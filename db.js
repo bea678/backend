@@ -70,6 +70,7 @@ const initTable = async () => {
     } catch (err) {
         console.log('err: ', err)
         console.log('API_KEY: ', process.env.API_KEY)
+        console.log('MYSQL_URL: ', process.env.MYSQL_URL)
         console.log('dbConfig is: ', dbConfig)
         console.error("❌ Error de MySQL:");
         console.error(`> Mensaje: ${err.message}`);
