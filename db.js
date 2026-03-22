@@ -1,7 +1,6 @@
 import mysql from 'mysql2/promise';
 
-const db = mysql.createPool({
-    // Usamos los nombres de variables que Railway suele proveer o tus locales
+const dbConfig = {
     host: process.env.MYSQLHOST || 'localhost',
     user: process.env.MYSQLUSER || 'root',
     password: process.env.MYSQLPASSWORD || 'Pituca1900*',
@@ -11,7 +10,9 @@ const db = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
-});
+}
+
+const db = mysql.createPool(dbConfig);
 
 const initTable = async () => {
     try {
@@ -68,6 +69,7 @@ const initTable = async () => {
 
     } catch (err) {
         console.log('err: ', err)
+        console.log('dbConfig is: ', dbConfig)
         console.error("❌ Error de MySQL:");
         console.error(`> Mensaje: ${err.message}`);
         console.error(`> Código: ${err.code}`); 
