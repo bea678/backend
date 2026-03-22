@@ -1,7 +1,13 @@
 import mysql from 'mysql2/promise';
-import { dbConfig } from './config';
 
-const db = mysql.createPool(dbConfig);
+const db = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',    //hecho
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'Pituca1900*',
+    database: process.env.DB_NAME || 'bearbitrage',   //hecho
+    timezone: 'Z',
+    port: process.env.DB_PORT || 3306
+});
 
 const initTable = async () => {
     try {
