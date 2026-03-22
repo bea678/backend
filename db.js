@@ -1,11 +1,11 @@
 import mysql from 'mysql2/promise';
 
 const dbConfig = {
-    host: process.env.MYSQLHOST || 'localhost',
-    user: process.env.MYSQLUSER || 'root',
-    password: process.env.MYSQLPASSWORD || 'Pituca1900*',
-    database: process.env.MYSQLDATABASE || 'bearbitrage',
-    port: process.env.MYSQLPORT || 3306,
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'Pituca1900*',
+    database: process.env.DB_NAME || 'bearbitrage',
+    port: process.env.DB_PORT || 3306,
     timezone: 'Z',
     waitForConnections: true,
     connectionLimit: 10,
@@ -69,6 +69,7 @@ const initTable = async () => {
 
     } catch (err) {
         console.log('err: ', err)
+        console.log('Object.keys(process.env): ', Object.keys(process.env))
         console.log('API_KEY: ', process.env.API_KEY)
         console.log('MYSQL_URL: ', process.env.MYSQL_URL)
         console.log('dbConfig is: ', dbConfig)
