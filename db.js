@@ -1,16 +1,29 @@
 import mysql from 'mysql2/promise';
 
 const db = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',    //hecho
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'Pituca1900*',
-    database: process.env.DB_NAME || 'bearbitrage',   //hecho
+    // Usamos los nombres de variables que Railway suele proveer o tus locales
+    host: process.env.MYSQLHOST || 'localhost',
+    user: process.env.MYSQLUSER || 'root',
+    password: process.env.MYSQLPASSWORD || 'Pituca1900*',
+    database: process.env.MYSQLDATABASE || 'bearbitrage',
+    port: process.env.MYSQLPORT || 3306,
     timezone: 'Z',
-    port: process.env.DB_PORT || 3306
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 const initTable = async () => {
     try {
+        // --- PRUEBA DE CONEXIÓN ---
+        console.log("⏳ Intentando conectar a la base de datos...");
+        const [rows] = await db.query('SELECT NOW() as currentTime, VERSION() as version');
+        console.log("✅ ¡Conexión exitosa!");
+        console.log(`📡 Servidor: ${process.env.MYSQLHOST || 'localhost'}`);
+        console.log(`⏱️ Hora del servidor DB: ${rows[0].currentTime}`);
+        console.log(`🆔 Versión MySQL: ${rows[0].version}`);
+        // --------------------------
+
         const queryOpportunities = `
             CREATE TABLE IF NOT EXISTS arbitrage_opportunities (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,21 +47,13 @@ const initTable = async () => {
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
                 opportunity_id INT NOT NULL,
-                
-                -- Datos financieros de la operación
                 total_investment DOUBLE NOT NULL,
                 net_profit DOUBLE NOT NULL,
                 roi_percentage DOUBLE,
-                
-                -- Desglose de ejecución (lo que Bea puso en cada casa)
                 home_stake DOUBLE NOT NULL,
                 away_stake DOUBLE NOT NULL,
-                
-                -- Estado y Auditoría
                 status ENUM('pending', 'completed', 'canceled') DEFAULT 'completed',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                
-                -- Relación con la tabla de oportunidades
                 CONSTRAINT fk_opportunity 
                     FOREIGN KEY (opportunity_id) 
                     REFERENCES arbitrage_opportunities(id)
@@ -56,13 +61,16 @@ const initTable = async () => {
             )`;
 
         await db.execute(queryOpportunities);
-        console.log("🗄️ Table 'arbitrage_opportunities' ready.");
+        console.log("🗄️ Tabla 'arbitrage_opportunities' lista.");
         
         await db.execute(queryUserBets);
-        console.log("📈 Table 'user_bets' ready for tracking.");
+        console.log("📈 Tabla 'user_bets' lista para seguimiento.");
 
     } catch (err) {
-        console.error("❌ MySQL Init Error:", err.message);
+        console.log('err: ', err)
+        console.error("❌ Error de MySQL:");
+        console.error(`> Mensaje: ${err.message}`);
+        console.error(`> Código: ${err.code}`); 
     }
 };
 

@@ -237,7 +237,11 @@ app.get('/arbitrage_opportunities', async (req, res) => {
     }
 });
 
+app.get('/arbitrage_opportunities', async (req, res) => {
+    res.json('holabea');
+})
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
-    console.log(`🚀 Server running at http://localhost:${PORT}/fetch-odds`);
+    console.log(`🚀 Server running`);
 });
