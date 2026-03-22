@@ -1,18 +1,10 @@
 import mysql from 'mysql2/promise';
-
-const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    timezone: 'Z'
-};
+import { dbConfig } from './config';
 
 const db = mysql.createPool(dbConfig);
 
 const initTable = async () => {
     try {
-        // 1. Tabla de Oportunidades (El mercado actual)
         const queryOpportunities = `
             CREATE TABLE IF NOT EXISTS arbitrage_opportunities (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +23,6 @@ const initTable = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )`;
         
-        // 2. Tabla de Apuestas Realizadas (Tu historial de éxito)
         const queryUserBets = `
             CREATE TABLE IF NOT EXISTS user_bets (
                 id INT AUTO_INCREMENT PRIMARY KEY,

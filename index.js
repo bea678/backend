@@ -1,15 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
 import axios from 'axios';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { processAndSaveArbitrage } from './analyzer2.js';
 import db from './db.js';
 import { parseQueryParams } from './query.js';
+import { PORT } from './config.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = 8080;
 
 const API_KEY = process.env.API_KEY;
 app.use(express.json());
