@@ -1,11 +1,16 @@
 import mysql from 'mysql2/promise';
 
+console.log("--- DEBUG DE ENTORNO ---");
+console.log("DB_HOST existe?", !!process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("------------------------");
+
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || 'Pituca1900*',
     database: process.env.DB_NAME || 'bearbitrage',
-    port: process.env.DB_PORT || 3306,
+    port: Number(process.env.DB_PORT) || 3306,
     timezone: 'Z',
     waitForConnections: true,
     connectionLimit: 10,
