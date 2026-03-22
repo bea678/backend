@@ -237,7 +237,7 @@ app.get('/arbitrage_opportunities', async (req, res) => {
     }
 });
 
-app.get('/arbitrage_opportunities', async (req, res) => {
+app.get('/holabea', async (req, res) => {
     res.json('holabea');
 })
 
