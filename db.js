@@ -5,12 +5,10 @@ console.log("DB_HOST existe?", !!process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
 console.log("------------------------");
 
+const dbUri = process.env.MYSQL_PUBLIC_URL;
+
 const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'Pituca1900*',
-    database: process.env.DB_NAME || 'bearbitrage',
-    port: Number(process.env.DB_PORT) || 3306,
+    uri: dbUri,
     timezone: 'Z',
     waitForConnections: true,
     connectionLimit: 10,
@@ -74,9 +72,8 @@ const initTable = async () => {
 
     } catch (err) {
         console.log('err: ', err)
-        console.log('Object.keys(process.env): ', Object.keys(process.env))
         console.log('API_KEY: ', process.env.API_KEY)
-        console.log('MYSQL_URL: ', process.env.MYSQL_URL)
+        console.log('MYSQL_URL: ', process.env.MYSQL_PUBLIC_URL)
         console.log('dbConfig is: ', dbConfig)
         console.error("❌ Error de MySQL:");
         console.error(`> Mensaje: ${err.message}`);
