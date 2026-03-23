@@ -1,26 +1,26 @@
 import mysql from 'mysql2/promise';
 
-//TOOD BEA CHANGE ANTES DE SUBIR
+const dbConfig = process.env.MYSQL_PUBLIC_URL 
+    ? { 
+        uri: process.env.MYSQL_PUBLIC_URL 
+      } 
+    : {
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'mi_base_de_datos',
+        port: process.env.DB_PORT || 3306
+      };
 
-const dbUri = process.env.MYSQL_PUBLIC_URL;
-
-const dbConfig = {
-    uri: dbUri,
+const finalConfig = {
+    ...dbConfig,
     timezone: 'Z',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 }
 
-/*const dbConfig = {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    timezone: 'Z'
-};*/
-
-const db = mysql.createPool(dbConfig);
+const db = mysql.createPool(finalConfig);
 
 const initTable = async () => {
     try {
