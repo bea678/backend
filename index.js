@@ -33,8 +33,6 @@ app.get('/refresh_data', async (req, res) => {
 
 app.get('/fetch-odds', async (req, res) => {
     try {
-        let oddsData;
-
         const response = await axios.get(process.env.ODS_API, {
             params: {
                 apiKey: API_KEY,
@@ -43,7 +41,7 @@ app.get('/fetch-odds', async (req, res) => {
                 oddsFormat: 'decimal'
             }
         });
-        oddsData = response.data;
+        let oddsData = response.data;
 
         processAndSaveArbitrage(oddsData);
         res.json({ status: "success", count: oddsData.length });
@@ -54,8 +52,6 @@ app.get('/fetch-odds', async (req, res) => {
 });
 
 app.post('/create_bet', async (req, res) => {
-    console.log('req.body: ', req.body);
-
     const {
         user_id,
         opportunity_id,
@@ -153,12 +149,10 @@ app.get('/user_bets', async (req, res) => {
             sql += ` WHERE ${conditions.join(' AND ')}`;
         }
 
-        // Ordenación
         const safeSortField = sort.field.replace(/[^a-zA-Z0-9_]/g, '') || 'created_at';
         const sortPrefix = ['home_team', 'sport_title'].includes(safeSortField) ? 'ao.' : 'ub.';
         sql += ` ORDER BY ${sortPrefix}${safeSortField} ${sort.direction}`;
 
-        // Paginación
         sql += ` LIMIT ? OFFSET ?`;
         params.push(Number(pager.limit), Number(pager.offset));
 
@@ -179,31 +173,43 @@ app.get('/user_bets', async (req, res) => {
 });
 
 app.get('/arbitrage_opportunities', async (req, res) => {
-    const { query, pager, sort } = parseQueryParams(req.query);
+    // 1. Parseamos los parámetros originales
+    const { query: parsedQuery, pager, sort } = parseQueryParams(req.query);
+    
+    // 2. EXTRAEMOS user_id de parsedQuery para que no entre al WHERE
+    // Usamos desestructuración: 'user_id' se guarda aparte y 'restOfFilters' contiene todo lo demás
+    const { user_id, ...restOfFilters } = parsedQuery;
 
     try {
-        let sql = `SELECT * FROM arbitrage_opportunities`;
-        let conditions = [];
         let params = [];
+        let selectFields = `ao.*`;
+        let joinClause = ``;
 
-        Object.keys(query).forEach((key) => {
-            const value = query[key];
+        // 3. Si hay user_id (extraído del objeto query), preparamos el JOIN
+        if (user_id && user_id !== 'undefined') {
+            selectFields += `, IF(ub.id IS NOT NULL, true, false) AS isUserIn`;
+            joinClause = ` LEFT JOIN user_bets ub ON ao.id = ub.opportunity_id AND ub.user_id = ?`;
+            params.push(Number(user_id)); // Primer '?'
+        } else {
+            selectFields += `, false AS isUserIn`;
+        }
+
+        let sql = `SELECT ${selectFields} FROM arbitrage_opportunities ao${joinClause}`;
+
+        // 4. Construimos las condiciones usando SOLO restOfFilters (sin user_id)
+        let conditions = [];
+        Object.keys(restOfFilters).forEach((key) => {
+            const value = restOfFilters[key];
             const safeKey = key.replace(/[^a-zA-Z0-9_]/g, '');
 
             if (value && typeof value === 'object' && value.$gt) {
-                console.log('value.$gt: ', value.$gt)
-                const safeKey = key.replace(/[^a-zA-Z0-9_]/g, '');
-
-                const dateLimit = new Date(value.$gt);
-
-                conditions.push(`${safeKey} > ?`);
-
-                params.push(dateLimit);
+                conditions.push(`ao.${safeKey} > ?`);
+                params.push(new Date(value.$gt));
             } else if (typeof value === 'string') {
-                conditions.push(`${safeKey} LIKE ?`);
+                conditions.push(`ao.${safeKey} LIKE ?`);
                 params.push(`%${value}%`);
-            } else {
-                conditions.push(`${safeKey} = ?`);
+            } else if (value !== undefined) {
+                conditions.push(`ao.${safeKey} = ?`);
                 params.push(value);
             }
         });
@@ -212,18 +218,16 @@ app.get('/arbitrage_opportunities', async (req, res) => {
             sql += ` WHERE ${conditions.join(' AND ')}`;
         }
 
+        // 5. Orden y Paginación
         const safeSortField = sort.field.replace(/[^a-zA-Z0-9_]/g, '');
-        sql += ` ORDER BY arbitrage_opportunities.${safeSortField} ${sort.direction}`;
-
-        sql += ` LIMIT ? OFFSET ?`;
+        sql += ` ORDER BY ao.${safeSortField} ${sort.direction} LIMIT ? OFFSET ?`;
         params.push(Number(pager.limit), Number(pager.offset));
 
-        console.log(`\x1b[33m%s\x1b[0m`, `  🔍 SQL Generado: ${sql}`);
-        console.log(`  📦 Parámetros:`, params);
+        // LOGS para confirmar
+        console.log("🚀 SQL:", sql);
+        console.log("📦 PARAMS:", params);
 
         const [rows] = await db.query(sql, params);
-
-        console.log(`  ✅ Resultados encontrados: ${rows.length}`);
 
         res.json({
             status: "success",
@@ -232,7 +236,7 @@ app.get('/arbitrage_opportunities', async (req, res) => {
         });
 
     } catch (error) {
-        console.error("❌ Error en el servidor:", error.message);
+        console.error("❌ Error:", error.message);
         res.status(500).json({ status: "error", message: error.message });
     }
 });

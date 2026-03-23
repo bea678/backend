@@ -1,9 +1,6 @@
 import mysql from 'mysql2/promise';
 
-console.log("--- DEBUG DE ENTORNO ---");
-console.log("DB_HOST existe?", !!process.env.DB_HOST);
-console.log("DB_USER:", process.env.DB_USER);
-console.log("------------------------");
+//TOOD BEA CHANGE ANTES DE SUBIR
 
 const dbUri = process.env.MYSQL_PUBLIC_URL;
 
@@ -14,6 +11,14 @@ const dbConfig = {
     connectionLimit: 10,
     queueLimit: 0
 }
+
+/*const dbConfig = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    timezone: 'Z'
+};*/
 
 const db = mysql.createPool(dbConfig);
 
