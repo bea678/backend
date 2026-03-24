@@ -2,22 +2,20 @@ import db from './db.js';
 
 const TOTAL_INVESTMENT = parseFloat(process.env.TOTAL_INVESTMENT) || 100;
 
-export async function processAndSaveArbitrage(data) { 
+export async function processAndSaveArbitrage(data, sourceApi) { 
     try {
-        // --- LIMPIEZA: Borrar registros que NO sean de hoy ---
-        // Compara solo la parte de la fecha (YYYY-MM-DD)
         const deleteQuery = `DELETE FROM arbitrage_opportunities WHERE DATE(commence_time) != CURDATE()`;
         await db.execute(deleteQuery);
-        console.log("Cleaning up old records... Done.");
+        console.log(`Cleaning up old records for ${sourceApi}... Done.`);
     } catch (err) {
         console.error("❌ Error cleaning old records:", err.message);
     }
 
     for (const event of data) { 
         const { home_team, away_team, bookmakers, commence_time, sport_title, sport_key } = event;
+        
         if (!bookmakers || bookmakers.length < 2) continue;
 
-        // Formatear fecha para MySQL (YYYY-MM-DD HH:MM:SS)
         const mysqlReadyTime = commence_time.replace('T', ' ').replace('Z', '');
 
         let bestHome = { price: 0, bookmaker: '' };
@@ -46,11 +44,12 @@ export async function processAndSaveArbitrage(data) {
                 const netProfit = ((TOTAL_INVESTMENT / totalProb) - TOTAL_INVESTMENT).toFixed(2);
 
                 const query = `INSERT INTO arbitrage_opportunities 
-                    (sport_key, sport_title, home_team, away_team, commence_time, best_home_price, home_bookmaker, best_away_price, away_bookmaker, total_probability, profit_percentage, net_profit) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+                    (source_api, sport_key, sport_title, home_team, away_team, commence_time, best_home_price, home_bookmaker, best_away_price, away_bookmaker, total_probability, profit_percentage, net_profit) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
                 try {
                     await db.execute(query, [
+                        sourceApi, 
                         sport_key, 
                         sport_title, 
                         home_team, 
@@ -70,5 +69,5 @@ export async function processAndSaveArbitrage(data) {
             }
         }
     }
-    console.log("✅ Analysis complete and saved to MySQL.");
+    console.log(`✅ Analysis complete for ${sourceApi} and saved to MySQL.`);
 }

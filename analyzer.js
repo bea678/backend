@@ -61,19 +61,19 @@ function analizarArbitraje() {
                 });
 
                 const bloque = 
-`==================================================
-✅ ¡ARBITRAJE! [${beneficioPorcentaje.toFixed(2)}% de beneficio]
-🏆 Deporte: ${sport_title}
-🔑 Sport Key: ${sport_key}
-📅 Fecha: ${fechaPartido}
-⚽ Evento: ${home_team} vs ${away_team}
---------------------------------------------------
-🏠 Apostar ${apuestaLocal.toFixed(2)}€ a ${home_team} (${mejorCuotaLocal.cuota}) en ${mejorCuotaLocal.casa}
-🚀 Apostar ${apuestaVisitante.toFixed(2)}€ a ${away_team} (${mejorCuotaVisitante.cuota}) en ${mejorCuotaVisitante.casa}
---------------------------------------------------
-💰 Si gana cualquiera, cobras: ${retornoCualquierCaso}€
-💵 GANANCIA NETA: +${gananciaLimpia}€
-==================================================\n\n`;
+                    `==================================================
+                    ✅ ¡ARBITRAJE! [${beneficioPorcentaje.toFixed(2)}% de beneficio]
+                    🏆 Deporte: ${sport_title}
+                    🔑 Sport Key: ${sport_key}
+                    📅 Fecha: ${fechaPartido}
+                    ⚽ Evento: ${home_team} vs ${away_team}
+                    --------------------------------------------------
+                    🏠 Apostar ${apuestaLocal.toFixed(2)}€ a ${home_team} (${mejorCuotaLocal.cuota}) en ${mejorCuotaLocal.casa}
+                    🚀 Apostar ${apuestaVisitante.toFixed(2)}€ a ${away_team} (${mejorCuotaVisitante.cuota}) en ${mejorCuotaVisitante.casa}
+                    --------------------------------------------------
+                    💰 Si gana cualquiera, cobras: ${retornoCualquierCaso}€
+                    💵 GANANCIA NETA: +${gananciaLimpia}€
+                    ==================================================\n\n`;
 
                 console.log(bloque);
                 logStream.write(bloque);

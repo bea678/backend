@@ -9,9 +9,115 @@ import { PORT } from './config.js';
 const app = express();
 
 const API_KEY = process.env.API_KEY;
+const API_KEY_IO = process.env.API_KEY_IO;
 app.use(express.json());
 
-app.get('/refresh_data', async (req, res) => {
+export async function processAndSaveValueBets(allValueBets, sourceApi) {
+    try {
+        const deleteQuery = `DELETE FROM arbitrage_opportunities WHERE DATE(commence_time) < CURDATE()`;
+        await db.execute(deleteQuery);
+    } catch (err) {
+        console.error("❌ Error cleaning records:", err.message);
+    }
+
+    for (const bet of allValueBets) {
+        const mysqlReadyTime = bet.event.date.replace('T', ' ').split('.')[0].replace('Z', '');
+        
+        let homePrice = 0, homeBookie = null;
+        let awayPrice = 0, awayBookie = null;
+
+        if (bet.betSide === 'home') {
+            homePrice = parseFloat(bet.bookmakerOdds.home);
+            homeBookie = bet.bookmaker;
+        } else if (bet.betSide === 'away') {
+            awayPrice = parseFloat(bet.bookmakerOdds.away);
+            awayBookie = bet.bookmaker;
+        } else if (bet.betSide === 'draw') {
+            homePrice = parseFloat(bet.bookmakerOdds.draw);
+            homeBookie = `${bet.bookmaker} (Draw)`;
+        }
+
+        const query = `INSERT INTO arbitrage_opportunities 
+            (source_api, sport_key, sport_title, home_team, away_team, commence_time, 
+             best_home_price, home_bookmaker, best_away_price, away_bookmaker, 
+             total_probability, profit_percentage, net_profit) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        try {
+            await db.execute(query, [
+                sourceApi,             
+                bet.event.sport, 
+                bet.event.league, 
+                bet.event.home, 
+                bet.event.away, 
+                mysqlReadyTime,        
+                homePrice, 
+                homeBookie, 
+                awayPrice, 
+                awayBookie,
+                0, 
+                bet.expectedValue, 
+                0
+            ]);
+        } catch (err) {
+            console.error(`❌ Error inserting bet ${bet.id}:`, err.message);
+        }
+    }
+    console.log(`✅ Proceso finalizado para ${sourceApi}.`);
+}
+
+app.get('/refresh_data_io', async (req, res) => {
+    const bookmakers = ['LeoVegas ES', 'Betfair ES']; 
+    
+    try {
+        console.log("Iniciando actualización de Value Bets (.io)...");
+
+        const requests = bookmakers.map(bookie => 
+            axios.get('https://api.odds-api.io/v3/value-bets', {
+                params: {
+                    apiKey: API_KEY_IO,
+                    bookmaker: bookie,
+                    includeEventDetails: true
+                }
+            })
+        );
+
+        const responses = await Promise.all(requests);
+        const allValueBets = responses.flatMap(response => response.data);
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const betsToday = allValueBets.filter(bet => {
+            return bet.event.date.split('T')[0] === todayStr;
+        });
+
+        betsToday.sort((a, b) => b.expectedValue - a.expectedValue);
+
+        let savedCount = 0;
+        if (betsToday.length > 0) {
+            await processAndSaveValueBets(betsToday, 'odds-api.io');
+            savedCount = betsToday.length;
+        }
+
+        res.json({
+            status: "success",
+            source: "odds-api.io",
+            date_processed: todayStr,
+            total_received: allValueBets.length,
+            total_filtered_today: savedCount,
+            message: savedCount > 0 ? "Datos actualizados correctamente" : "No se encontraron apuestas para hoy"
+        });
+
+    } catch (error) {
+        console.error('❌ Error en refresh_data_io:', error.message);
+        res.status(500).json({ 
+            status: "error", 
+            message: error.message,
+            details: error.response ? error.response.data : null
+        });
+    }
+});
+
+app.get('/refresh_data_com', async (req, res) => {
     try {
         const response = await axios.get(process.env.ODS_API, {
             params: {
@@ -23,7 +129,7 @@ app.get('/refresh_data', async (req, res) => {
         });
         let oddsData = response.data;
 
-        processAndSaveArbitrage(oddsData);
+        processAndSaveArbitrage(oddsData, 'odds-api.com');
         res.json({ status: "success" });
 
     } catch (error) {
@@ -43,7 +149,7 @@ app.get('/fetch-odds', async (req, res) => {
         });
         let oddsData = response.data;
 
-        processAndSaveArbitrage(oddsData);
+        processAndSaveArbitrage(oddsData, 'odds-api.com');
         res.json({ status: "success", count: oddsData.length });
 
     } catch (error) {
@@ -247,5 +353,5 @@ app.get('/holabea', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
-    console.log(`🚀 Server running`);
+    console.log(`🚀 Server running en: `, PORT);
 });

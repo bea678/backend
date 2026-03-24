@@ -36,6 +36,7 @@ const initTable = async () => {
         const queryOpportunities = `
             CREATE TABLE IF NOT EXISTS arbitrage_opportunities (
                 id INT AUTO_INCREMENT PRIMARY KEY,
+                source_api ENUM('odds-api.com', 'odds-api.io') NOT NULL,
                 sport_key VARCHAR(255),
                 sport_title VARCHAR(255),
                 home_team VARCHAR(255),
