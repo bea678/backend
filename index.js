@@ -491,9 +491,8 @@ const getUserById = async (id) => {
 };
 
 const executeCronHive = async () => {
-    const user = await getUserById(1);
-
     cron.schedule('*/10 7-22 * * *', async () => {
+        const user = await getUserById(1);
         console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
 
         try {
