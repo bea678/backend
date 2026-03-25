@@ -26,7 +26,7 @@ const initTable = async () => {
         const [rows] = await db.query('SELECT NOW() as currentTime, VERSION() as version');
         console.log("✅ ¡Conexión exitosa!");
 
-        // 1. TABLA DE USUARIOS (Nueva)
+        // 1. TABLA DE USUARIOS 
         const queryUsers = `
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +55,7 @@ const initTable = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )`;
         
-        // 3. TABLA DE APUESTAS (Con FK a users)
+        // 3. TABLA DE APUESTAS 
         const queryUserBets = `
             CREATE TABLE IF NOT EXISTS user_bets (
                 id INT AUTO_INCREMENT PRIMARY KEY,

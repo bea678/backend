@@ -508,13 +508,6 @@ const executeCronHive = async () => {
                 console.log('✅ Notificación enviada con éxito');
             } else {
                 console.log('ℹ️ Consulta realizada: No hay novedades relevantes.');
-                if (user && user.pushToken) {
-                    await sendPushNotification(
-                        user.pushToken,
-                        "Hive5",
-                        `No hay préstamos disponibles`,
-                    );
-                }
             }
 
         } catch (error) {
