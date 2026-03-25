@@ -11,7 +11,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const app = express();
 import cron from 'node-cron';
-import { get } from 'http';
 
 const API_KEY = process.env.API_KEY;
 const API_KEY_IO = process.env.API_KEY_IO;
@@ -494,18 +493,17 @@ const getUserById = async (id) => {
 const executeCronHive = async () => {
     const user = await getUserById(1);
 
-    cron.schedule('*/10 * * * *', async () => {
+    cron.schedule('*/10 7-22 * * *', async () => {
         console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
 
         try {
             const data = await consultarHive5('loansForInvestment');
             if (data && data.length > 0) {
-
                 if (user && user.pushToken) {
                     await sendPushNotification(
                         user.pushToken,
                         "Hive5: ¡Nueva Oportunidad!",
-                        `Hay ${data.length} préstamos nuevos para inversión.`,
+                        `Hay préstamos nuevos para inversión.`,
                     );
                 }
                 console.log('✅ Notificación enviada con éxito');
