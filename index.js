@@ -6,399 +6,36 @@ import db from './db.js';
 import { parseQueryParams } from './query.js';
 import { PORT } from './config.js';
 import fs from 'fs/promises';
-
+import * as cheerio from 'cheerio';
+import admin from 'firebase-admin';
+import { readFile } from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 const app = express();
 
 const API_KEY = process.env.API_KEY;
 const API_KEY_IO = process.env.API_KEY_IO;
 app.use(express.json());
 
-const sports_io = [
-    "football",
-    /*  "basketball",
-      "tennis",
-      "baseball",
-      "american-football",
-      "ice-hockey",
-      "esports",
-      "darts",
-      "mixed-martial-arts",
-      "boxing",
-      "handball",
-      "volleyball",
-      "snooker",
-      "table-tennis",
-      "rugby",
-      "cricket",
-      "water-polo",
-      "futsal",
-      "beach-volleyball",
-      "aussie-rules",
-      "floorball",
-      "squash",
-      "beach-soccer",
-      "lacrosse",
-      "curling",
-      "padel",
-      "bandy",
-      "gaelic-football",
-      "beach-handball",
-      "athletics",
-      "badminton",
-      "cross-country",
-      "golf",
-      "cycling"*/
-];
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-const todaysEventsIDS =
-    [
-        69977698,
-        69904544,
-        69904546,
-        69289742,
-        67698010,
-        69279056,
-        69110562,
-        70066288,
-        70212214,
-        65931778,
-        69796798,
-        66755224,
-        70184412,
-        70152818,
-        66711994,
-        66712018,
-        66712172,
-        66711896,
-        70224578,
-        70211600,
-        69248932,
-        69024366,
-        69852468,
-        61939050,
-        61939056,
-        62041340,
-        62041836,
-        62041842,
-        62041846,
-        62041850,
-        62042372,
-        62042376,
-        62042384,
-        62042898,
-        66711970,
-        66711982,
-        66708686,
-        66708718,
-        66708732,
-        66711910,
-        70224624,
-        70184414,
-        70209578,
-        69572182,
-        69165474,
-        69165622,
-        69165608,
-        69165640,
-        69165724,
-        68536290,
-        70065836,
-        69796800,
-        70224632,
-        69165630,
-        69165666,
-        70006684,
-        70006686,
-        70006690,
-        69165822,
-        61939706,
-        61939708,
-        61939712,
-        61939720,
-        62041344,
-        62041348,
-        62041352,
-        62042896,
-        62042902,
-        62042904,
-        66711954,
-        66712020,
-        66708748,
-        69024368,
-        70007792,
-        69594254,
-        69420100,
-        69931120,
-        70181242,
-        70181348,
-        69951918,
-        69503852,
-        69503854,
-        69503856,
-        66711956,
-        66711968,
-        66712080,
-        70231600,
-        66711922,
-        69585058,
-        69100500,
-        69593920,
-        69165606,
-        69165664,
-        69165726,
-        66708734,
-        69734518,
-        69165642,
-        69593718,
-        61939048,
-        61939052,
-        61939722,
-        68681934,
-        66711942,
-        66711944,
-        67790346,
-        66711898,
-        70025582,
-        70231708,
-        70245174,
-        69249438,
-        70006688,
-        70006692,
-        67962774,
-        69593948,
-        68385436,
-        69293368,
-        68936642,
-        66711980,
-        66711996,
-        66708720,
-        66708750,
-        66711908,
-        70109172,
-        69277778,
-        69310292,
-        69165624,
-        69165748,
-        69165738,
-        69255278,
-        70230982,
-        70129020,
-        70129078,
-        70129080,
-        70129082,
-        67207494,
-        69880364,
-        70230984,
-        70230986,
-        70230988,
-        70072088,
-        66708684,
-        66711920,
-        69734524,
-        70230990,
-        69834324,
-        69961346,
-        69980160,
-        67516624,
-        69125466,
-        69165632,
-        69165736,
-        68385438,
-        61541276,
-        62103522,
-        69116086,
-        69125468,
-        69221460,
-        68533626,
-        69177244,
-        61541266,
-        61541268,
-        61541274,
-        61541278,
-        69134102,
-        69140800,
-        69140806,
-        70007212,
-        69500084,
-        66917684,
-        66917688,
-        66917696,
-        67962776,
-        68158506,
-        68158508,
-        68158510,
-        68158520,
-        68158524,
-        68158526,
-        69294716,
-        69350542,
-        69594126,
-        66917690,
-        69165472,
-        67766528,
-        66149854,
-        67464474,
-        69140992,
-        69613634,
-        69165820,
-        68356016,
-        70109182,
-        66712078,
-        70172648,
-        62216334,
-        66756622,
-        70007220,
-        69325202,
-        69029884,
-        67766172,
-        70067204,
-        70072086,
-        69828050,
-        69828052,
-        69828054,
-        70092254,
-        68567708,
-        61916096,
-        61916098,
-        61916100,
-        61916102,
-        61916104,
-        61916106,
-        68129058,
-        68533624,
-        69834326,
-        69265482,
-        67516622,
-        69089240,
-        69851662,
-        69851664,
-        69851666,
-        69089242,
-        70245176,
-        70245178,
-        69540540,
-        69540548,
-        70245180,
-        67516388,
-        69824122,
-        67766174,
-        67766176,
-        67766530,
-        67766178,
-        69310356,
-        70077404,
-        67546216,
-        69904548,
-        69904550,
-        68129062,
-        66917694,
-        69977700,
-        67091844,
-        69904552,
-        69904554,
-        69904556,
-        69905306,
-        69905338,
-        69905308,
-        66917686,
-        69861228,
-        67911956,
-        67911958,
-        68129060,
-        67172424,
-        70013108,
-        69904698,
-        66917682,
-        66917692,
-        69824148,
-        67171856,
-        69977702,
-        69824124,
-        67172426,
-        69540566,
-        69834328,
-        69905340,
-        69828056
-    ]
+const serviceAccount = {
+  type: "service_account",
+  project_id: process.env.FIREBASE_PROJECT_ID,
+  private_key_id: process.env.FIREBASE_PROJECT_KEY_ID,
+  private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  client_id: process.env.FIREBASE_CLIENT_ID,
+  auth_uri: process.env.FIREBASE_AUTH_URI,
+  token_uri: process.env.FIREBASE_TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.FIREBASE_PROVIDER_CERT_URL,
+  client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+  universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
+};
 
-const bookmakers = 'Betfair ES,LeoVegas ES';
-
-app.get('/hola', async (req, res) => {
-    const today = new Date().toISOString().split('T')[0];
-    //const todaysEventsIDS = [];
-    const bets = [];
-
-    try {
-        //1. De cada deporte cogemos los eventos
-        /* for (const sport of sports_io) {
-             const response = await axios.get('https://api.odds-api.io/v3/events', {
-                 params: {
-                     apiKey: API_KEY_IO,
-                     sport: sport
-                 }
-             });
- 
-             const events = response.data;
- 
-             events.forEach(event => {
-                 const eventDate = event.date.split('T')[0];
- 
-                 if (eventDate === today) {
-                     todaysEventsIDS.push(event.id);
-                 }
-             });
-         }
- 
-         try {
-             await fs.writeFile('eventos_hoy.json', JSON.stringify(todaysEventsIDS, null, 2));
- 
-             console.log('Fichero "eventos_hoy.json" guardado correctamente.');
-         } catch (fileError) {
-             console.error('Error al escribir el fichero:', fileError);
-         }*/
-
-        console.log(`Se han encontrado ${todaysEventsIDS.length} eventos para hoy.`);
-
-        todaysEventsIDS.splice(0, 50);
-
-        //2. De cada evento cogemos las apuestas
-        for (const eventID of todaysEventsIDS) {
-            try {
-                const oddsResponse = await fetch(
-                    `https://api.odds-api.io/v3/odds?apiKey=${API_KEY_IO}&eventId=${eventID}&bookmakers=${bookmakers}`
-                );
-
-                const data = await oddsResponse.json();
-
-                /*      const oddsResponse = await axios.get('https://api.odds-api.io/v3/odds', {
-                          params: {
-                              apiKey: API_KEY_IO,
-                              event: event.id,
-                              bookmakers: bookmakers, 
-                          }
-                      });*/
-
-                console.log('data: ', data)
-                if (data) {
-                    bets.push(data);
-                }
-            } catch (err) {
-                console.error(`Error obteniendo cuotas para el evento ${eventID}:`, err.message);
-                continue;
-            }
-        }
-
-        await fs.writeFile('bets.json', JSON.stringify(bets, null, 2));
-
-        console.log(`Proceso finalizado. Total de apuestas recolectadas: ${bets.length}`);
-
-        res.json({
-            success: true,
-        });
-
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
 });
 
 export async function processAndSaveValueBets(allValueBets, sourceApi) {
@@ -741,7 +378,110 @@ app.get('/holabea', async (req, res) => {
     res.json('holabea');
 })
 
+async function consultarHive5(idABuscar) {
+    const url = 'https://app.hive5.com/investment/primary/?page=1';
+
+    const formData = new URLSearchParams();
+    formData.append('interest-from', '');
+    formData.append('interest-to', '');
+    formData.append('originator', '');
+    formData.append('period-from', '');
+    formData.append('period-to', '90');
+    formData.append('amount-left-from', '');
+    formData.append('amount-left-to', '');
+    formData.append('type', '');
+    formData.append('clearFilter', 'false');
+    formData.append('page', '1');
+    formData.append('orderBy[]', '');
+    formData.append('amount-left-invest', '10'); 
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'accept-language': 'es-ES,es;q=0.9',
+                'cache-control': 'no-cache',
+                'content-type': 'application/x-www-form-urlencoded',
+                'cookie': 'PHPSESSID=41e64403fc1d13972a9480f50b8b81c7',
+                'origin': 'https://app.hive5.com',
+                'referer': 'https://app.hive5.com/investment/primary/?page=1',
+                'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
+                'sec-ch-ua': '"Not(A:Brand";v="8", "Chromium";v="144", "Google Chrome";v="144"',
+                'sec-fetch-dest': 'document',
+                'sec-fetch-mode': 'navigate',
+                'sec-fetch-site': 'same-origin'
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}. Revisa si la Cookie ha caducado.`);
+        }
+
+        const html = await response.text();        
+        const $ = cheerio.load(html);
+        const elemento = $(`#${idABuscar}`);
+
+        if (elemento.length > 0) {
+            console.log(`✅ Elemento encontrado`);
+            return elemento.text().trim();
+        } else {
+            console.log(`⚠️ ID no encontrado. Abre response.html para ver qué devolvió el servidor.`);
+            return null;
+        }
+
+    } catch (error) {
+        console.error('🔴 Error crítico:', error.message);
+    }
+}
+
+/**
+ * Función para enviar la notificación
+ * @param {string} fcmToken - El token que obtuviste en React Native
+ * @param {string} title - Título de la notificación
+ * @param {string} body - Contenido del mensaje
+ */
+const sendPushNotification = async (fcmToken, title, body) => {
+  const message = {
+    notification: {
+      title: title,
+      body: body,
+    },
+    android: {
+      priority: 'high', 
+      notification: {
+        channelId: 'high_importance_channel',
+        sound: 'default',
+        priority: 'high',
+        clickAction: 'fcm.ACTION_EVENT'
+      },
+    },
+    data: {
+      tipo: 'arbitraje_alert',
+      id: '12345'
+    },
+    token: fcmToken,
+  };
+
+  try {
+    const response = await admin.messaging().send(message);
+    console.log('✅ Mensaje enviado exitosamente:', response);
+    return response;
+  } catch (error) {
+    console.error('❌ Error enviando el mensaje:', error);
+    throw error;
+  }
+};
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
+
+    sendPushNotification('cadINOVlRn6kXEhVcJ1V3g:APA91bHSjEVhuxZuk7mRyOuLATfkf2CJZ98FMZme1Nl7aaEdRuAglA-CN-xchxoAOYltedOWlygWRycSL1L2gb5_5jWbE3Byhu8UF50cAr9Exfa9OYgzkSI',
+        'Hive5',
+        'beaaaaa'
+    )
+    //TODO BEA aqui un cron
+    //consultarHive5('loansForInvestment');
 });
