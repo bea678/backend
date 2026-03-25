@@ -5,37 +5,38 @@ import { processAndSaveArbitrage } from './analyzer2.js';
 import db from './db.js';
 import { parseQueryParams } from './query.js';
 import { PORT } from './config.js';
-import fs from 'fs/promises';
 import * as cheerio from 'cheerio';
 import admin from 'firebase-admin';
-import { readFile } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const app = express();
+import cron from 'node-cron';
+import { get } from 'http';
 
 const API_KEY = process.env.API_KEY;
 const API_KEY_IO = process.env.API_KEY_IO;
+    
 app.use(express.json());
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 const serviceAccount = {
-  type: "service_account",
-  project_id: process.env.FIREBASE_PROJECT_ID,
-  private_key_id: process.env.FIREBASE_PROJECT_KEY_ID,
-  private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  client_id: process.env.FIREBASE_CLIENT_ID,
-  auth_uri: process.env.FIREBASE_AUTH_URI,
-  token_uri: process.env.FIREBASE_TOKEN_URI,
-  auth_provider_x509_cert_url: process.env.FIREBASE_PROVIDER_CERT_URL,
-  client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
-  universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
+    type: "service_account",
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PROJECT_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_PROVIDER_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_CERT_URL,
+    universe_domain: process.env.FIREBASE_UNIVERSE_DOMAIN,
 };
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount)
 });
 
 export async function processAndSaveValueBets(allValueBets, sourceApi) {
@@ -393,7 +394,7 @@ async function consultarHive5(idABuscar) {
     formData.append('clearFilter', 'false');
     formData.append('page', '1');
     formData.append('orderBy[]', '');
-    formData.append('amount-left-invest', '10'); 
+    formData.append('amount-left-invest', '10');
 
     try {
         const response = await fetch(url, {
@@ -419,7 +420,7 @@ async function consultarHive5(idABuscar) {
             throw new Error(`Error HTTP: ${response.status}. Revisa si la Cookie ha caducado.`);
         }
 
-        const html = await response.text();        
+        const html = await response.text();
         const $ = cheerio.load(html);
         const elemento = $(`#${idABuscar}`);
 
@@ -427,7 +428,7 @@ async function consultarHive5(idABuscar) {
             console.log(`✅ Elemento encontrado`);
             return elemento.text().trim();
         } else {
-            console.log(`⚠️ ID no encontrado. Abre response.html para ver qué devolvió el servidor.`);
+            console.log(`⚠️ ID no encontrado.`);
             return null;
         }
 
@@ -443,45 +444,126 @@ async function consultarHive5(idABuscar) {
  * @param {string} body - Contenido del mensaje
  */
 const sendPushNotification = async (fcmToken, title, body) => {
-  const message = {
-    notification: {
-      title: title,
-      body: body,
-    },
-    android: {
-      priority: 'high', 
-      notification: {
-        channelId: 'high_importance_channel',
-        sound: 'default',
-        priority: 'high',
-        clickAction: 'fcm.ACTION_EVENT'
-      },
-    },
-    data: {
-      tipo: 'arbitraje_alert',
-      id: '12345'
-    },
-    token: fcmToken,
-  };
+    const message = {
+        notification: {
+            title: title,
+            body: body,
+        },
+        android: {
+            priority: 'high',
+            notification: {
+                channelId: 'high_importance_channel',
+                sound: 'default',
+                priority: 'high',
+                clickAction: 'fcm.ACTION_EVENT'
+            },
+        },
+        data: {
+            tipo: 'arbitraje_alert',
+            id: '12345'
+        },
+        token: fcmToken,
+    };
 
-  try {
-    const response = await admin.messaging().send(message);
-    console.log('✅ Mensaje enviado exitosamente:', response);
-    return response;
-  } catch (error) {
-    console.error('❌ Error enviando el mensaje:', error);
-    throw error;
-  }
+    try {
+        const response = await admin.messaging().send(message);
+        console.log('✅ Mensaje enviado exitosamente:', response);
+        return response;
+    } catch (error) {
+        console.error('❌ Error enviando el mensaje:', error);
+        throw error;
+    }
 };
+const getUserById = async (id) => {
+    try {
+        const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
+        const [rows] = await db.execute(query, [id]);
+
+        if (rows.length === 0) {
+            console.log(`⚠️ No se encontró el usuario con ID: ${id}`);
+            return null;
+        }
+
+        return rows[0]; // Retorna el objeto del usuario { id, name, pushToken, ... }
+    } catch (error) {
+        console.error('❌ Error al obtener usuario:', error.message);
+        throw error;
+    }
+};
+
+const executeCronHive = async () => {
+    const user = await getUserById(1);
+
+    cron.schedule('*/10 * * * *', async () => {
+        console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
+
+        try {
+            const data = await consultarHive5('loansForInvestment');
+            if (data && data.length > 0) {
+
+                if (user && user.pushToken) {
+                    await sendPushNotification(
+                        user.pushToken,
+                        "Hive5: ¡Nueva Oportunidad!",
+                        `Hay ${data.length} préstamos nuevos para inversión.`,
+                    );
+                }
+                console.log('✅ Notificación enviada con éxito');
+            } else {
+                console.log('ℹ️ Consulta realizada: No hay novedades relevantes.');
+                if (user && user.pushToken) {
+                    await sendPushNotification(
+                        user.pushToken,
+                        "Hive5",
+                        `No hay préstamos disponibles`,
+                    );
+                }
+            }
+
+        } catch (error) {
+            console.error('❌ Error en el ciclo del Cron:', error.message);
+        }
+    });
+}
+
+app.put('/update-token', async (req, res) => {
+    const { userId, pushToken } = req.body;
+
+    console.log('Solicitud de actualización - ID:', userId, 'Token:', pushToken?.substring(0, 10) + '...');
+
+    if (!userId || !pushToken) {
+        return res.status(400).json({ error: 'userId y pushToken son obligatorios' });
+    }
+
+    try {
+        // Query de UPDATE estándar
+        const query = `
+            UPDATE users 
+            SET pushToken = ? 
+            WHERE id = ?
+        `;
+
+        const [result] = await db.execute(query, [pushToken, userId]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                message: 'No se encontró el usuario con ese ID para actualizar.'
+            });
+        }
+
+        console.log('✅ Base de datos actualizada correctamente');
+        res.status(200).json({ success: true, message: 'Token actualizado' });
+
+    } catch (error) {
+        console.error('❌ Error SQL:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
 
-    sendPushNotification('cadINOVlRn6kXEhVcJ1V3g:APA91bHSjEVhuxZuk7mRyOuLATfkf2CJZ98FMZme1Nl7aaEdRuAglA-CN-xchxoAOYltedOWlygWRycSL1L2gb5_5jWbE3Byhu8UF50cAr9Exfa9OYgzkSI',
-        'Hive5',
-        'beaaaaa'
-    )
-    //TODO BEA aqui un cron
-    //consultarHive5('loansForInvestment');
+    executeCronHive()
 });

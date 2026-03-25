@@ -1,9 +1,7 @@
 import mysql from 'mysql2/promise';
 
 const dbConfig = process.env.MYSQL_PUBLIC_URL 
-    ? { 
-        uri: process.env.MYSQL_PUBLIC_URL 
-      } 
+    ? { uri: process.env.MYSQL_PUBLIC_URL } 
     : {
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
@@ -24,15 +22,20 @@ const db = mysql.createPool(finalConfig);
 
 const initTable = async () => {
     try {
-        // --- PRUEBA DE CONEXIÓN ---
         console.log("⏳ Intentando conectar a la base de datos...");
         const [rows] = await db.query('SELECT NOW() as currentTime, VERSION() as version');
         console.log("✅ ¡Conexión exitosa!");
-        console.log(`📡 Servidor: ${process.env.MYSQLHOST || 'localhost'}`);
-        console.log(`⏱️ Hora del servidor DB: ${rows[0].currentTime}`);
-        console.log(`🆔 Versión MySQL: ${rows[0].version}`);
-        // --------------------------
 
+        // 1. TABLA DE USUARIOS (Nueva)
+        const queryUsers = `
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                pushToken VARCHAR(500),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )`;
+
+        // 2. TABLA DE OPORTUNIDADES
         const queryOpportunities = `
             CREATE TABLE IF NOT EXISTS arbitrage_opportunities (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -52,6 +55,7 @@ const initTable = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )`;
         
+        // 3. TABLA DE APUESTAS (Con FK a users)
         const queryUserBets = `
             CREATE TABLE IF NOT EXISTS user_bets (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -64,11 +68,18 @@ const initTable = async () => {
                 away_stake DOUBLE NOT NULL,
                 status ENUM('pending', 'completed', 'canceled') DEFAULT 'completed',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                CONSTRAINT fk_user
+                    FOREIGN KEY (user_id) 
+                    REFERENCES users(id)
+                    ON DELETE CASCADE,
                 CONSTRAINT fk_opportunity 
                     FOREIGN KEY (opportunity_id) 
                     REFERENCES arbitrage_opportunities(id)
                     ON DELETE CASCADE
             )`;
+
+        await db.execute(queryUsers);
+        console.log("👤 Tabla 'users' lista.");
 
         await db.execute(queryOpportunities);
         console.log("🗄️ Tabla 'arbitrage_opportunities' lista.");
@@ -77,13 +88,7 @@ const initTable = async () => {
         console.log("📈 Tabla 'user_bets' lista para seguimiento.");
 
     } catch (err) {
-        console.log('err: ', err)
-        console.log('API_KEY: ', process.env.API_KEY)
-        console.log('MYSQL_URL: ', process.env.MYSQL_PUBLIC_URL)
-        console.log('dbConfig is: ', dbConfig)
-        console.error("❌ Error de MySQL:");
-        console.error(`> Mensaje: ${err.message}`);
-        console.error(`> Código: ${err.code}`); 
+        console.error("❌ Error de MySQL:", err.message);
     }
 };
 
