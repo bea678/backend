@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const app = express();
 import cron from 'node-cron';
+import fs from 'fs/promises';
 
 const API_KEY = process.env.API_KEY;
 const API_KEY_IO = process.env.API_KEY_IO;
@@ -387,7 +388,7 @@ async function consultarHive5(idABuscar) {
     formData.append('interest-to', '');
     formData.append('originator', '');
     formData.append('period-from', '');
-    formData.append('period-to', '90'); // ⚠️ Ojo: si los nuevos préstamos son > 90 días, no saldrán
+    formData.append('period-to', '35'); 
     formData.append('amount-left-from', '');
     formData.append('amount-left-to', '');
     formData.append('type', '');
@@ -407,7 +408,7 @@ async function consultarHive5(idABuscar) {
                 'accept-language': 'es-ES,es;q=0.9',
                 'cache-control': 'no-cache',
                 'content-type': 'application/x-www-form-urlencoded',
-                'cookie': 'PHPSESSID=41e64403fc1d13972a9480f50b8b81c7', // ⚠️ IMPORTANTE: Verifica que no haya caducado
+                'cookie': 'PHPSESSID=f9de8a319ae9577f691bc8eb59d9497c', // ⚠️ IMPORTANTE: Verifica que no haya caducado
                 'origin': 'https://app.hive5.com',
                 'referer': 'https://app.hive5.com/investment/primary/?page=1',
                 'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
@@ -428,12 +429,24 @@ async function consultarHive5(idABuscar) {
 
         // 2. Leer el HTML y verificar tamaño
         const html = await response.text();
+
+
         const tamanoKB = (html.length / 1024).toFixed(2);
         console.log(`📄 Datos recibidos: ${tamanoKB} KB`);
 
         // 3. Detectar si estamos en la página de Login (Sesión caducada)
-        if (html.includes('login-form') || html.includes('name="login"') || html.length < 5000) {
+        if (html.includes('registration-block') || html.includes('name="login"') || html.length < 5000) {
+            const user = await getUserById(1);
+
             console.error(`⚠️ ALERTA: La sesión ha caducado. El servidor envió la página de Login en lugar de los préstamos.`);
+
+            if (user?.pushToken) {
+                 await sendPushNotification(
+                        user.pushToken,
+                        "Hive5",
+                        `La cookie ha expirado.`,
+                    );
+            }
             return null;
         }
 
@@ -444,7 +457,6 @@ async function consultarHive5(idABuscar) {
         if (elemento.length > 0) {
             const contenido = elemento.text().trim();
             console.log(`✅ ÉXITO: Elemento #${idABuscar} localizado.`);
-            console.log(`📝 Contenido: ${contenido.substring(0, 50)}...`);
             return contenido;
         } else {
             console.log(`⚠️ ID NO ENCONTRADO: La conexión fue exitosa pero el ID #${idABuscar} no está en el HTML.`);            
@@ -512,7 +524,7 @@ const getUserById = async (id) => {
 };
 
 const executeCronHive = async () => {
-   cron.schedule('*/5 10-18 * * *', async () => {
+   cron.schedule('*/10 7-22 * * *', async () => {
         const user = await getUserById(1);
         console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
 
@@ -577,4 +589,5 @@ app.listen(PORT, () => {
     console.log(`🚀 Server running en: `, PORT);
 
     executeCronHive()
+    //consultarHive5('loansForInvestment');
 });
