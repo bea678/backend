@@ -381,12 +381,13 @@ app.get('/holabea', async (req, res) => {
 async function consultarHive5(idABuscar) {
     const url = 'https://app.hive5.com/investment/primary/?page=1';
 
+    // Configuración de los filtros del formulario
     const formData = new URLSearchParams();
     formData.append('interest-from', '');
     formData.append('interest-to', '');
     formData.append('originator', '');
     formData.append('period-from', '');
-    formData.append('period-to', '90');
+    formData.append('period-to', '90'); // ⚠️ Ojo: si los nuevos préstamos son > 90 días, no saldrán
     formData.append('amount-left-from', '');
     formData.append('amount-left-to', '');
     formData.append('type', '');
@@ -396,6 +397,9 @@ async function consultarHive5(idABuscar) {
     formData.append('amount-left-invest', '10');
 
     try {
+        console.log(`\n--- 🔍 INICIANDO CONEXIÓN A HIVE5 ---`);
+        console.log(`🌐 URL: ${url}`);
+
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -403,11 +407,10 @@ async function consultarHive5(idABuscar) {
                 'accept-language': 'es-ES,es;q=0.9',
                 'cache-control': 'no-cache',
                 'content-type': 'application/x-www-form-urlencoded',
-                'cookie': 'PHPSESSID=41e64403fc1d13972a9480f50b8b81c7',
+                'cookie': 'PHPSESSID=41e64403fc1d13972a9480f50b8b81c7', // ⚠️ IMPORTANTE: Verifica que no haya caducado
                 'origin': 'https://app.hive5.com',
                 'referer': 'https://app.hive5.com/investment/primary/?page=1',
                 'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
-                'sec-ch-ua': '"Not(A:Brand";v="8", "Chromium";v="144", "Google Chrome";v="144"',
                 'sec-fetch-dest': 'document',
                 'sec-fetch-mode': 'navigate',
                 'sec-fetch-site': 'same-origin'
@@ -415,24 +418,42 @@ async function consultarHive5(idABuscar) {
             body: formData
         });
 
+        // 1. Verificar Estado HTTP
+        console.log(`📡 Status Code: ${response.status} (${response.statusText})`);
+        
         if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}. Revisa si la Cookie ha caducado.`);
+            console.error(`🔴 ERROR: El servidor respondió con un error. ¿Ha caducado la Cookie?`);
+            return null;
         }
 
+        // 2. Leer el HTML y verificar tamaño
         const html = await response.text();
+        const tamanoKB = (html.length / 1024).toFixed(2);
+        console.log(`📄 Datos recibidos: ${tamanoKB} KB`);
+
+        // 3. Detectar si estamos en la página de Login (Sesión caducada)
+        if (html.includes('login-form') || html.includes('name="login"') || html.length < 5000) {
+            console.error(`⚠️ ALERTA: La sesión ha caducado. El servidor envió la página de Login en lugar de los préstamos.`);
+            return null;
+        }
+
+        // 4. Procesar con Cheerio
         const $ = cheerio.load(html);
         const elemento = $(`#${idABuscar}`);
 
         if (elemento.length > 0) {
-            console.log(`✅ Elemento encontrado`);
-            return elemento.text().trim();
+            const contenido = elemento.text().trim();
+            console.log(`✅ ÉXITO: Elemento #${idABuscar} localizado.`);
+            console.log(`📝 Contenido: ${contenido.substring(0, 50)}...`);
+            return contenido;
         } else {
-            console.log(`⚠️ ID no encontrado.`);
+            console.log(`⚠️ ID NO ENCONTRADO: La conexión fue exitosa pero el ID #${idABuscar} no está en el HTML.`);            
             return null;
         }
 
     } catch (error) {
-        console.error('🔴 Error crítico:', error.message);
+        console.error('🔴 ERROR CRÍTICO DE RED:', error.message);
+        return null;
     }
 }
 
@@ -491,7 +512,7 @@ const getUserById = async (id) => {
 };
 
 const executeCronHive = async () => {
-    cron.schedule('*/10 7-22 * * *', async () => {
+   cron.schedule('*/5 10-18 * * *', async () => {
         const user = await getUserById(1);
         console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
 
