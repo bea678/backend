@@ -408,7 +408,7 @@ async function consultarHive5(idABuscar) {
                 'accept-language': 'es-ES,es;q=0.9',
                 'cache-control': 'no-cache',
                 'content-type': 'application/x-www-form-urlencoded',
-                'cookie': 'PHPSESSID=f9de8a319ae9577f691bc8eb59d9497c', // ⚠️ IMPORTANTE: Verifica que no haya caducado
+                'cookie': 'PHPSESSID=b6bd15cb890d52fd3c884e70c55b8763',
                 'origin': 'https://app.hive5.com',
                 'referer': 'https://app.hive5.com/investment/primary/?page=1',
                 'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
