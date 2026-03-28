@@ -5,17 +5,16 @@ import { processAndSaveArbitrage } from './analyzer2.js';
 import db from './db.js';
 import { parseQueryParams } from './query.js';
 import { PORT } from './config.js';
-import * as cheerio from 'cheerio';
 import admin from 'firebase-admin';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { executeCronHive, consultarHive5 } from './hive5.js';
+
 const app = express();
-import cron from 'node-cron';
-import fs from 'fs/promises';
 
 const API_KEY = process.env.API_KEY;
 const API_KEY_IO = process.env.API_KEY_IO;
-    
+
 app.use(express.json());
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -307,11 +306,7 @@ app.get('/user_bets', async (req, res) => {
 });
 
 app.get('/arbitrage_opportunities', async (req, res) => {
-    // 1. Parseamos los parámetros originales
     const { query: parsedQuery, pager, sort } = parseQueryParams(req.query);
-
-    // 2. EXTRAEMOS user_id de parsedQuery para que no entre al WHERE
-    // Usamos desestructuración: 'user_id' se guarda aparte y 'restOfFilters' contiene todo lo demás
     const { user_id, ...restOfFilters } = parsedQuery;
 
     try {
@@ -319,18 +314,16 @@ app.get('/arbitrage_opportunities', async (req, res) => {
         let selectFields = `ao.*`;
         let joinClause = ``;
 
-        // 3. Si hay user_id (extraído del objeto query), preparamos el JOIN
         if (user_id && user_id !== 'undefined') {
             selectFields += `, IF(ub.id IS NOT NULL, true, false) AS isUserIn`;
             joinClause = ` LEFT JOIN user_bets ub ON ao.id = ub.opportunity_id AND ub.user_id = ?`;
-            params.push(Number(user_id)); // Primer '?'
+            params.push(Number(user_id)); 
         } else {
             selectFields += `, false AS isUserIn`;
         }
 
         let sql = `SELECT ${selectFields} FROM arbitrage_opportunities ao${joinClause}`;
 
-        // 4. Construimos las condiciones usando SOLO restOfFilters (sin user_id)
         let conditions = [];
         Object.keys(restOfFilters).forEach((key) => {
             const value = restOfFilters[key];
@@ -352,12 +345,10 @@ app.get('/arbitrage_opportunities', async (req, res) => {
             sql += ` WHERE ${conditions.join(' AND ')}`;
         }
 
-        // 5. Orden y Paginación
         const safeSortField = sort.field.replace(/[^a-zA-Z0-9_]/g, '');
         sql += ` ORDER BY ao.${safeSortField} ${sort.direction} LIMIT ? OFFSET ?`;
         params.push(Number(pager.limit), Number(pager.offset));
 
-        // LOGS para confirmar
         console.log("🚀 SQL:", sql);
         console.log("📦 PARAMS:", params);
 
@@ -375,99 +366,9 @@ app.get('/arbitrage_opportunities', async (req, res) => {
     }
 });
 
-app.get('/holabea', async (req, res) => {
+app.get('/', async (req, res) => {
     res.json('holabea');
 })
-
-async function consultarHive5(idABuscar) {
-    const url = 'https://app.hive5.com/investment/primary/?page=1';
-
-    // Configuración de los filtros del formulario
-    const formData = new URLSearchParams();
-    formData.append('interest-from', '');
-    formData.append('interest-to', '');
-    formData.append('originator', '');
-    formData.append('period-from', '');
-    formData.append('period-to', '35'); 
-    formData.append('amount-left-from', '');
-    formData.append('amount-left-to', '');
-    formData.append('type', '');
-    formData.append('clearFilter', 'false');
-    formData.append('page', '1');
-    formData.append('orderBy[]', '');
-    formData.append('amount-left-invest', '10');
-
-    try {
-        console.log(`\n--- 🔍 INICIANDO CONEXIÓN A HIVE5 ---`);
-        console.log(`🌐 URL: ${url}`);
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                'accept-language': 'es-ES,es;q=0.9',
-                'cache-control': 'no-cache',
-                'content-type': 'application/x-www-form-urlencoded',
-                'cookie': 'PHPSESSID=b6bd15cb890d52fd3c884e70c55b8763',
-                'origin': 'https://app.hive5.com',
-                'referer': 'https://app.hive5.com/investment/primary/?page=1',
-                'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36',
-                'sec-fetch-dest': 'document',
-                'sec-fetch-mode': 'navigate',
-                'sec-fetch-site': 'same-origin'
-            },
-            body: formData
-        });
-
-        // 1. Verificar Estado HTTP
-        console.log(`📡 Status Code: ${response.status} (${response.statusText})`);
-        
-        if (!response.ok) {
-            console.error(`🔴 ERROR: El servidor respondió con un error. ¿Ha caducado la Cookie?`);
-            return null;
-        }
-
-        // 2. Leer el HTML y verificar tamaño
-        const html = await response.text();
-
-
-        const tamanoKB = (html.length / 1024).toFixed(2);
-        console.log(`📄 Datos recibidos: ${tamanoKB} KB`);
-
-        // 3. Detectar si estamos en la página de Login (Sesión caducada)
-        if (html.includes('registration-block') || html.includes('name="login"') || html.length < 5000) {
-            const user = await getUserById(1);
-
-            console.error(`⚠️ ALERTA: La sesión ha caducado. El servidor envió la página de Login en lugar de los préstamos.`);
-
-            if (user?.pushToken) {
-                 await sendPushNotification(
-                        user.pushToken,
-                        "Hive5",
-                        `La cookie ha expirado.`,
-                    );
-            }
-            return null;
-        }
-
-        // 4. Procesar con Cheerio
-        const $ = cheerio.load(html);
-        const elemento = $(`#${idABuscar}`);
-
-        if (elemento.length > 0) {
-            const contenido = elemento.text().trim();
-            console.log(`✅ ÉXITO: Elemento #${idABuscar} localizado.`);
-            return contenido;
-        } else {
-            console.log(`⚠️ ID NO ENCONTRADO: La conexión fue exitosa pero el ID #${idABuscar} no está en el HTML.`);            
-            return null;
-        }
-
-    } catch (error) {
-        console.error('🔴 ERROR CRÍTICO DE RED:', error.message);
-        return null;
-    }
-}
 
 /**
  * Función para enviar la notificación
@@ -506,7 +407,7 @@ const sendPushNotification = async (fcmToken, title, body) => {
         throw error;
     }
 };
-const getUserById = async (id) => {
+export const getUserById = async (id) => {
     try {
         const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
         const [rows] = await db.execute(query, [id]);
@@ -516,38 +417,12 @@ const getUserById = async (id) => {
             return null;
         }
 
-        return rows[0]; // Retorna el objeto del usuario { id, name, pushToken, ... }
+        return rows[0]; 
     } catch (error) {
         console.error('❌ Error al obtener usuario:', error.message);
         throw error;
     }
 };
-
-const executeCronHive = async () => {
-   cron.schedule('*/10 7-22 * * *', async () => {
-        const user = await getUserById(1);
-        console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
-
-        try {
-            const data = await consultarHive5('loansForInvestment');
-            if (data && data.length > 0) {
-                if (user && user.pushToken) {
-                    await sendPushNotification(
-                        user.pushToken,
-                        "Hive5: ¡Nueva Oportunidad!",
-                        `Hay préstamos nuevos para inversión.`,
-                    );
-                }
-                console.log('✅ Notificación enviada con éxito');
-            } else {
-                console.log('ℹ️ Consulta realizada: No hay novedades relevantes.');
-            }
-
-        } catch (error) {
-            console.error('❌ Error en el ciclo del Cron:', error.message);
-        }
-    });
-}
 
 app.put('/update-token', async (req, res) => {
     const { userId, pushToken } = req.body;
@@ -559,7 +434,6 @@ app.put('/update-token', async (req, res) => {
     }
 
     try {
-        // Query de UPDATE estándar
         const query = `
             UPDATE users 
             SET pushToken = ? 
