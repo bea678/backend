@@ -1,0 +1,530 @@
+{
+  "0602_kedahdarulaman_umdamansara": {
+    "eventId": "9_UM-Damansara United",
+    "partido": "UM-Damansara United vs Kedah Darul Aman FC",
+    "cuotas": [
+      1.06,
+      9,
+      23
+    ],
+    "competicion": "FAM League",
+    "hora": "06:02"
+  },
+  "1030_slovanbratisvab_tatranliptovskymikus": {
+    "eventId": "11_Slovan Bratislava B",
+    "partido": "Slovan Bratislava B vs Tatran Liptovský Mikuláš",
+    "cuotas": [
+      3.15,
+      3.45,
+      1.89
+    ],
+    "competicion": "2. Liga",
+    "hora": "10:30"
+  },
+  "1015_slovackob_tjstartbrno": {
+    "eventId": "15_Slovácko B",
+    "partido": "Slovácko B vs TJ Start Brno",
+    "cuotas": [
+      1.48,
+      3.75,
+      4.5
+    ],
+    "competicion": "MSFL",
+    "hora": "10:15"
+  },
+  "1015_hostoun_lokovltavin": {
+    "eventId": "16_Loko Vltavín",
+    "partido": "Loko Vltavín vs Hostoun",
+    "cuotas": [
+      2.33,
+      3.1,
+      2.45
+    ],
+    "competicion": "ČFL",
+    "hora": "10:15"
+  },
+  "1015_mdabolesvb_vkehamry": {
+    "eventId": "16_Mladá Boleslav B",
+    "partido": "Mladá Boleslav B vs Velke Hamry",
+    "cuotas": [
+      1.9,
+      3.35,
+      2.95
+    ],
+    "competicion": "ČFL",
+    "hora": "10:15"
+  },
+  "1015_ceskebejoviceb_motorletpraha": {
+    "eventId": "16_Motorlet Praha",
+    "partido": "Motorlet Praha vs České Budějovice B",
+    "cuotas": [
+      1.87,
+      3.45,
+      2.95
+    ],
+    "competicion": "ČFL",
+    "hora": "10:15"
+  },
+  "1015_fkmastaborskoii_skpetrinplzen": {
+    "eventId": "16_SK Petrin Plzen",
+    "partido": "SK Petrin Plzen vs FK Mas Táborsko II",
+    "cuotas": [
+      2.23,
+      3.3,
+      2.43
+    ],
+    "competicion": "ČFL",
+    "hora": "10:15"
+  },
+  "1030_fkpribramb_viktoriaplzenb": {
+    "eventId": "16_Viktoria Plzeň B",
+    "partido": "Viktoria Plzeň B vs FK Pribram B",
+    "cuotas": [
+      1.36,
+      4.25,
+      5.1
+    ],
+    "competicion": "ČFL",
+    "hora": "10:30"
+  },
+  "1200_1461trabzon_arnavutkoybediyesigenclikvespor": {
+    "eventId": "23_1461 Trabzon",
+    "partido": "1461 Trabzon vs Arnavutkoy Belediyesi Genclik VE Spor",
+    "cuotas": [
+      1.94,
+      3.2,
+      3.35
+    ],
+    "competicion": "2. Lig",
+    "hora": "12:00"
+  },
+  "1230_nongbuapitchaya_policetero": {
+    "eventId": "24_Nong Bua Pitchaya",
+    "partido": "Nong Bua Pitchaya vs Police Tero",
+    "cuotas": [
+      1.92,
+      3.4,
+      3.1
+    ],
+    "competicion": "2ª División",
+    "hora": "12:30"
+  },
+  "1200_amasyaspor1968fk_karanizeregli": {
+    "eventId": "25_Amasyaspor 1968 FK",
+    "partido": "Amasyaspor 1968 FK vs Karadeniz Eregli",
+    "cuotas": [
+      2.55,
+      2.85,
+      2.28
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_buncakspor_orduspor1967": {
+    "eventId": "25_Bulancakspor",
+    "partido": "Bulancakspor vs Orduspor 1967",
+    "cuotas": [
+      2.5,
+      2.9,
+      2.32
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_bulvarspor_silivrispor": {
+    "eventId": "25_Bulvarspor",
+    "partido": "Bulvarspor vs Silivrispor",
+    "cuotas": [
+      3.15,
+      3.15,
+      1.85
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_cayispor_sebatgenclikspor": {
+    "eventId": "25_Cayelispor",
+    "partido": "Cayelispor vs Sebat Genclik Spor",
+    "cuotas": [
+      5.6,
+      3.7,
+      1.38
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_orduspor_yozgatspor": {
+    "eventId": "25_Orduspor",
+    "partido": "Orduspor vs Yozgatspor",
+    "cuotas": [
+      1.67,
+      3.25,
+      3.7
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_osmaniyespor_suvermerkapadokyaspor": {
+    "eventId": "25_Osmaniyespor",
+    "partido": "Osmaniyespor vs Suvermer Kapadokyaspor",
+    "cuotas": [
+      1.68,
+      3.35,
+      3.5
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_matyayesilyurtbediyespor_silifkebediyespor": {
+    "eventId": "25_Silifke Belediyespor",
+    "partido": "Silifke Belediyespor vs Malatya Yesilyurt Belediyespor",
+    "cuotas": [
+      1.95,
+      3,
+      3.05
+    ],
+    "competicion": "3. Ligi",
+    "hora": "12:00"
+  },
+  "1200_satun_thonburi": {
+    "eventId": "26_Satun FC",
+    "partido": "Satun FC vs Thonburi United FC",
+    "cuotas": [
+      2.23,
+      3.05,
+      2.95
+    ],
+    "competicion": "3.ª división",
+    "hora": "12:00"
+  },
+  "1200_metalistkharkiv_viktoriyasumy": {
+    "eventId": "35_Metalist Kharkiv",
+    "partido": "Metalist Kharkiv vs FC Viktoriya Sumy",
+    "cuotas": [
+      2,
+      3,
+      3.35
+    ],
+    "competicion": "Persha Liga",
+    "hora": "12:00"
+  },
+  "1200_terrassa_valenciamestal": {
+    "eventId": "38_Valencia Mestalla",
+    "partido": "Valencia Mestalla vs FC Terrassa",
+    "cuotas": [
+      2.23,
+      3.05,
+      3
+    ],
+    "competicion": "Segunda B - Gr. III",
+    "hora": "12:00"
+  },
+  "1300_dainavaalytus_fktaurastaurage": {
+    "eventId": "40_FK Tauras Tauragė",
+    "partido": "FK Tauras Tauragė vs Dainava Alytus",
+    "cuotas": [
+      1.53,
+      4,
+      4.8
+    ],
+    "competicion": "1 Lyga",
+    "hora": "13:00"
+  },
+  "1300_enskeik_ifklidingofk": {
+    "eventId": "42_Enskede IK",
+    "partido": "Enskede IK vs IFK Lidingö FK",
+    "cuotas": [
+      1.33,
+      4.6,
+      6.1
+    ],
+    "competicion": "2ª División NS",
+    "hora": "13:00"
+  },
+  "1300_comoros_namibia": {
+    "eventId": "43_Namibia",
+    "partido": "Namibia vs Comoros",
+    "cuotas": [
+      2.65,
+      2.88,
+      2.7
+    ],
+    "competicion": "Amistosos Internacionales",
+    "hora": "13:00"
+  },
+  "1345_manjungcity_perlis": {
+    "eventId": "50_Perlis",
+    "partido": "Perlis vs Manjung City FC",
+    "cuotas": [
+      2.7,
+      3.5,
+      2.12
+    ],
+    "competicion": "FAM League",
+    "hora": "13:45"
+  },
+  "1400_azigspor_bucaspor": {
+    "eventId": "57_Bucaspor",
+    "partido": "Bucaspor vs Elaziğspor",
+    "cuotas": [
+      12,
+      6.4,
+      1.14
+    ],
+    "competicion": "2. Lig",
+    "hora": "14:00"
+  },
+  "1400_erzincanspor_inegolspor": {
+    "eventId": "57_Inegölspor",
+    "partido": "Inegölspor vs Erzincanspor",
+    "cuotas": [
+      1.63,
+      3.6,
+      4.3
+    ],
+    "competicion": "2. Lig",
+    "hora": "14:00"
+  },
+  "1400_kirkrispor_somaspor": {
+    "eventId": "57_Somaspor",
+    "partido": "Somaspor vs Kirklarelispor",
+    "cuotas": [
+      2.7,
+      3.15,
+      2.25
+    ],
+    "competicion": "2. Lig",
+    "hora": "14:00"
+  },
+  "1430_egyptinsurance_levs": {
+    "eventId": "58_Egypt Insurance",
+    "partido": "Egypt Insurance vs Levels FC",
+    "cuotas": [
+      2.8,
+      2.85,
+      2.28
+    ],
+    "competicion": "2ª División",
+    "hora": "14:30"
+  },
+  "1400_kormakurhvot_volsungur": {
+    "eventId": "63_Völsungur",
+    "partido": "Völsungur vs Kormakur/Hvot",
+    "cuotas": [
+      1.14,
+      7,
+      9.5
+    ],
+    "competicion": "Copa",
+    "hora": "14:00"
+  },
+  "1430_hebarpazardzhik_vihrensandanski": {
+    "eventId": "72_FC Hebar Pazardzhik",
+    "partido": "FC Hebar Pazardzhik vs Vihren Sandanski",
+    "cuotas": [
+      2.28,
+      3.05,
+      2.55
+    ],
+    "competicion": "PFL 2",
+    "hora": "14:30"
+  },
+  "1430_logoretsrazgradii_yantra": {
+    "eventId": "72_Ludogorets Razgrad II",
+    "partido": "Ludogorets Razgrad II vs FC Yantra",
+    "cuotas": [
+      2.45,
+      2.9,
+      2.48
+    ],
+    "competicion": "PFL 2",
+    "hora": "14:30"
+  },
+  "1400_alhilomdurman_rutsiro": {
+    "eventId": "74_Rutsiro FC",
+    "partido": "Rutsiro FC vs Al Hilal Omdurman",
+    "cuotas": [
+      7.5,
+      4.4,
+      1.32
+    ],
+    "competicion": "Premier League",
+    "hora": "14:00"
+  },
+  "1500_ndbtinci_nddravinja": {
+    "eventId": "90_ND Beltinci",
+    "partido": "ND Beltinci vs ND Dravinja",
+    "cuotas": [
+      1.34,
+      4.4,
+      6.75
+    ],
+    "competicion": "SNL 2",
+    "hora": "15:00"
+  },
+  "1600_afyl_darlington": {
+    "eventId": "103_AFC Fylde",
+    "partido": "AFC Fylde vs Darlington FC",
+    "cuotas": [
+      1.48,
+      4.1,
+      5.2
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_atford_bedfordtown": {
+    "eventId": "103_AFC Telford United",
+    "partido": "AFC Telford United vs Bedford Town",
+    "cuotas": [
+      1.47,
+      4.3,
+      5
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_chester_curzonashton": {
+    "eventId": "103_Curzon Ashton",
+    "partido": "Curzon Ashton vs Chester FC",
+    "cuotas": [
+      3.5,
+      3.75,
+      1.78
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_buxton_hereford": {
+    "eventId": "103_Hereford United",
+    "partido": "Hereford United vs Buxton FC",
+    "cuotas": [
+      2.8,
+      3.35,
+      2.16
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_kingslynntown_spennymoortown": {
+    "eventId": "103_King's Lynn Town FC",
+    "partido": "King's Lynn Town FC vs Spennymoor Town",
+    "cuotas": [
+      2.08,
+      3.3,
+      3.05
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_leamington_peterboroughsports": {
+    "eventId": "103_Leamington",
+    "partido": "Leamington vs Peterborough Sports FC",
+    "cuotas": [
+      3.15,
+      3.4,
+      2
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_kidrminsterharriers_oxfordcity": {
+    "eventId": "103_Oxford City",
+    "partido": "Oxford City vs Kidderminster Harriers",
+    "cuotas": [
+      4.1,
+      3.5,
+      1.73
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_chorley_scarboroughathletic": {
+    "eventId": "103_Scarborough Athletic FC",
+    "partido": "Scarborough Athletic FC vs Chorley",
+    "cuotas": [
+      2.15,
+      3.2,
+      2.95
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_alfretontown_southshids": {
+    "eventId": "103_South Shields FC",
+    "partido": "South Shields FC vs Alfreton Town",
+    "cuotas": [
+      1.26,
+      5.2,
+      8
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1600_radcliffe_worksoptown": {
+    "eventId": "103_Worksop Town",
+    "partido": "Worksop Town vs Radcliffe FC",
+    "cuotas": [
+      2.5,
+      3.55,
+      2.32
+    ],
+    "competicion": "Liga Nacional Norte",
+    "hora": "16:00"
+  },
+  "1700_canonerosmarinareserves_union": {
+    "eventId": "131_Club Union FC",
+    "partido": "Club Union FC vs Club Cañoneros Marina Reserves",
+    "cuotas": [
+      1.22,
+      5.5,
+      8.5
+    ],
+    "competicion": "Tercera Division",
+    "hora": "17:00"
+  },
+  "1745_aguislvalleteotihuacan_cefor3030": {
+    "eventId": "131_Aguilas Del Valle De Teotihuacan",
+    "partido": "Aguilas Del Valle De Teotihuacan vs Cefor 3030",
+    "cuotas": [
+      2.65,
+      3.7,
+      2.14
+    ],
+    "competicion": "Tercera Division",
+    "hora": "17:45"
+  },
+  "2000_cacerro_monteviowanrers": {
+    "eventId": "159_Montevideo Wanderers",
+    "partido": "Montevideo Wanderers vs CA Cerro",
+    "cuotas": [
+      2.02,
+      2.9,
+      3.35
+    ],
+    "competicion": "Campeonato Uruguayo",
+    "hora": "20:00"
+  },
+  "2000_inpendientemexiquense_sangrecampeoon": {
+    "eventId": "164_Sangre De Campeoon",
+    "partido": "Sangre De Campeoon vs Deportivo Independiente Mexiquense",
+    "cuotas": [
+      2.43,
+      3.3,
+      2.45
+    ],
+    "competicion": "Tercera Division",
+    "hora": "20:00"
+  },
+  "2100_chfutbol_ecatepecfutbol": {
+    "eventId": "171_Ecatepec Fútbol Club",
+    "partido": "Ecatepec Fútbol Club vs CH Fútbol Club",
+    "cuotas": [
+      1.12,
+      8,
+      11
+    ],
+    "competicion": "Tercera Division",
+    "hora": "21:00"
+  }
+}
