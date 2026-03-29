@@ -504,6 +504,40 @@ app.get('/download-music/:id', async (req, res) => {
   }
 });
 
+app.get('/check-system', (req, res) => {
+    const commands = {
+        python: 'python3 --version',
+        ffmpeg: 'ffmpeg -version | head -n 1',
+        path: 'echo $PATH',
+        wherePython: 'which python3'
+    };
+
+    let results = {};
+    let completed = 0;
+    const total = Object.keys(commands).length;
+
+    Object.entries(commands).forEach(([key, cmd]) => {
+        exec(cmd, (error, stdout, stderr) => {
+            results[key] = {
+                output: stdout.trim(),
+                error: stderr.trim() || (error ? error.message : null)
+            };
+            
+            completed++;
+            if (completed === total) {
+                // Si python.output está vacío, es que NO está instalado
+                const isReady = results.python.output.includes('Python');
+                
+                res.json({
+                    status: isReady ? "✅ SISTEMA LISTO" : "❌ FALTA PYTHON",
+                    diagnostics: results,
+                    tip: "Si falta Python, asegúrate de que nixpacks.toml tenga 'python3' en aptPkgs."
+                });
+            }
+        });
+    });
+});
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
