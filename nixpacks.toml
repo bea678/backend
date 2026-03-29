@@ -1,10 +1,15 @@
-providers = ["node"]
-
 [phases.setup]
-nixPkgs = ["python3", "ffmpeg", "nodejs-20_x"]
+# Especificamos los paquetes de Nix para el entorno
+nixPkgs = ["python3", "ffmpeg", "nodejs_20"]
 
-[phases.build]
+[phases.install]
+# Definimos explícitamente el comando de instalación
 cmds = ["npm install"]
 
+[phases.build]
+# Si no necesitas compilar nada, podemos omitir o dejar vacía esta fase
+cmds = []
+
 [start]
-cmd = "npm start"
+# El comando para arrancar la aplicación
+cmd = "node index.js"
