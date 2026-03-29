@@ -9,12 +9,14 @@ import admin from 'firebase-admin';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { executeCronHive, consultarHive5 } from './hive5.js';
-import ytdl from '@distube/ytdl-core';
+import youtubeDl from 'youtube-dl-exec';
+const { exec } = youtubeDl; // Extraemos exec manualmente
+import ffmpeg from 'ffmpeg-static';
+
 const app = express();
 
 const API_KEY = process.env.API_KEY;
 const API_KEY_IO = process.env.API_KEY_IO;
-
 app.use(express.json());
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -459,27 +461,46 @@ app.put('/update-token', async (req, res) => {
     }
 });
 
-app.get('/download-music', async (req, res) => {
-  const { id } = req.query; 
-  
-  if (!id) {
-    return res.status(400).json({ error: 'Falta el ID del video' });
-  }
-
+app.get('/download-music/:id', async (req, res) => {
+  const { id } = req.params;
   const videoURL = `https://www.youtube.com/watch?v=${id}`;
+
+  console.log(`Iniciando descarga para el ID: ${id}`);
 
   try {
     res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Content-Disposition', `attachment; filename="${id}.mp3"`);
+    res.setHeader('Content-Disposition', `attachment; filename="audio-${id}.mp3"`);
 
-    ytdl(videoURL, {
-      filter: 'audioonly',
-      quality: 'highestaudio',
-    }).pipe(res);
+    const subprocess = exec(videoURL, {
+      extractAudio: true,
+      audioFormat: 'mp3',
+      output: '-',
+      ffmpegLocation: ffmpeg,
+      noCheckCertificates: true,
+      addHeader: [
+        'User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+      ]
+    }, {
+      childProcess: true 
+    });
+
+    subprocess.stdout.pipe(res);
+
+    subprocess.stderr.on('data', (data) => {
+      console.log(`[yt-dlp log]: ${data.toString()}`);
+    });
+
+    subprocess.on('close', (code) => {
+      console.log(`Proceso terminado con código: ${code}`);
+    });
+
+    req.on('close', () => {
+      subprocess.kill();
+    });
 
   } catch (error) {
-    console.error('Error al procesar audio:', error);
-    res.status(500).send('Error en el servidor');
+    console.error('Error en el servidor:', error);
+    if (!res.headersSent) res.status(500).send('Error interno');
   }
 });
 
