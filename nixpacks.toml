@@ -1,5 +1,12 @@
 [phases.setup]
-nixPkgs = ["nodePackages.npm", "python3", "ffmpeg"]
+nixPkgs = ["python311", "ffmpeg", "nodejs_20"]
 
 [phases.build]
-cmds = ["npm install"]
+# Esto crea un alias real de python3 apuntando a python3.11 si no existe
+cmds = [
+  "npm install",
+  "ln -s $(which python3) /usr/bin/python3 || true"
+]
+
+[start]
+cmd = "npm start"
