@@ -9,7 +9,7 @@ import admin from 'firebase-admin';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { executeCronHive, consultarHive5 } from './hive5.js';
-
+import ytdl from '@distube/ytdl-core';
 const app = express();
 
 const API_KEY = process.env.API_KEY;
@@ -388,7 +388,8 @@ const sendPushNotification = async (fcmToken, title, body) => {
                 channelId: 'high_importance_channel',
                 sound: 'default',
                 priority: 'high',
-                clickAction: 'fcm.ACTION_EVENT'
+                clickAction: 'fcm.ACTION_EVENT',
+                icon: 'ic_notification_bear',
             },
         },
         data: {
@@ -458,10 +459,34 @@ app.put('/update-token', async (req, res) => {
     }
 });
 
+app.get('/download-music', async (req, res) => {
+  const { id } = req.query; 
+  
+  if (!id) {
+    return res.status(400).json({ error: 'Falta el ID del video' });
+  }
+
+  const videoURL = `https://www.youtube.com/watch?v=${id}`;
+
+  try {
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${id}.mp3"`);
+
+    ytdl(videoURL, {
+      filter: 'audioonly',
+      quality: 'highestaudio',
+    }).pipe(res);
+
+  } catch (error) {
+    console.error('Error al procesar audio:', error);
+    res.status(500).send('Error en el servidor');
+  }
+});
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
 
-    executeCronHive()
+    //executeCronHive()
     //consultarHive5('loansForInvestment');
 });

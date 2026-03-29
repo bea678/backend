@@ -1,1102 +1,1102 @@
 {
-  "0945_kedah_umdamansara": {
+  "1200_tano_zaragozaaragon": {
     "eventId": "0",
-    "partido": "UM-Damansara United vs Kedah",
+    "partido": "Real Zaragoza Deportivo Aragon vs Tudelano",
     "cuotas": [
-      1.02,
-      12,
-      50
+      3.75,
+      3.5,
+      1.85
     ],
-    "competicion": "Malasia - A1 Semi-Pro League",
-    "hora": "09:45"
+    "competicion": "España - Segunda Federación - Grupo 2",
+    "hora": "12:00"
   },
-  "1000_asatargumures_cfrcluj": {
+  "1200_fingsutd_templeogue": {
     "eventId": "1",
-    "partido": "CFR Cluj vs ASA Targu Mures",
+    "partido": "Finglas Utd vs Templeogue United",
     "cuotas": [
-      1.28,
-      4.5,
-      7
+      1.2,
+      5.5,
+      8
     ],
-    "competicion": "Partidos amistosos",
-    "hora": "10:00"
+    "competicion": "Partidos Copa FAI Intermediate Irlandesa",
+    "hora": "12:00"
   },
-  "1000_brisbanestrikers_loganlightning": {
+  "1200_edflogronow_sociedadfemenino": {
     "eventId": "2",
-    "partido": "Logan Lightning FC vs Brisbane Strikers",
+    "partido": "Real Sociedad Femenino vs EDF Logrono (W)",
+    "cuotas": [
+      1.08,
+      7.5,
+      18
+    ],
+    "competicion": "España - Liga F",
+    "hora": "12:00"
+  },
+  "1200_alcorcon_ibizaeivissa": {
+    "eventId": "3",
+    "partido": "Ibiza Eivissa vs Alcorcón",
+    "cuotas": [
+      1.95,
+      3.1,
+      4
+    ],
+    "competicion": "España - Primera Federación - Grupo 2",
+    "hora": "12:00"
+  },
+  "1200_ourensecf_ponferradina": {
+    "eventId": "4",
+    "partido": "Ourense CF vs Ponferradina",
+    "cuotas": [
+      2.5,
+      2.9,
+      3
+    ],
+    "competicion": "España - Primera Federación - Grupo 1",
+    "hora": "12:00"
+  },
+  "1200_athleticbilbaob_ctavigob": {
+    "eventId": "5",
+    "partido": "Celta de Vigo B vs Athletic Bilbao B",
+    "cuotas": [
+      2.25,
+      3.25,
+      3.1
+    ],
+    "competicion": "España - Primera Federación - Grupo 1",
+    "hora": "12:00"
+  },
+  "1200_caosasunab_guadajara": {
+    "eventId": "6",
+    "partido": "CA Osasuna II vs Guadalajara",
+    "cuotas": [
+      2.45,
+      3,
+      3
+    ],
+    "competicion": "España - Primera Federación - Grupo 1",
+    "hora": "12:00"
+  },
+  "1200_amorebieta_eibarb": {
+    "eventId": "7",
+    "partido": "Amorebieta vs SD Eibar B",
+    "cuotas": [
+      2.3,
+      2.9,
+      3
+    ],
+    "competicion": "España - Segunda Federación - Grupo 2",
+    "hora": "12:00"
+  },
+  "1200_ceandratx_poblense": {
+    "eventId": "8",
+    "partido": "UD Poblense vs CE Andratx",
+    "cuotas": [
+      1.46,
+      3.75,
+      6
+    ],
+    "competicion": "España - Segunda Federación - Grupo 3",
+    "hora": "12:00"
+  },
+  "1200_gironab_ibizaisspitiusas": {
+    "eventId": "9",
+    "partido": "Girona B vs CD Ibiza Islas Pitiusas",
+    "cuotas": [
+      1.7,
+      3.3,
+      4.4
+    ],
+    "competicion": "España - Segunda Federación - Grupo 3",
+    "hora": "12:00"
+  },
+  "1200_baleares_olot": {
+    "eventId": "10",
+    "partido": "CD Atlético Baleares vs Olot",
+    "cuotas": [
+      1.7,
+      3,
+      4.6
+    ],
+    "competicion": "España - Segunda Federación - Grupo 3",
+    "hora": "12:00"
+  },
+  "1200_barbastro_espanyolb": {
+    "eventId": "11",
+    "partido": "UD Barbastro vs Espanyol B",
+    "cuotas": [
+      2.6,
+      2.8,
+      2.6
+    ],
+    "competicion": "España - Segunda Federación - Grupo 3",
+    "hora": "12:00"
+  },
+  "1200_brondbyfemenino_koldingifw": {
+    "eventId": "12",
+    "partido": "Kolding IF (W) vs Brondby Femenino",
+    "cuotas": [
+      10.5,
+      5.5,
+      1.2
+    ],
+    "competicion": "Dinamarca - A-Liga - Femenina",
+    "hora": "12:00"
+  },
+  "1200_gkskatowicew_pogontczeww": {
+    "eventId": "13",
+    "partido": "Pogon Tczew (W) vs GKS Katowice (W)",
+    "cuotas": [
+      14,
+      8,
+      1.08
+    ],
+    "competicion": "Polonia - Ekstraliga - Femenina",
+    "hora": "12:00"
+  },
+  "1200_inhuletspetrove_vorsk": {
+    "eventId": "14",
+    "partido": "Vorskla vs Inhulets Petrove",
+    "cuotas": [
+      2.7,
+      2.9,
+      2.3
+    ],
+    "competicion": "Persha Liga Ucraniana",
+    "hora": "12:00"
+  },
+  "1200_hestrafors_qviding": {
+    "eventId": "15",
+    "partido": "Qviding vs Hestrafors",
+    "cuotas": [
+      1.4,
+      4.5,
+      5
+    ],
+    "competicion": "División 2 sueca",
+    "hora": "12:00"
+  },
+  "1200_guchastars_kisumuallstars": {
+    "eventId": "16",
+    "partido": "Kisumu All Stars vs Gucha Stars",
+    "cuotas": [
+      2.4,
+      2.9,
+      2.75
+    ],
+    "competicion": "Kenia - National Super League",
+    "hora": "12:00"
+  },
+  "1200_gkswikiec_lechiatomaszow": {
+    "eventId": "17",
+    "partido": "Lechia Tomaszow vs GKS Wikielec",
+    "cuotas": [
+      1.65,
+      4,
+      3.25
+    ],
+    "competicion": "Polonia - III Liga",
+    "hora": "12:00"
+  },
+  "1200_switnowydwormazowiecki_wartasieradz": {
+    "eventId": "18",
+    "partido": "Warta Sieradz vs Swit Nowy Dwor Mazowiecki",
+    "cuotas": [
+      1.48,
+      3.7,
+      4.5
+    ],
+    "competicion": "Polonia - III Liga",
+    "hora": "12:00"
+  },
+  "1200_kscktroszyn_widzewlodzb": {
+    "eventId": "19",
+    "partido": "Widzew Lodz II vs KS CK Troszyn",
     "cuotas": [
       2.7,
       4,
+      1.95
+    ],
+    "competicion": "Polonia - III Liga",
+    "hora": "12:00"
+  },
+  "1230_benevento_cosenza": {
+    "eventId": "20",
+    "partido": "Benevento vs Cosenza",
+    "cuotas": [
+      1.46,
+      3.5,
+      5.5
+    ],
+    "competicion": "Serie C Italiana",
+    "hora": "12:30"
+  },
+  "1230_oviedob_rayocantabria": {
+    "eventId": "21",
+    "partido": "SD Rayo Cantabria vs Real Oviedo II",
+    "cuotas": [
+      2.7,
+      3.25,
       2.2
     ],
-    "competicion": "Australia - Queensland Premier League",
-    "hora": "10:00"
+    "competicion": "España - Segunda Federación - Grupo 1",
+    "hora": "12:30"
   },
-  "1000_palmbeachsc_swqthunr": {
-    "eventId": "3",
-    "partido": "SWQ Thunder vs Palm Beach SC",
+  "1300_brabrand_naestved": {
+    "eventId": "22",
+    "partido": "Naestved vs Brabrand",
+    "cuotas": [
+      1.24,
+      4.5,
+      8
+    ],
+    "competicion": "Dinamarca - 2.a división",
+    "hora": "13:00"
+  },
+  "1300_astonvilfemenino_chseafemenino": {
+    "eventId": "23",
+    "partido": "Chelsea Femenino vs Aston Villa Femenino",
     "cuotas": [
       1.09,
       7,
       12
     ],
-    "competicion": "Australia - Copa - Clasificatorios",
-    "hora": "10:00"
-  },
-  "1000_acsdumbravita_utaarad": {
-    "eventId": "4",
-    "partido": "UTA Arad vs Acs Dumbravita",
-    "cuotas": [
-      1.46,
-      4,
-      5
-    ],
-    "competicion": "Partidos amistosos",
-    "hora": "10:00"
-  },
-  "1000_mtgravatthawks_redcliffedolphins": {
-    "eventId": "5",
-    "partido": "Mt Gravatt Hawks vs Redcliffe Dolphins",
-    "cuotas": [
-      1.14,
-      7,
-      10
-    ],
-    "competicion": "Australia - Queensland PL 3",
-    "hora": "10:00"
-  },
-  "1015_slovackob_startbrno": {
-    "eventId": "6",
-    "partido": "Slovacko B vs Start Brno",
-    "cuotas": [
-      1.5,
-      4,
-      4.75
-    ],
-    "competicion": "República Checa - MSFL",
-    "hora": "10:15"
-  },
-  "1015_hlucin_trinec": {
-    "eventId": "7",
-    "partido": "Trinec vs Hlucin",
-    "cuotas": [
-      1.07,
-      8,
-      15
-    ],
-    "competicion": "República Checa - MSFL",
-    "hora": "10:15"
-  },
-  "1015_mfkfrykmistek_zbrojovkabrnob": {
-    "eventId": "8",
-    "partido": "MFK Frydek-Mistek vs FC Zbrojovka Brno B",
-    "cuotas": [
-      2.1,
-      3.4,
-      2.88
-    ],
-    "competicion": "República Checa - MSFL",
-    "hora": "10:15"
-  },
-  "1030_slovanbratisvaii_tatranlipmikus": {
-    "eventId": "9",
-    "partido": "Slovan Bratislava II vs Tatran Lip Mikulas",
-    "cuotas": [
-      2.8,
-      3.5,
-      2
-    ],
-    "competicion": "Eslovaquia - 2. Liga",
-    "hora": "10:30"
-  },
-  "1030_boroondaraeaglesw_boxhillw": {
-    "eventId": "10",
-    "partido": "Boroondara Eagles (W) vs Box Hill (W)",
-    "cuotas": [
-      3.5,
-      3.75,
-      1.8
-    ],
-    "competicion": "Australia - NPL Victoria - Femenina",
-    "hora": "10:30"
-  },
-  "1030_lhi_neroca": {
-    "eventId": "11",
-    "partido": "Neroca FC vs Delhi FC",
-    "cuotas": [
-      2.5,
-      3.5,
-      2.2
-    ],
-    "competicion": "India - I-League - 2.a división",
-    "hora": "10:30"
-  },
-  "1100_ltrassidoarjo_persipurajayapura": {
-    "eventId": "12",
-    "partido": "Persipura Jayapura vs Deltras Sidoarjo",
-    "cuotas": [
-      1.14,
-      5,
-      14
-    ],
-    "competicion": "Indonesia - Campeonato",
-    "hora": "11:00"
-  },
-  "1100_fkucsatarasivka_mmetalurhzaporizhya": {
-    "eventId": "13",
-    "partido": "FK UCSA Tarasivka vs MFC Metalurh Zaporizhya",
-    "cuotas": [
-      1.5,
-      3.5,
-      5
-    ],
-    "competicion": "Persha Liga Ucraniana",
-    "hora": "11:00"
-  },
-  "1100_kiberaw_kisumuallstarletsw": {
-    "eventId": "14",
-    "partido": "Kisumu All Starlets (W) vs Kibera (W)",
-    "cuotas": [
-      6,
-      4.33,
-      1.36
-    ],
-    "competicion": "Kenya - Championship - Femenino",
-    "hora": "11:00"
-  },
-  "1100_madirasoccerassassinsw_trinitystarletsw": {
-    "eventId": "15",
-    "partido": "Trinity Starlets (W) vs Madira Soccer Assassins (W)",
-    "cuotas": [
-      1.73,
-      3.5,
-      4.1
-    ],
-    "competicion": "Kenya - Championship - Femenino",
-    "hora": "11:00"
-  },
-  "1100_acssepsiosk_csikszereda": {
-    "eventId": "16",
-    "partido": "ACS Sepsi OSK vs Csikszereda",
-    "cuotas": [
-      2.3,
-      3.25,
-      2.5
-    ],
-    "competicion": "Partidos amistosos",
-    "hora": "11:00"
-  },
-  "1200_alhamacfw_badalonaw": {
-    "eventId": "17",
-    "partido": "FC Badalona (W) vs Alhama CF (W)",
-    "cuotas": [
-      1.34,
-      4.4,
-      9
-    ],
-    "competicion": "España - Liga F",
-    "hora": "12:00"
-  },
-  "1200_puentegenil_yecno": {
-    "eventId": "18",
-    "partido": "Puente Genil FC vs Yeclano Deportivo",
-    "cuotas": [
-      2.8,
-      2.7,
-      2.6
-    ],
-    "competicion": "España - Segunda Federación - Grupo 4",
-    "hora": "12:00"
-  },
-  "1200_terrassa_valenciamestal": {
-    "eventId": "19",
-    "partido": "Valencia-Mestalla vs Terrassa",
-    "cuotas": [
-      2.05,
-      3.1,
-      3.4
-    ],
-    "competicion": "España - Segunda Federación - Grupo 3",
-    "hora": "12:00"
-  },
-  "1200_bayswatercity_dianwhiteeagle": {
-    "eventId": "20",
-    "partido": "Dianella White Eagle vs Bayswater City",
-    "cuotas": [
-      3.75,
-      3.75,
-      1.65
-    ],
-    "competicion": "Western Australia - Australiana NPL ",
-    "hora": "12:00"
-  },
-  "1200_gnistan_ktp": {
-    "eventId": "21",
-    "partido": "KTP vs Gnistan",
-    "cuotas": [
-      2.6,
-      3.75,
-      2.1
-    ],
-    "competicion": "Partidos amistosos",
-    "hora": "12:00"
-  },
-  "1200_agfaarhusw_nordsjandfemenino": {
-    "eventId": "22",
-    "partido": "FC Nordsjaelland Femenino vs AGF Aarhus (W)",
-    "cuotas": [
-      1.47,
-      4.2,
-      5
-    ],
-    "competicion": "Dinamarca - A-Liga - Femenina",
-    "hora": "12:00"
-  },
-  "1200_comoras_namibia": {
-    "eventId": "23",
-    "partido": "Namibia vs Comoras",
-    "cuotas": [
-      2.7,
-      3,
-      2.5
-    ],
-    "competicion": "Internacional - FIFA Series",
-    "hora": "12:00"
-  },
-  "1200_admpoliceservicebomet_nairobi": {
-    "eventId": "24",
-    "partido": "Adm Police Service Bomet vs Nairobi United",
-    "cuotas": [
-      3,
-      2.7,
-      2.4
-    ],
-    "competicion": "Kenia - Premier League",
-    "hora": "12:00"
-  },
-  "1200_bandarikenya_bidco": {
-    "eventId": "25",
-    "partido": "Bandari FC (Kenya) vs Bidco United",
-    "cuotas": [
-      1.95,
-      2.7,
-      4.25
-    ],
-    "competicion": "Kenia - Premier League",
-    "hora": "12:00"
-  },
-  "1200_czarnisosnowiecw_lechpoznanfemenino": {
-    "eventId": "26",
-    "partido": "Lech Poznan Femenino vs Czarni Sosnowiec (W)",
-    "cuotas": [
-      10.5,
-      6,
-      1.15
-    ],
-    "competicion": "Polonia - Ekstraliga - Femenina",
-    "hora": "12:00"
-  },
-  "1200_1461trabzon_arnavutkoybediyesigvs": {
-    "eventId": "27",
-    "partido": "1461 Trabzon vs Arnavutkoy Belediyesi GVS",
-    "cuotas": [
-      2,
-      3.25,
-      3.25
-    ],
-    "competicion": "Turquía - 2. Lig",
-    "hora": "12:00"
-  },
-  "1200_koronakiceii_siarkatarnobrzeg": {
-    "eventId": "28",
-    "partido": "Korona Kielce II vs Siarka Tarnobrzeg",
-    "cuotas": [
-      2.3,
-      3.75,
-      2.4
-    ],
-    "competicion": "Polonia - III Liga",
-    "hora": "12:00"
-  },
-  "1200_fkmetalkharkiv_viktoriyasumy": {
-    "eventId": "29",
-    "partido": "FK Metal Kharkiv vs FC Viktoriya Sumy",
-    "cuotas": [
-      2.1,
-      3,
-      3.25
-    ],
-    "competicion": "Persha Liga Ucraniana",
-    "hora": "12:00"
-  },
-  "1200_erbaaspor_iskenrunspor": {
-    "eventId": "30",
-    "partido": "Erbaaspor vs Iskenderunspor",
-    "cuotas": [
-      2.9,
-      3.3,
-      2.1
-    ],
-    "competicion": "Turquía - 2. Lig",
-    "hora": "12:00"
-  },
-  "1200_nkppodhalenowytarg_wiscracovia": {
-    "eventId": "31",
-    "partido": "Wisla de Cracovia vs NKP Podhale Nowy Targ",
-    "cuotas": [
-      1.28,
-      5,
-      7.5
-    ],
-    "competicion": "Partidos amistosos",
-    "hora": "12:00"
-  },
-  "1200_breidablik_krreykjavik": {
-    "eventId": "32",
-    "partido": "Breidablik vs KR Reykjavik",
-    "cuotas": [
-      2.5,
-      4,
-      2.15
-    ],
-    "competicion": "Partidos amistosos",
-    "hora": "12:00"
-  },
-  "1230_azsujkrakoww_pogonszczecinfemenino": {
-    "eventId": "33",
-    "partido": "AZS UJ Krakow (W) vs Pogon Szczecin Femenino",
-    "cuotas": [
-      13,
-      7,
-      1.11
-    ],
-    "competicion": "Polonia - Ekstraliga - Femenina",
-    "hora": "12:30"
-  },
-  "1230_nongbuapitchaya_policetero": {
-    "eventId": "34",
-    "partido": "Nongbua Pitchaya FC vs Police Tero",
-    "cuotas": [
-      2,
-      3.4,
-      3.1
-    ],
-    "competicion": "Tailandia - Liga 2",
-    "hora": "12:30"
-  },
-  "1235_chinau23_northkoreau23": {
-    "eventId": "35",
-    "partido": "China U23 vs North Korea U23",
-    "cuotas": [
-      2.1,
-      3,
-      3
-    ],
-    "competicion": "Amistosos internacionales - sub 23",
-    "hora": "12:35"
-  },
-  "1300_psmsmedan_pspspekanbaru": {
-    "eventId": "36",
-    "partido": "Psms Medan vs PSPS Pekanbaru",
-    "cuotas": [
-      1.75,
-      3.25,
-      3.75
-    ],
-    "competicion": "Indonesia - Campeonato",
+    "competicion": "Inglaterra - WSL",
     "hora": "13:00"
   },
-  "1300_evertonfemenino_liverpoolfemenino": {
-    "eventId": "37",
-    "partido": "Everton Femenino vs Liverpool Femenino",
+  "1300_londoncitylionesses_westhamw": {
+    "eventId": "24",
+    "partido": "West Ham United (W) vs London City Lionesses",
     "cuotas": [
-      2.9,
-      3.4,
-      2.1
+      2.8,
+      3.25,
+      2
     ],
     "competicion": "Inglaterra - WSL",
     "hora": "13:00"
   },
-  "1300_ishojif_vskaarhus": {
-    "eventId": "38",
-    "partido": "Ishoj IF vs VSK Aarhus FC",
+  "1300_ballymun_lucan": {
+    "eventId": "25",
+    "partido": "Ballymun vs Lucan United",
     "cuotas": [
-      3.25,
-      3.25,
-      1.9
+      7,
+      4,
+      1.32
     ],
-    "competicion": "Dinamarca - 2.a división",
+    "competicion": "Leinster Senior League Irlandesa",
     "hora": "13:00"
   },
-  "1300_lskkvinnerw_lynw": {
-    "eventId": "39",
-    "partido": "Lyn (W) vs LSK Kvinner (W)",
+  "1300_ayrfid_mahi": {
+    "eventId": "26",
+    "partido": "Malahide United vs Ayrfield United",
     "cuotas": [
-      2.6,
-      3.5,
-      2.3
+      1.1,
+      7,
+      12
     ],
-    "competicion": "Noruega - Toppserien - Femenina",
+    "competicion": "Partidos Copa FAI Intermediate Irlandesa",
     "hora": "13:00"
   },
-  "1300_haugesundfemenino_valerengafemenino": {
-    "eventId": "40",
-    "partido": "Haugesund Femenino vs Valerenga Femenino",
+  "1300_killesterdonnycarneyfc_leixlip": {
+    "eventId": "27",
+    "partido": "Killester Donnycarney F.C vs Leixlip United",
     "cuotas": [
-      8.5,
+      1.24,
       5,
-      1.25
+      7
     ],
-    "competicion": "Noruega - Toppserien - Femenina",
+    "competicion": "Partidos Copa FAI Intermediate Irlandesa",
     "hora": "13:00"
   },
-  "1300_fortunaalesundw_stabaekfemenino": {
-    "eventId": "41",
-    "partido": "Fortuna Alesund (W) vs Stabaek Femenino",
+  "1300_hutnikkrakow_uniaskierniewice": {
+    "eventId": "28",
+    "partido": "Hutnik Krakow vs Unia Skierniewice",
     "cuotas": [
-      1.9,
-      3.6,
-      3.4
-    ],
-    "competicion": "Noruega - Toppserien - Femenina",
-    "hora": "13:00"
-  },
-  "1300_honefossbkwomen_molfemenino": {
-    "eventId": "42",
-    "partido": "Honefoss BK Women vs Molde Femenino",
-    "cuotas": [
-      1.73,
-      3.75,
-      3.8
-    ],
-    "competicion": "Noruega - Toppserien - Femenina",
-    "hora": "13:00"
-  },
-  "1300_bodglimtwomen_roaw": {
-    "eventId": "43",
-    "partido": "Roa (W) vs Bodø/Glimt Women",
-    "cuotas": [
-      1.6,
-      3.9,
-      4.6
-    ],
-    "competicion": "Noruega - Toppserien - Femenina",
-    "hora": "13:00"
-  },
-  "1300_kcb_marasugar": {
-    "eventId": "44",
-    "partido": "KCB vs Mara Sugar FC",
-    "cuotas": [
-      2.2,
-      2.8,
-      3.25
-    ],
-    "competicion": "Kenia - Premier League",
-    "hora": "13:00"
-  },
-  "1300_fkberane_ofkigalo1929": {
-    "eventId": "45",
-    "partido": "OFK Igalo 1929 vs FK Berane",
-    "cuotas": [
-      3.6,
       3,
+      3.5,
       1.95
     ],
-    "competicion": "Montenegro - 2.a división",
+    "competicion": "2 Liga Polaca",
     "hora": "13:00"
   },
-  "1300_fortunesacco_naivas": {
-    "eventId": "46",
-    "partido": "Naivas vs Fortune Sacco",
+  "1300_gtenerifesurw_madridw": {
+    "eventId": "29",
+    "partido": "UDG Tenerife Sur (W) vs Madrid (W)",
     "cuotas": [
-      2.5,
-      3.1,
-      2.6
-    ],
-    "competicion": "Kenia - National Super League",
-    "hora": "13:00"
-  },
-  "1300_eifekenasii_kaapo": {
-    "eventId": "47",
-    "partido": "EIF Ekenas II vs KaaPo",
-    "cuotas": [
-      2.2,
+      1.6,
       3.75,
-      2.5
+      4.5
+    ],
+    "competicion": "España - Liga F",
+    "hora": "13:00"
+  },
+  "1300_mjondalen_raufoss": {
+    "eventId": "30",
+    "partido": "Raufoss vs Mjondalen",
+    "cuotas": [
+      1.75,
+      3.7,
+      3.25
+    ],
+    "competicion": "Partidos amistosos",
+    "hora": "13:00"
+  },
+  "1300_kapakajaani_sczulimanit": {
+    "eventId": "31",
+    "partido": "KaPa Kajaani vs SC Zulimanit",
+    "cuotas": [
+      1.07,
+      8,
+      14
     ],
     "competicion": "Copa Finlandesa",
     "hora": "13:00"
   },
-  "1300_fkdainavaalytus_fktauras": {
-    "eventId": "48",
-    "partido": "Fk Tauras vs FK Dainava Alytus",
+  "1300_karacabeybediyesporas_sanliurfaspor": {
+    "eventId": "32",
+    "partido": "Sanliurfaspor vs Karacabey Belediyespor AS",
     "cuotas": [
-      1.46,
-      4,
-      5
-    ],
-    "competicion": "Liga 1 lituana",
-    "hora": "13:00"
-  },
-  "1300_eiktonsberg_follo": {
-    "eventId": "49",
-    "partido": "Eik-Tonsberg vs Follo",
-    "cuotas": [
-      2,
-      3.5,
-      2.9
-    ],
-    "competicion": "Partidos amistosos",
-    "hora": "13:00"
-  },
-  "1300_lksgoczalkowicezdroj_spartakatowice": {
-    "eventId": "50",
-    "partido": "LKS Goczalkowice-Zdroj vs Sparta Katowice",
-    "cuotas": [
-      1.9,
-      3.75,
-      3
-    ],
-    "competicion": "Polonia - III Liga",
-    "hora": "13:00"
-  },
-  "1300_wybrzezerewalskierewal_zkskluczeviastargard": {
-    "eventId": "51",
-    "partido": "Wybrzeze Rewalskie Rewal vs ZKS Kluczevia Stargard",
-    "cuotas": [
-      4.5,
-      3.5,
-      1.65
-    ],
-    "competicion": "Polonia - III Liga",
-    "hora": "13:00"
-  },
-  "1300_aldosiviu20_institutou20": {
-    "eventId": "52",
-    "partido": "Aldosivi U20 vs Instituto U20",
-    "cuotas": [
-      1.95,
-      3.8,
-      3
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_estiantesriocuartou20_rafaau20": {
-    "eventId": "53",
-    "partido": "Atletico Rafaela U20 vs Estudiantes Rio Cuarto U20",
-    "cuotas": [
-      2.3,
-      3.6,
-      2.5
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_banfidsub20_centralcordobau20": {
-    "eventId": "54",
-    "partido": "Banfield Sub-20 vs Central Cordoba U20",
-    "cuotas": [
-      1.75,
-      3.5,
-      3.9
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_barracascentralu20_bgranosub20": {
-    "eventId": "55",
-    "partido": "Belgrano Sub-20 vs Barracas Central U20",
-    "cuotas": [
-      1.4,
+      1.38,
       4,
       6
     ],
-    "competicion": "Argentina - sub 20",
+    "competicion": "Turquía - 2. Lig",
     "hora": "13:00"
   },
-  "1300_argentinosjuniorsu20_bocajuniorssub20": {
-    "eventId": "56",
-    "partido": "Boca Juniors Sub-20 vs Argentinos Juniors U20",
+  "1300_murangaseal_shabana": {
+    "eventId": "33",
+    "partido": "Shabana vs Muranga Seal",
     "cuotas": [
-      1.67,
-      3.75,
-      4.2
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_riestrau20_tallerescordobasub20": {
-    "eventId": "57",
-    "partido": "Deportivo Riestra U20 vs Talleres de Córdoba Sub-20",
-    "cuotas": [
-      3.5,
-      3.9,
-      1.75
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_cainpendienteu20_estiantesptau20": {
-    "eventId": "58",
-    "partido": "Estudiantes de La Plata U20 vs CA Independiente U20",
-    "cuotas": [
-      1.83,
-      3.7,
+      2,
+      2.8,
       3.5
     ],
-    "competicion": "Argentina - sub 20",
+    "competicion": "Kenia - Premier League",
     "hora": "13:00"
   },
-  "1300_godoycruzsub20_unionsantafeu20": {
-    "eventId": "59",
-    "partido": "Godoy Cruz Sub-20 vs Union de Santa Fe U20",
+  "1300_nakhonsifc_trat": {
+    "eventId": "34",
+    "partido": "Nakhon Si United F.C. vs Trat",
     "cuotas": [
-      2.2,
+      2.05,
+      3.2,
+      3.2
+    ],
+    "competicion": "Tailandia - Liga 2",
+    "hora": "13:00"
+  },
+  "1300_davaoaguis_maharlikamani": {
+    "eventId": "35",
+    "partido": "Maharlika Manila FC vs Davao Aguilas FC",
+    "cuotas": [
       3.7,
-      2.63
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_cahuracanu20_newlsoldboysu20": {
-    "eventId": "60",
-    "partido": "CA Huracan U20 vs Newell's Old Boys U20",
-    "cuotas": [
-      2.6,
-      3.4,
-      2.38
-    ],
-    "competicion": "Argentina - sub 20",
-    "hora": "13:00"
-  },
-  "1300_ptenseu20_riverptesub20": {
-    "eventId": "61",
-    "partido": "Platense U20 vs River Plate Sub-20",
-    "cuotas": [
-      2.5,
       3.5,
-      2.4
+      1.7
     ],
-    "competicion": "Argentina - sub 20",
+    "competicion": "Filipinas - PFL",
     "hora": "13:00"
   },
-  "1300_japs_tpv": {
-    "eventId": "62",
-    "partido": "Japs vs TPV",
+  "1300_groril_strommen": {
+    "eventId": "36",
+    "partido": "Strommen vs Grorud IL",
     "cuotas": [
-      1.44,
-      4.6,
-      5
+      1.85,
+      3.7,
+      3
     ],
     "competicion": "Partidos amistosos",
     "hora": "13:00"
   },
-  "1300_skiljebo_viggbyholmsikff": {
-    "eventId": "63",
-    "partido": "Skiljebo vs Viggbyholms IK FF",
+  "1300_ifkkum_vanersborgsif": {
+    "eventId": "37",
+    "partido": "Vanersborgs IF vs IFK Kumla",
     "cuotas": [
-      2.1,
+      2,
       3.5,
-      2.7
-    ],
-    "competicion": "División 2 sueca",
-    "hora": "13:00"
-  },
-  "1300_agrobiznesvolochysk_podillya": {
-    "eventId": "64",
-    "partido": "Podillya vs Agrobiznes Volochysk",
-    "cuotas": [
-      2.2,
-      3,
-      3
-    ],
-    "competicion": "Persha Liga Ucraniana",
-    "hora": "13:00"
-  },
-  "1300_jonseredsif_vastrafrolunda": {
-    "eventId": "65",
-    "partido": "Vastra Frolunda vs Jonsereds IF",
-    "cuotas": [
-      1.95,
-      3.75,
       2.8
     ],
     "competicion": "División 2 sueca",
     "hora": "13:00"
   },
-  "1300_jaro_oulu": {
-    "eventId": "66",
-    "partido": "Jaro vs Oulu",
+  "1300_fconstanta_logoretsrazgrad": {
+    "eventId": "38",
+    "partido": "Ludogorets Razgrad vs F. Constanta",
     "cuotas": [
-      2.6,
-      3.5,
-      2.15
+      1.65,
+      3.7,
+      3.7
     ],
     "competicion": "Partidos amistosos",
     "hora": "13:00"
   },
-  "1300_astorpsff_bkastrio": {
-    "eventId": "67",
-    "partido": "Astorps FF vs BK Astrio",
+  "1300_ankaraspor_beyogluyenicarsi": {
+    "eventId": "39",
+    "partido": "Ankaraspor vs Beyoglu Yeni Carsi",
     "cuotas": [
-      1.85,
-      3.75,
-      3.5
-    ],
-    "competicion": "División 2 sueca",
-    "hora": "13:00"
-  },
-  "1330_harrogatetown_nottscounty": {
-    "eventId": "68",
-    "partido": "Harrogate Town vs Notts County",
-    "cuotas": [
-      3.7,
-      3.5,
-      1.85
-    ],
-    "competicion": "Inglaterra - Sky Bet League 2",
-    "hora": "13:30"
-  },
-  "1330_britonferrylnsaw_haverfordwestcounty": {
-    "eventId": "69",
-    "partido": "Haverfordwest County vs Briton Ferry Llansawel",
-    "cuotas": [
-      1.85,
-      3.6,
-      3.6
-    ],
-    "competicion": "Premiership Gales",
-    "hora": "13:30"
-  },
-  "1330_ipswichfemenino_southamptonfemenino": {
-    "eventId": "70",
-    "partido": "Ipswich Femenino vs Southampton Femenino",
-    "cuotas": [
-      4.4,
-      3.6,
-      1.65
-    ],
-    "competicion": "Partidos Femeninos - Inglaterra",
-    "hora": "13:30"
-  },
-  "1330_portsmouthfemenino_sheffidw": {
-    "eventId": "71",
-    "partido": "Sheffield United (W) vs Portsmouth Femenino",
-    "cuotas": [
-      1.9,
-      3.25,
-      3.5
-    ],
-    "competicion": "Partidos Femeninos - Inglaterra",
-    "hora": "13:30"
-  },
-  "1330_adana1954fk_kepezbediyespor": {
-    "eventId": "72",
-    "partido": "Kepez Belediyespor vs Adana 1954 FK",
-    "cuotas": [
-      7.5,
-      4.25,
-      1.33
+      2,
+      3,
+      3
     ],
     "competicion": "Turquía - 2. Lig",
-    "hora": "13:30"
+    "hora": "13:00"
   },
-  "1330_ogre_vmfdzalgiris": {
-    "eventId": "73",
-    "partido": "VMFD Zalgiris vs Ogre United",
+  "1300_68aksaraybediyespor_mardinbuyuksehirbed": {
+    "eventId": "40",
+    "partido": "Mardin Buyuksehir Beled vs 68 Aksaray Belediyespor",
     "cuotas": [
-      1.5,
-      4.25,
-      4.6
+      1.38,
+      4,
+      6
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "13:00"
+  },
+  "1300_batmanpetrolspor_kastamonuspor": {
+    "eventId": "41",
+    "partido": "Kastamonuspor vs Batman Petrolspor",
+    "cuotas": [
+      10,
+      4.5,
+      1.22
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "13:00"
+  },
+  "1300_kabatiyouth_vihiga": {
+    "eventId": "42",
+    "partido": "Vihiga United vs Kabati Youth FC",
+    "cuotas": [
+      1.87,
+      3.1,
+      3.9
+    ],
+    "competicion": "Kenia - National Super League",
+    "hora": "13:00"
+  },
+  "1300_epicentrdunaivtsi_lnzlebedyn": {
+    "eventId": "43",
+    "partido": "FC Epicentr Dunaivtsi vs LNZ-Lebedyn",
+    "cuotas": [
+      7,
+      4,
+      1.32
     ],
     "competicion": "Partidos amistosos",
+    "hora": "13:00"
+  },
+  "1300_hammarby_kongsvinger": {
+    "eventId": "44",
+    "partido": "Hammarby vs Kongsvinger",
+    "cuotas": [
+      1.08,
+      8,
+      12
+    ],
+    "competicion": "Partidos amistosos",
+    "hora": "13:00"
+  },
+  "1330_bukovyna_prykarpattyaivanofrankivsk": {
+    "eventId": "45",
+    "partido": "FC Bukovyna vs Prykarpattya Ivano Frankivsk",
+    "cuotas": [
+      1.16,
+      5,
+      12
+    ],
+    "competicion": "Persha Liga Ucraniana",
     "hora": "13:30"
   },
-  "1335_alje_jubbah": {
-    "eventId": "74",
-    "partido": "Al Jeel vs Jubbah",
+  "1400_eibar_spalmas": {
+    "eventId": "46",
+    "partido": "Eibar vs Las Palmas",
     "cuotas": [
-      1.5,
-      4.25,
-      4.5
-    ],
-    "competicion": "Arabia Saudí - 2.a división",
-    "hora": "13:35"
-  },
-  "1335_alsah_najransc": {
-    "eventId": "75",
-    "partido": "Al Sahel vs Najran SC",
-    "cuotas": [
-      1.75,
-      3.4,
-      4
-    ],
-    "competicion": "Arabia Saudí - 2.a división",
-    "hora": "13:35"
-  },
-  "1345_manjungcity_perlisgsa": {
-    "eventId": "76",
-    "partido": "Perlis GSA vs Manjung City FC",
-    "cuotas": [
+      2.3,
       2.8,
-      3.5,
-      2.1
-    ],
-    "competicion": "Malasia - A1 Semi-Pro League",
-    "hora": "13:45"
-  },
-  "1400_adceuta_cadiz": {
-    "eventId": "77",
-    "partido": "AD Ceuta FC vs Cádiz",
-    "cuotas": [
-      2.15,
-      3.25,
-      3.5
+      3.2
     ],
     "competicion": "España - Segunda división",
     "hora": "14:00"
   },
-  "1400_queenspark_stjohnstone": {
-    "eventId": "78",
-    "partido": "St Johnstone vs Queens Park",
+  "1400_persipal_psissemarang": {
+    "eventId": "47",
+    "partido": "PSIS Semarang vs Persipal FC",
     "cuotas": [
-      1.24,
-      5,
-      10
-    ],
-    "competicion": "Championship Escocesa",
-    "hora": "14:00"
-  },
-  "1400_arbroath_morton": {
-    "eventId": "79",
-    "partido": "Morton vs Arbroath",
-    "cuotas": [
-      2.7,
-      3,
-      2.5
-    ],
-    "competicion": "Championship Escocesa",
-    "hora": "14:00"
-  },
-  "1400_sancjanowysacz_stalstalowawo": {
-    "eventId": "80",
-    "partido": "Stal Stalowa Wola vs Sandecja Nowy Sacz",
-    "cuotas": [
-      2.4,
-      3.25,
-      2.5
-    ],
-    "competicion": "2 Liga Polaca",
-    "hora": "14:00"
-  },
-  "1400_algeciras_ceeuropa": {
-    "eventId": "81",
-    "partido": "CE Europa vs Algeciras",
-    "cuotas": [
-      1.95,
-      3.25,
-      3.9
-    ],
-    "competicion": "España - Primera Federación - Grupo 2",
-    "hora": "14:00"
-  },
-  "1400_atusvn_voitsberg": {
-    "eventId": "82",
-    "partido": "Voitsberg vs Atus Velden",
-    "cuotas": [
-      1.09,
-      7.5,
-      16
-    ],
-    "competicion": "Austria - Regionalliga",
-    "hora": "14:00"
-  },
-  "1400_parndorf_unionacmauer": {
-    "eventId": "83",
-    "partido": "Union AC Mauer vs Parndorf",
-    "cuotas": [
-      4,
-      3.6,
-      1.7
-    ],
-    "competicion": "Austria - Regionalliga",
-    "hora": "14:00"
-  },
-  "1400_kormakurhvot_volsungur": {
-    "eventId": "84",
-    "partido": "Volsungur vs Kormakur/Hvot",
-    "cuotas": [
-      1.09,
-      8,
+      1.14,
+      7,
       12
     ],
-    "competicion": "Icelandic Cup",
+    "competicion": "Indonesia - Campeonato",
     "hora": "14:00"
   },
-  "1400_bayernmunichfemenino_nurnbergw": {
-    "eventId": "85",
-    "partido": "Bayern Múnich Femenino vs FC Nurnberg (W)",
+  "1400_psssleman_tornado": {
+    "eventId": "48",
+    "partido": "Tornado FC vs Pss Sleman",
     "cuotas": [
-      1.02,
-      18,
-      56
+      2.5,
+      3.25,
+      2.5
+    ],
+    "competicion": "Indonesia - Campeonato",
+    "hora": "14:00"
+  },
+  "1400_egaleo_ssyros": {
+    "eventId": "49",
+    "partido": "Egaleo vs Ellas Syros",
+    "cuotas": [
+      2.3,
+      2.9,
+      2.88
+    ],
+    "competicion": "Grecia - Superliga 2",
+    "hora": "14:00"
+  },
+  "1400_ilioupoli_kallia": {
+    "eventId": "50",
+    "partido": "Ilioupoli vs Kallithea",
+    "cuotas": [
+      5,
+      3.4,
+      1.57
+    ],
+    "competicion": "Grecia - Superliga 2",
+    "hora": "14:00"
+  },
+  "1400_paechania_panargiakos": {
+    "eventId": "51",
+    "partido": "PAE Chania vs Panargiakos",
+    "cuotas": [
+      1.36,
+      3.9,
+      7.5
+    ],
+    "competicion": "Grecia - Superliga 2",
+    "hora": "14:00"
+  },
+  "1400_sgessenschonebeckw_werrbremenfemenino": {
+    "eventId": "52",
+    "partido": "Werder Bremen Femenino vs SG Essen-Schonebeck (W)",
+    "cuotas": [
+      1.47,
+      4.2,
+      5
     ],
     "competicion": "Alemania - Frauen-Bundesliga",
     "hora": "14:00"
   },
-  "1400_aarhusfremadii_vorupfb": {
-    "eventId": "86",
-    "partido": "Aarhus Fremad II vs Vorup FB",
+  "1400_askooedt_rzpletswacam": {
+    "eventId": "53",
+    "partido": "RZ Pellets WAC (Am) vs Asko Oedt",
     "cuotas": [
-      1.85,
-      4,
-      3.25
-    ],
-    "competicion": "Dinamarca - Danmarksserien",
-    "hora": "14:00"
-  },
-  "1400_fortunahjorringw_kogew": {
-    "eventId": "87",
-    "partido": "Fortuna Hjorring (W) vs Koge (W)",
-    "cuotas": [
-      3.75,
       3.25,
+      3.5,
       1.9
     ],
-    "competicion": "Dinamarca - A-Liga - Femenina",
+    "competicion": "Austria - Regionalliga",
     "hora": "14:00"
   },
-  "1400_holstebro_norresundby": {
-    "eventId": "88",
-    "partido": "Norresundby vs Holstebro",
+  "1400_friggw_greitoppfotballw": {
+    "eventId": "54",
+    "partido": "Frigg (W) vs Grei Toppfotball (W)",
     "cuotas": [
-      8,
-      5.5,
-      1.2
+      3.4,
+      3.9,
+      1.75
     ],
-    "competicion": "Dinamarca - Danmarksserien",
+    "competicion": "Norwegian Ladies 1st Division",
     "hora": "14:00"
   },
-  "1400_alhilomdurman_rutsiro": {
-    "eventId": "89",
-    "partido": "Rutsiro FC vs Al Hilal Omdurman",
+  "1400_fyllingalenw_kolbotnw": {
+    "eventId": "55",
+    "partido": "Kolbotn (W) vs Fyllingsdalen (W)",
     "cuotas": [
-      12,
-      5,
-      1.18
-    ],
-    "competicion": "Ruanda - National Football League",
-    "hora": "14:00"
-  },
-  "1400_fkkom_fklovcen": {
-    "eventId": "90",
-    "partido": "FK Kom vs Fk Lovcen",
-    "cuotas": [
-      1.75,
-      3.25,
-      3.75
-    ],
-    "competicion": "Montenegro - 2.a división",
-    "hora": "14:00"
-  },
-  "1400_fkgrbalj_fkotrant": {
-    "eventId": "91",
-    "partido": "FK Grbalj vs FK Otrant",
-    "cuotas": [
-      3.25,
-      3.25,
-      2
-    ],
-    "competicion": "Montenegro - 2.a división",
-    "hora": "14:00"
-  },
-  "1400_grslevif_skjold": {
-    "eventId": "92",
-    "partido": "Skjold vs Gørslev IF",
-    "cuotas": [
-      2.7,
-      3.6,
-      2.15
-    ],
-    "competicion": "Dinamarca - Danmarksserien",
-    "hora": "14:00"
-  },
-  "1400_mofa_nairobicitystars": {
-    "eventId": "93",
-    "partido": "Nairobi City Stars vs MOFA FC",
-    "cuotas": [
-      2.55,
-      2.88,
-      2.75
-    ],
-    "competicion": "Kenia - National Super League",
-    "hora": "14:00"
-  },
-  "1400_fkpodgorica_rarpljevlja": {
-    "eventId": "94",
-    "partido": "FK Podgorica vs Rudar Pljevlja",
-    "cuotas": [
-      2,
-      3.25,
-      3.3
-    ],
-    "competicion": "Montenegro - 2.a división",
-    "hora": "14:00"
-  },
-  "1400_brattvag_kristiansund": {
-    "eventId": "95",
-    "partido": "Kristiansund vs Brattvag",
-    "cuotas": [
-      1.42,
-      4.6,
+      1.47,
+      4.2,
       5
+    ],
+    "competicion": "Norwegian Ladies 1st Division",
+    "hora": "14:00"
+  },
+  "1400_sofapaka_ulinzistars": {
+    "eventId": "56",
+    "partido": "Ulinzi Stars vs Sofapaka",
+    "cuotas": [
+      1.9,
+      2.9,
+      4
+    ],
+    "competicion": "Kenia - Premier League",
+    "hora": "14:00"
+  },
+  "1400_rigasfutboskob_valmierasfk": {
+    "eventId": "57",
+    "partido": "Rigas Futbola Skola II vs Valmieras FK",
+    "cuotas": [
+      2.2,
+      3.75,
+      2.5
+    ],
+    "competicion": "Letonia - 1.Liga",
+    "hora": "14:00"
+  },
+  "1400_ankaramirspor_menemenbediyespor": {
+    "eventId": "58",
+    "partido": "Ankara Demirspor vs Menemen Belediyespor",
+    "cuotas": [
+      2.2,
+      3.25,
+      2.8
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "14:00"
+  },
+  "1400_scschwaz_tsvstjohann": {
+    "eventId": "59",
+    "partido": "SC Schwaz vs TSV St Johann",
+    "cuotas": [
+      1.55,
+      3.75,
+      4.5
+    ],
+    "competicion": "Austria - Regionalliga",
+    "hora": "14:00"
+  },
+  "1400_tampereenilvesb_tampereutd": {
+    "eventId": "60",
+    "partido": "Tampereen Ilves II vs Tampere Utd",
+    "cuotas": [
+      2.3,
+      4,
+      2.3
     ],
     "competicion": "Partidos amistosos",
     "hora": "14:00"
   },
-  "1400_kirkrispor_somasporsporkulubu": {
-    "eventId": "96",
-    "partido": "Somaspor Spor Kulubu vs Kirklarelispor",
-    "cuotas": [
-      3.25,
-      3.25,
-      2
-    ],
-    "competicion": "Turquía - 2. Lig",
-    "hora": "14:00"
-  },
-  "1400_erzincanspor_inegolspor": {
-    "eventId": "97",
-    "partido": "Inegolspor vs Erzincanspor",
+  "1415_antequeracf_madridb": {
+    "eventId": "61",
+    "partido": "Atletico Madrid II vs Antequera CF",
     "cuotas": [
       1.7,
-      3.6,
-      4.25
+      3.4,
+      5
     ],
-    "competicion": "Turquía - 2. Lig",
-    "hora": "14:00"
+    "competicion": "España - Primera Federación - Grupo 2",
+    "hora": "14:15"
   },
-  "1400_azigspor_bucaspor": {
-    "eventId": "98",
-    "partido": "Bucaspor vs Elazigspor",
-    "cuotas": [
-      18,
-      8,
-      1.07
-    ],
-    "competicion": "Turquía - 2. Lig",
-    "hora": "14:00"
-  },
-  "1400_alsharq_jerash": {
-    "eventId": "99",
-    "partido": "Jerash vs Al Sharq",
+  "1430_lrvicenzavirtus_unionbrescia": {
+    "eventId": "62",
+    "partido": "LR Vicenza Virtus vs Union Brescia",
     "cuotas": [
       1.95,
+      3,
+      3.75
+    ],
+    "competicion": "Serie C Italiana",
+    "hora": "14:30"
+  },
+  "1430_aacecerigno_crotone": {
+    "eventId": "63",
+    "partido": "Crotone vs Audace Cerignola",
+    "cuotas": [
+      1.75,
       3.25,
+      4
+    ],
+    "competicion": "Serie C Italiana",
+    "hora": "14:30"
+  },
+  "1430_foggia_trapani": {
+    "eventId": "64",
+    "partido": "Foggia vs Trapani",
+    "cuotas": [
+      2.5,
+      3,
+      2.5
+    ],
+    "competicion": "Serie C Italiana",
+    "hora": "14:30"
+  },
+  "1430_siracusa_teamaltamura": {
+    "eventId": "65",
+    "partido": "Team Altamura vs Siracusa",
+    "cuotas": [
+      2.9,
+      3,
+      2.3
+    ],
+    "competicion": "Serie C Italiana",
+    "hora": "14:30"
+  },
+  "1430_acbra_pontera": {
+    "eventId": "66",
+    "partido": "Pontedera vs AC Bra",
+    "cuotas": [
+      1.75,
+      3.25,
+      4
+    ],
+    "competicion": "Serie C Italiana",
+    "hora": "14:30"
+  },
+  "1430_kufstein_svkuchl": {
+    "eventId": "67",
+    "partido": "SV Kuchl vs Kufstein",
+    "cuotas": [
+      1.26,
+      5,
+      8
+    ],
+    "competicion": "Austria - Regionalliga",
+    "hora": "14:30"
+  },
+  "1445_armedforces_kedahfa": {
+    "eventId": "68",
+    "partido": "Kedah FA vs Armed Forces FC",
+    "cuotas": [
+      1.9,
+      3.3,
+      3.6
+    ],
+    "competicion": "Malasia - A1 Semi-Pro League",
+    "hora": "14:45"
+  },
+  "1500_georgia_lituania": {
+    "eventId": "69",
+    "partido": "Lituania vs Georgia",
+    "cuotas": [
+      5,
+      3.4,
+      1.7
+    ],
+    "competicion": "Amistosos Internacionales",
+    "hora": "15:00"
+  },
+  "1500_kkskalisz_podbeskidziebb": {
+    "eventId": "70",
+    "partido": "Podbeskidzie B-B vs KKS Kalisz",
+    "cuotas": [
+      1.5,
+      3.75,
+      5
+    ],
+    "competicion": "2 Liga Polaca",
+    "hora": "15:00"
+  },
+  "1500_jesenice_nkslovenskabistrica": {
+    "eventId": "71",
+    "partido": "NK Slovenska Bistrica vs Jesenice",
+    "cuotas": [
+      1.28,
+      4.75,
+      8
+    ],
+    "competicion": "Eslovenia - 2. SNL",
+    "hora": "15:00"
+  },
+  "1500_liverpoolmontevio_progreso": {
+    "eventId": "72",
+    "partido": "Progreso vs Liverpool Montevideo",
+    "cuotas": [
+      3.75,
+      3.25,
+      1.85
+    ],
+    "competicion": "Uruguayan Primera division",
+    "hora": "15:00"
+  },
+  "1500_ponka_sfkvrchovina": {
+    "eventId": "73",
+    "partido": "Polanka vs SFK Vrchovina",
+    "cuotas": [
+      2.5,
+      3.5,
+      2.4
+    ],
+    "competicion": "República Checa - MSFL",
+    "hora": "15:00"
+  },
+  "1500_charltonfemenino_crystalpacefemenino": {
+    "eventId": "74",
+    "partido": "Crystal Palace Femenino vs Charlton Femenino",
+    "cuotas": [
+      2.3,
+      3,
+      2.9
+    ],
+    "competicion": "Partidos Femeninos - Inglaterra",
+    "hora": "15:00"
+  },
+  "1500_kiberabckstars_tanta": {
+    "eventId": "75",
+    "partido": "FC Talanta vs Kibera Black Stars",
+    "cuotas": [
+      2,
+      3,
+      3.75
+    ],
+    "competicion": "Kenia - National Super League",
+    "hora": "15:00"
+  },
+  "1500_bibienne_bulle": {
+    "eventId": "76",
+    "partido": "Biel Bienne vs Bulle",
+    "cuotas": [
+      1.38,
+      4.75,
+      5
+    ],
+    "competicion": "Suiza - Ascenso a 1 Liga",
+    "hora": "15:00"
+  },
+  "1500_sanlsur_yibuti": {
+    "eventId": "77",
+    "partido": "Sudán del Sur vs Yibuti",
+    "cuotas": [
+      1.26,
+      5,
+      8
+    ],
+    "competicion": "CAF African Nations Champ' Qualifiers",
+    "hora": "15:00"
+  },
+  "1500_bediyerincespor_kahramanmarasistiklspor": {
+    "eventId": "78",
+    "partido": "Belediye Derincespor vs Kahramanmaras Istiklal Spor",
+    "cuotas": [
+      2.7,
+      3.3,
+      2.3
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "15:00"
+  },
+  "1500_ankaragucu_beykozanadoluspor": {
+    "eventId": "79",
+    "partido": "Beykoz Anadolu Spor vs Ankaragucu",
+    "cuotas": [
+      6.5,
+      3.75,
+      1.44
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "15:00"
+  },
+  "1500_aliagafutbolas_isparta32spor": {
+    "eventId": "80",
+    "partido": "Aliaga Futbol AS vs Isparta 32 Spor",
+    "cuotas": [
+      1.35,
+      4.25,
+      7
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "15:00"
+  },
+  "1500_altinordu_mugspor": {
+    "eventId": "81",
+    "partido": "Muglaspor vs Altinordu",
+    "cuotas": [
+      1.14,
+      5.5,
+      16
+    ],
+    "competicion": "Turquía - 2. Lig",
+    "hora": "15:00"
+  },
+  "1500_macao_tanzania": {
+    "eventId": "82",
+    "partido": "Macao vs Tanzania",
+    "cuotas": [
+      56,
+      20,
+      1.01
+    ],
+    "competicion": "Internacional - FIFA Series",
+    "hora": "15:00"
+  },
+  "1500_aplggdanskw_ukssmslodzw": {
+    "eventId": "83",
+    "partido": "APLG Gdansk (W) vs UKS SMS Lodz (W)",
+    "cuotas": [
+      3.4,
+      3.6,
+      1.9
+    ],
+    "competicion": "Polonia - Ekstraliga - Femenina",
+    "hora": "15:00"
+  },
+  "1500_nyvaternopil_probiygoronka": {
+    "eventId": "84",
+    "partido": "Nyva Ternopil vs Probiy Gorodenka",
+    "cuotas": [
+      2.3,
+      3.25,
+      2.8
+    ],
+    "competicion": "Persha Liga Ucraniana",
+    "hora": "15:00"
+  },
+  "1500_newcastleutdw_sunrndfemenino": {
+    "eventId": "85",
+    "partido": "Sunderland Femenino vs Newcastle Utd (W)",
+    "cuotas": [
+      3,
+      3.25,
+      2.1
+    ],
+    "competicion": "Partidos Femeninos - Inglaterra",
+    "hora": "15:00"
+  },
+  "1500_birminghamfemenino_bristolcityfemenino": {
+    "eventId": "86",
+    "partido": "Bristol City Femenino vs Birmingham Femenino",
+    "cuotas": [
+      3.75,
+      3.5,
+      1.75
+    ],
+    "competicion": "Partidos Femeninos - Inglaterra",
+    "hora": "15:00"
+  },
+  "1500_durhamw_nottinghamforestfemenino": {
+    "eventId": "87",
+    "partido": "Nottingham Forest Femenino vs Durham (W)",
+    "cuotas": [
+      1.42,
+      4.25,
+      5.5
+    ],
+    "competicion": "Partidos Femeninos - Inglaterra",
+    "hora": "15:00"
+  },
+  "1500_rekordbiskobiaw_sskwrocwfemenino": {
+    "eventId": "88",
+    "partido": "Rekord Bielsko-Biala (W) vs Slask Wroclaw Femenino",
+    "cuotas": [
+      2.75,
+      3.5,
+      2.2
+    ],
+    "competicion": "Polonia - Ekstraliga - Femenina",
+    "hora": "15:00"
+  },
+  "1500_newsaintsw_swanseacityw": {
+    "eventId": "89",
+    "partido": "Swansea City (W) vs The New Saints (W)",
+    "cuotas": [
+      1.13,
+      7,
+      12
+    ],
+    "competicion": "Gales - Partidos femeninos",
+    "hora": "15:00"
+  },
+  "1500_asane_sogndal": {
+    "eventId": "90",
+    "partido": "Sogndal vs Asane",
+    "cuotas": [
+      1.7,
+      4,
+      3.75
+    ],
+    "competicion": "Partidos amistosos",
+    "hora": "15:00"
+  },
+  "1500_kottmannorf_skaustriakgenfurtamateure": {
+    "eventId": "91",
+    "partido": "Kottmannsdorf vs SK Austria Klagenfurt Amateure",
+    "cuotas": [
+      3,
+      3.4,
+      2.05
+    ],
+    "competicion": "Austria - Landesliga",
+    "hora": "15:00"
+  },
+  "1500_moss_stabaek": {
+    "eventId": "92",
+    "partido": "Stabaek vs Moss",
+    "cuotas": [
+      1.75,
+      4,
       3.25
     ],
-    "competicion": "Arabia Saudí - 2.a división",
-    "hora": "14:00"
+    "competicion": "Partidos amistosos",
+    "hora": "15:00"
+  },
+  "1515_aleopardssckenya_kariobangisharks": {
+    "eventId": "93",
+    "partido": "AFC Leopards SC (Kenya) vs FC Kariobangi Sharks",
+    "cuotas": [
+      1.65,
+      3.25,
+      5
+    ],
+    "competicion": "Kenia - Premier League",
+    "hora": "15:15"
+  },
+  "1530_marekdupnitsa_spartakpleven": {
+    "eventId": "94",
+    "partido": "Marek Dupnitsa vs Spartak Pleven",
+    "cuotas": [
+      1.55,
+      3.6,
+      5
+    ],
+    "competicion": "Bulgaria - Liga B",
+    "hora": "15:30"
+  },
+  "1530_chernomoretsbourgas_dunavruse": {
+    "eventId": "95",
+    "partido": "Chernomorets Bourgas vs Dunav Ruse",
+    "cuotas": [
+      3.25,
+      3,
+      2.1
+    ],
+    "competicion": "Bulgaria - Liga B",
+    "hora": "15:30"
+  },
+  "1530_cskasofiab_etar": {
+    "eventId": "96",
+    "partido": "Etar vs CSKA Sofia II",
+    "cuotas": [
+      2.9,
+      3.25,
+      2.1
+    ],
+    "competicion": "Bulgaria - Liga B",
+    "hora": "15:30"
+  },
+  "1530_barrytownutd_connahsquay": {
+    "eventId": "97",
+    "partido": "Connahs Quay vs Barry Town Utd",
+    "cuotas": [
+      2.1,
+      3.5,
+      2.8
+    ],
+    "competicion": "Premiership Gales",
+    "hora": "15:30"
+  },
+  "1600_armenia_biorrusia": {
+    "eventId": "98",
+    "partido": "Armenia vs Bielorrusia",
+    "cuotas": [
+      2.05,
+      3.2,
+      3.2
+    ],
+    "competicion": "Amistosos Internacionales",
+    "hora": "16:00"
+  },
+  "1600_acamica_amarante": {
+    "eventId": "99",
+    "partido": "Amarante vs Academica",
+    "cuotas": [
+      3,
+      3,
+      2.2
+    ],
+    "competicion": "Portugal - Liga 3",
+    "hora": "16:00"
   }
 }

@@ -1,8 +1,11 @@
 import { scrapeBetfairFootball } from "./betfairScrapping.js";
 import { scrapeLeoVegasFootball } from "./leovegasScrapping.js";
 import fs from 'fs/promises';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { scrapeLuckiaFootball } from "./luckiaScraping.js";
 
-// --- 1. EXPORTACIONES PARA LOS SCRAPERS ---
+puppeteer.use(StealthPlugin());
 
 export function obtenerHoraInicio(minutosParaEmpezar) {
     const ahora = new Date();
@@ -11,16 +14,24 @@ export function obtenerHoraInicio(minutosParaEmpezar) {
 }
 
 export function generarIdUnico(home, away, hora) {
-    const normalizar = (str) => (str || "").toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Quita acentos
-        .replace(/fc|sd|ud|cd|united|real|club|deportivo|atletico|atl\.|de|el|la|the/g, '')
-        .replace(/[^a-z0-9]/g, '') // Solo letras y números
-        .trim();
+    const normalizar = (str) => {
+        if (!str) return "";
+        return str.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+            .replace(/\bii\b/g, 'b') 
+            .replace(/fc|sd|ud|cd|united|real|club|deportivo|atletico|atl\.|de|el|la|the|deportiva/g, '')
+            .replace(/\(espana\)|\bespana\b|\besp\b/g, '')
+            .replace(/[^a-z0-9]/g, '') 
+            .trim();
+    };
 
     const h = normalizar(home);
     const a = normalizar(away);
+    
     const equipos = [h, a].sort().join('_');
-    return `${hora.replace(':', '')}_${equipos}`;
+    const horaFinal = hora.replace(/[^0-9]/g, '').slice(-4); 
+
+    return `${horaFinal}_${equipos}`;
 }
 
 export function calcularDetalleArbitraje(q1, qX, q2) {
@@ -40,8 +51,6 @@ export function calcularDetalleArbitraje(q1, qX, q2) {
     };
 }
 
-// --- 2. LÓGICA DE UNIFICACIÓN ---
-
 function unificarCuotas(fuentes) {
     console.log('\n🧠 Unificando mercados de todas las fuentes...');
     const master = {};
@@ -59,7 +68,6 @@ function unificarCuotas(fuentes) {
                     hora: p.hora,
                     mejoresCuotas: [0, 0, 0],
                     origen: ['', '', ''],
-                    // Guardamos las cuotas originales de cada casa para la tabla de coincidencias
                     detalles: {}
                 };
             }
@@ -77,27 +85,54 @@ function unificarCuotas(fuentes) {
     return master;
 }
 
-// --- 3. FUNCIÓN PRINCIPAL ---
+// --- FUNCIÓN PRINCIPAL CON GESTIÓN DE CACHÉ INTELIGENTE ---
 
 export async function scrapeArbitrageFootball() {
     console.log('--- 🚀 INICIANDO RADAR MULTICASA ---');
     
-    let bfData, lvData;
+    let bfData, lvData, lcData;
+    
     try {
-        console.log('📂 Intentando cargar caché...');
-        bfData = JSON.parse(await fs.readFile('betfair_cache.json', 'utf-8'));
-        lvData = JSON.parse(await fs.readFile('leovegas_cache.json', 'utf-8'));
-        console.log('✅ Caché cargada.');
+        console.log('📂 Verificando archivos de caché...');
+        
+        // Intentamos leer los 3 archivos en paralelo para ahorrar tiempo
+        const [bfCache, lvCache, lcCache] = await Promise.all([
+            fs.readFile('betfair_cache.json', 'utf-8'),
+            fs.readFile('leovegas_cache.json', 'utf-8'),
+            fs.readFile('luckia_cache.json', 'utf-8')
+        ]);
+
+        bfData = JSON.parse(bfCache);
+        lvData = JSON.parse(lvCache);
+        lcData = JSON.parse(lcCache);
+
+        console.log('✅ Datos cargados desde la caché local para agilizar.');
+
     } catch (e) {
-        console.log('🌐 Caché no lista. Scrapeando...');
-        [bfData, lvData] = await Promise.all([scrapeBetfairFootball(), scrapeLeoVegasFootball()]);
-        await fs.writeFile('betfair_cache.json', JSON.stringify(bfData, null, 2));
-        await fs.writeFile('leovegas_cache.json', JSON.stringify(lvData, null, 2));
+        console.log('🌐 Caché incompleta o no encontrada. Iniciando scrapers (esto tardará un poco)...');
+        
+        // Si falla la lectura de cualquiera, ejecutamos los scrapers
+        [bfData, lvData, lcData] = await Promise.all([
+            scrapeBetfairFootball(), 
+            scrapeLeoVegasFootball(), 
+            scrapeLuckiaFootball()
+        ]);
+
+        // Guardamos los nuevos datos en caché para la próxima vez
+        await Promise.all([
+            fs.writeFile('betfair_cache.json', JSON.stringify(bfData, null, 2)),
+            fs.writeFile('leovegas_cache.json', JSON.stringify(lvData, null, 2)),
+            fs.writeFile('luckia_cache.json', JSON.stringify(lcData, null, 2))
+        ]);
+        
+        console.log('💾 Nueva caché generada correctamente.');
     }
 
+    // Unificamos usando el masterMap
     const masterMap = unificarCuotas([
         { nombre: 'BF', data: bfData },
-        { nombre: 'LV', data: lvData }
+        { nombre: 'LV', data: lvData },
+        { nombre: 'LC', data: lcData }
     ]);
 
     const coincidencias = [];
@@ -105,39 +140,46 @@ export async function scrapeArbitrageFootball() {
 
     Object.keys(masterMap).forEach(key => {
         const m = masterMap[key];
+        const casasQueLoTienen = Object.keys(m.detalles);
         
-        // Solo consideramos coincidencia si está en AMBAS casas (BF y LV)
-        if (m.detalles.BF && m.detalles.LV) {
+        // Coincidencia si el partido está en 2 o más casas cualesquiera
+        if (casasQueLoTienen.length >= 2) {
             const arb = calcularDetalleArbitraje(...m.mejoresCuotas);
             
             const infoBase = {
                 Partido: m.partido,
                 Hora: m.hora,
-                'Cuotas BF': m.detalles.BF.join(' | '),
-                'Cuotas LV': m.detalles.LV.join(' | '),
-                'Mejores': m.mejoresCuotas.join(' | ')
+                'Casas': casasQueLoTienen.join(' / '),
+                'Mejores Cuotas': m.mejoresCuotas.join(' | '),
+                'Fuentes': m.origen.join(' / ')
             };
 
             coincidencias.push(infoBase);
+
             if (arb.hayArbitraje) {
-                surebets.push({ ...infoBase, ROI: arb.roi + "%", Stakes: `1:${arb.stakes.local} X:${arb.stakes.empate} 2:${arb.stakes.visitante}` });
+                surebets.push({ 
+                    ...infoBase, 
+                    ROI: arb.roi + "%", 
+                    Stakes: `1:${arb.stakes.local} X:${arb.stakes.empate} 2:${arb.stakes.visitante}` 
+                });
             }
         }
     });
 
-    console.log(`\n✅ Partidos analizados en total: ${Object.keys(masterMap).length}`);
-    console.log(`🤝 Coincidencias encontradas entre BF y LV: ${coincidencias.length}`);
+    console.log(`\n✅ Análisis finalizado.`);
+    console.log(`📊 Partidos unificados: ${Object.keys(masterMap).length}`);
+    console.log(`🤝 Coincidencias multicasa encontradas: ${coincidencias.length}`);
 
     if (coincidencias.length > 0) {
-        console.log('\n--- 🤝 DETALLE DE COINCIDENCIAS (TODAS) ---');
-        console.table(coincidencias);
+        console.log('\n--- 🤝 DETALLE DE COINCIDENCIAS (TODAS LAS COMBINACIONES) ---');
+        console.table(coincidencias.sort((a, b) => a.Hora.localeCompare(b.Hora)));
     }
 
     if (surebets.length > 0) {
         console.log('\n--- 🔥 OPORTUNIDADES DE ARBITRAJE ---');
         console.table(surebets.sort((a, b) => parseFloat(b.ROI) - parseFloat(a.ROI)));
     } else {
-        console.log('\n☹️ No se han encontrado Surebets con beneficio hoy.');
+        console.log('\n☹️ No se han encontrado Surebets actualmente.');
     }
 }
 

@@ -1,0 +1,607 @@
+{
+  "1145_cerdanyolvalles_funegrama": {
+    "eventId": "0_FUN",
+    "partido": "Fun. E.Grama vs Cerdanyola Del Valles",
+    "cuotas": [
+      1.75,
+      3.2,
+      4
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 11:45"
+  },
+  "1145_montanesa_uetona": {
+    "eventId": "1_UE ",
+    "partido": "UE Tona vs Montanesa",
+    "cuotas": [
+      2.08,
+      3,
+      3
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 11:45"
+  },
+  "1200_ceeuropab_peradacf": {
+    "eventId": "2_CE ",
+    "partido": "CE Europa B vs Peralada CF",
+    "cuotas": [
+      2.31,
+      2.9,
+      2.76
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_cehospitalet_cfcanvidalet": {
+    "eventId": "3_CE ",
+    "partido": "CE Hospitalet vs CF Can Vidalet",
+    "cuotas": [
+      1.45,
+      3.75,
+      5.5
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 12:00"
+  },
+  "1230_lesca_sancristobal": {
+    "eventId": "4_FC ",
+    "partido": "FC L Escala vs San Cristobal",
+    "cuotas": [
+      1.78,
+      3.25,
+      3.65
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 12:30"
+  },
+  "1700_cfbadalona_uelleida": {
+    "eventId": "5_UE ",
+    "partido": "UE Lleida vs CF Badalona",
+    "cuotas": [
+      6.7,
+      3.5,
+      1.42
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 17:00"
+  },
+  "1800_cfvinovaigtru_corn": {
+    "eventId": "6_CF ",
+    "partido": "CF Vilanova I LA Geltru vs UD Cornella",
+    "cuotas": [
+      2.77,
+      2.78,
+      2.38
+    ],
+    "competicion": "España Tercera RFEF Grupo 5",
+    "hora": "29 Mar 18:00"
+  },
+  "1200_alcorcon_ibizaeivissa": {
+    "eventId": "7_UD ",
+    "partido": "UD Ibiza Eivissa vs Alcorcón",
+    "cuotas": [
+      1.97,
+      2.97,
+      3.75
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_athbilbaob_ctab": {
+    "eventId": "8_CEL",
+    "partido": "Celta B vs Ath.Bilbao B",
+    "cuotas": [
+      2.22,
+      3.1,
+      3
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_caosasunab_guadajara": {
+    "eventId": "9_CA ",
+    "partido": "CA Osasuna B vs Guadalajara",
+    "cuotas": [
+      2.4,
+      2.95,
+      2.83
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_ourensecf_ponferradina": {
+    "eventId": "10_OUR",
+    "partido": "Ourense Cf vs Ponferradina",
+    "cuotas": [
+      2.52,
+      2.82,
+      2.78
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1415_antequera_madridb": {
+    "eventId": "11_ATL",
+    "partido": "Atl.Madrid B vs Antequera",
+    "cuotas": [
+      1.74,
+      3.15,
+      4.6
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 14:15"
+  },
+  "1600_cesaball_vilrbcf": {
+    "eventId": "12_VIL",
+    "partido": "Villarreal B CF vs CE Sabadell",
+    "cuotas": [
+      2.63,
+      2.78,
+      2.7
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 16:00"
+  },
+  "1630_nse_sociedadtarazona": {
+    "eventId": "13_SOC",
+    "partido": "Sociedad Deportivo Tarazona vs CD Eldense",
+    "cuotas": [
+      2.9,
+      2.86,
+      2.4
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 16:30"
+  },
+  "1630_rmurcia_sevil": {
+    "eventId": "14_SEV",
+    "partido": "Sevilla Atlético vs R.Murcia",
+    "cuotas": [
+      4.25,
+      2.94,
+      1.87
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 16:30"
+  },
+  "1845_hercules_marb": {
+    "eventId": "15_HÉR",
+    "partido": "Hércules vs Marbella",
+    "cuotas": [
+      1.83,
+      3.15,
+      4.1
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 18:45"
+  },
+  "2100_cpcacerenosad_lugo": {
+    "eventId": "16_CP ",
+    "partido": "Cp Cacereno Sad vs Lugo",
+    "cuotas": [
+      2.61,
+      2.9,
+      2.62
+    ],
+    "competicion": "España Primera Federación",
+    "hora": "29 Mar 21:00"
+  },
+  "1200_ceandratx_poblense": {
+    "eventId": "17_UD ",
+    "partido": "Ud Poblense vs CE Andratx",
+    "cuotas": [
+      1.5,
+      3.6,
+      5.5
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_baleares_olot": {
+    "eventId": "18_ATL",
+    "partido": "Atl.Baleares vs Olot",
+    "cuotas": [
+      1.77,
+      3,
+      4.2
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_alca_rayomajadahonda": {
+    "eventId": "19_RAY",
+    "partido": "Rayo Majadahonda vs Alcalá",
+    "cuotas": [
+      1.48,
+      3.6,
+      5.7
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_gironab_ibizaisspitiusas": {
+    "eventId": "20_GIR",
+    "partido": "Girona B vs Cd Ibiza Islas Pitiusas",
+    "cuotas": [
+      1.83,
+      3.1,
+      3.85
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_orihuacf_tenerifeb": {
+    "eventId": "21_TEN",
+    "partido": "Tenerife B vs Orihuela CF",
+    "cuotas": [
+      1.92,
+      3.35,
+      3.25
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_amorebieta_eibarb": {
+    "eventId": "22_SD ",
+    "partido": "SD Amorebieta vs SD Eibar B",
+    "cuotas": [
+      2.2,
+      2.9,
+      3
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_getafebcf_rayovallecanob": {
+    "eventId": "23_RAY",
+    "partido": "Rayo Vallecano B vs Getafe B CF",
+    "cuotas": [
+      3.8,
+      3.35,
+      1.77
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_barbastro_espanyolbarb": {
+    "eventId": "24_BAR",
+    "partido": "Barbastro vs Espanyol Bar.B",
+    "cuotas": [
+      2.6,
+      2.78,
+      2.6
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_aragon_tano": {
+    "eventId": "25_DEP",
+    "partido": "Deportivo Aragon vs CD Tudelano",
+    "cuotas": [
+      3.35,
+      3.15,
+      1.94
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:00"
+  },
+  "1230_oviedob_racingsantanrb": {
+    "eventId": "26_RÁC",
+    "partido": "Rácing Santander B vs Real Oviedo B",
+    "cuotas": [
+      2.66,
+      3.35,
+      2.2
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 12:30"
+  },
+  "1300_intercity_spalmasb": {
+    "eventId": "27_UD ",
+    "partido": "UD Las Palmas B vs Intercity",
+    "cuotas": [
+      2.05,
+      3.2,
+      3
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 13:00"
+  },
+  "1700_numancia_sarriana": {
+    "eventId": "28_NUM",
+    "partido": "Numancia vs SD Sarriana",
+    "cuotas": [
+      1.26,
+      4.65,
+      8.2
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1700_astorga_pcorunab": {
+    "eventId": "29_DEP",
+    "partido": "Dep.La Coruna B vs Atletico Astorga",
+    "cuotas": [
+      1.36,
+      4.2,
+      6.4
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1700_avesb_logrones": {
+    "eventId": "30_LOG",
+    "partido": "Logrones vs Deportivo Alaves B",
+    "cuotas": [
+      1.66,
+      3.25,
+      4.55
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1700_extremadura_portivaminera": {
+    "eventId": "31_CD ",
+    "partido": "CD Extremadura vs Deportiva Minera",
+    "cuotas": [
+      2.24,
+      3,
+      2.84
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1700_gimsegoviana_valdolidb": {
+    "eventId": "32_GIM",
+    "partido": "Gim.Segoviana vs Real Valladolid B",
+    "cuotas": [
+      1.84,
+      3.25,
+      3.6
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1700_bergantinos_coruxo": {
+    "eventId": "33_BER",
+    "partido": "Bergantinos vs Coruxo FC",
+    "cuotas": [
+      2.6,
+      2.84,
+      2.54
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1700_naxara_sestaor": {
+    "eventId": "34_NÁX",
+    "partido": "Náxara vs Sestao R.",
+    "cuotas": [
+      3.65,
+      2.95,
+      1.93
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:00"
+  },
+  "1730_anavalcarnero_quintanarlrey": {
+    "eventId": "35_CD ",
+    "partido": "Cd Quintanar Del Rey vs CDA Navalcarnero",
+    "cuotas": [
+      2.28,
+      3,
+      2.78
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 17:30"
+  },
+  "1800_alcoyano_torrent": {
+    "eventId": "36_CD ",
+    "partido": "CD Alcoyano vs Torrent",
+    "cuotas": [
+      1.6,
+      3.15,
+      5
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 18:00"
+  },
+  "1800_atleticlleidace_reusreddis": {
+    "eventId": "37_REU",
+    "partido": "Reus Fc Reddis vs Atletic Lleida CE",
+    "cuotas": [
+      1.84,
+      3,
+      3.75
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 18:00"
+  },
+  "1800_ruirun_utebo": {
+    "eventId": "38_UTE",
+    "partido": "Utebo FC vs RU Irún",
+    "cuotas": [
+      2.74,
+      3.15,
+      2.18
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 18:00"
+  },
+  "1800_marinoluanco_ourense": {
+    "eventId": "39_MAR",
+    "partido": "Marino de Luanco vs Ourense",
+    "cuotas": [
+      2.53,
+      2.75,
+      2.62
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 18:00"
+  },
+  "1800_burgospromesas_lealtad": {
+    "eventId": "40_CD ",
+    "partido": "Cd Lealtad vs Burgos Promesas",
+    "cuotas": [
+      2.05,
+      3,
+      3.1
+    ],
+    "competicion": "España Segunda Federación",
+    "hora": "29 Mar 18:00"
+  },
+  "1200_logrono_rsociedad": {
+    "eventId": "41_R.S",
+    "partido": "R.Sociedad vs Logrono",
+    "cuotas": [
+      1.11,
+      7,
+      14
+    ],
+    "competicion": "Espana Primera División (Fem)",
+    "hora": "29 Mar 12:00"
+  },
+  "1300_gtenerife_madridccf": {
+    "eventId": "42_UDG",
+    "partido": "Udg Tenerife vs Madrid Ccf",
+    "cuotas": [
+      1.66,
+      3.7,
+      4.2
+    ],
+    "competicion": "Espana Primera División (Fem)",
+    "hora": "29 Mar 13:00"
+  },
+  "1700_athbilbao_fmadrid": {
+    "eventId": "43_ATH",
+    "partido": "Ath.Bilbao vs F/Atl. Madrid",
+    "cuotas": [
+      3.55,
+      3.25,
+      1.92
+    ],
+    "competicion": "Espana Primera División (Fem)",
+    "hora": "29 Mar 17:00"
+  },
+  "2100_barcona_madridcf": {
+    "eventId": "44_REA",
+    "partido": "Real Madrid CF vs Barcelona",
+    "cuotas": [
+      9,
+      6.2,
+      1.2
+    ],
+    "competicion": "Espana Primera División (Fem)",
+    "hora": "29 Mar 21:00"
+  },
+  "1200_alondrascf_juventcambados": {
+    "eventId": "45_ALO",
+    "partido": "Alondras Cf vs Club Juventud Cambados",
+    "cuotas": [
+      1.68,
+      3.15,
+      4.3
+    ],
+    "competicion": "España Tercera RFEF Grupo 1",
+    "hora": "29 Mar 12:00"
+  },
+  "1615_corunamontaneroscf_viveiro": {
+    "eventId": "46_ATL",
+    "partido": "Atletico Coruna Montaneros CF vs Viveiro",
+    "cuotas": [
+      1.64,
+      3.3,
+      4.4
+    ],
+    "competicion": "España Tercera RFEF Grupo 1",
+    "hora": "29 Mar 16:15"
+  },
+  "1700_arosasc_somozas": {
+    "eventId": "47_ARO",
+    "partido": "Arosa SC vs Ud Somozas",
+    "cuotas": [
+      1.57,
+      3.4,
+      4.8
+    ],
+    "competicion": "España Tercera RFEF Grupo 1",
+    "hora": "29 Mar 17:00"
+  },
+  "1730_barbadas_boiro": {
+    "eventId": "48_UD ",
+    "partido": "UD Barbadas vs Cd Boiro",
+    "cuotas": [
+      4.5,
+      3.25,
+      1.64
+    ],
+    "competicion": "España Tercera RFEF Grupo 1",
+    "hora": "29 Mar 17:30"
+  },
+  "1200_navarrocf_praviano": {
+    "eventId": "49_CD ",
+    "partido": "Cd Praviano vs Navarro CF",
+    "cuotas": [
+      1.83,
+      3.1,
+      3.7
+    ],
+    "competicion": "España Tercera RFEF Grupo 2",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_lentregu_titanico": {
+    "eventId": "50_REA",
+    "partido": "Real Titanico vs L Entregu",
+    "cuotas": [
+      4.7,
+      3.45,
+      1.57
+    ],
+    "competicion": "España Tercera RFEF Grupo 2",
+    "hora": "29 Mar 12:00"
+  },
+  "1200_lnes_sportinggijonb": {
+    "eventId": "51_CD ",
+    "partido": "Cd Llanes vs Sporting Gijón B",
+    "cuotas": [
+      5.6,
+      3.85,
+      1.42
+    ],
+    "competicion": "España Tercera RFEF Grupo 2",
+    "hora": "29 Mar 12:00"
+  },
+  "1230_colunga_lnera": {
+    "eventId": "52_LLA",
+    "partido": "Llanera vs CD Colunga",
+    "cuotas": [
+      1.16,
+      5.4,
+      11
+    ],
+    "competicion": "España Tercera RFEF Grupo 2",
+    "hora": "29 Mar 12:30"
+  },
+  "1800_gijonindustrial_tuil": {
+    "eventId": "53_UD ",
+    "partido": "UD Gijon Industrial vs Cd Tuilla",
+    "cuotas": [
+      1.86,
+      3.15,
+      3.5
+    ],
+    "competicion": "España Tercera RFEF Grupo 2",
+    "hora": "29 Mar 18:00"
+  },
+  "1815_avilesstadiumcf_mosconia": {
+    "eventId": "54_AVI",
+    "partido": "Aviles Stadium CF vs Cd Mosconia",
+    "cuotas": [
+      4.25,
+      3.1,
+      1.73
+    ],
+    "competicion": "España Tercera RFEF Grupo 2",
+    "hora": "29 Mar 18:15"
+  }
+}
