@@ -1,10 +1,14 @@
 [phases.setup]
-# Usamos apt para asegurar que los binarios vayan a las rutas estándar de Linux
-aptPkgs = ["python3", "ffmpeg"]
 nixPkgs = ["...", "nodejs_20"]
+aptPkgs = [
+  "python3", 
+  "ffmpeg", 
+  "ca-certificates", 
+  "fonts-liberation",
+  "..."
+]
 
 [phases.build]
-# No intentes crear enlaces en /usr/bin, Nixpacks ya debería ver python3 si lo instalas vía apt
 cmds = ["npm install"]
 
 [start]
