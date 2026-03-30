@@ -24,7 +24,6 @@
     "odds-api-io": "^1.1.0",
     "puppeteer": "^24.40.0",
     "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "youtube-dl-exec": "^3.1.4"
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }

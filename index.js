@@ -9,10 +9,7 @@ import admin from 'firebase-admin';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { executeCronHive, consultarHive5 } from './hive5.js';
-import youtubeDl from 'youtube-dl-exec';
-const { exec } = youtubeDl; 
-import ffmpeg from 'ffmpeg-static';
-import { spawn, execSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 
 const app = express();
 
@@ -462,94 +459,25 @@ app.put('/update-token', async (req, res) => {
     }
 });
 
-// Ejemplo si usas la librería 'youtube-dl-exec'
-app.get('/download-music/:id', async (req, res) => {
-  const { id } = req.params;
-  const videoURL = `https://www.youtube.com/watch?v=${id}`;
-
-  console.log(`Iniciando descarga para el ID: ${id}`);
-
-  try {
-    res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Content-Disposition', `attachment; filename="audio-${id}.mp3"`);
-
-    const subprocess = exec(videoURL, {
-        extractAudio: true,
-        audioFormat: 'mp3',
-        output: '-',
-        ffmpegLocation: ffmpeg,
-        noCheckCertificates: true,
-        cookies: './cookies.txt',
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        youtubeSkipDashManifest: true,
-        format: 'bestaudio/best',
-        }, {
-        childProcess: true 
-        });
-
-    subprocess.stdout.pipe(res);
-
-    subprocess.stderr.on('data', (data) => {
-      console.log(`[yt-dlp log]: ${data.toString()}`);
-    });
-
-    subprocess.on('close', (code) => {
-      console.log(`Proceso terminado con código: ${code}`);
-    });
-
-    req.on('close', () => {
-      subprocess.kill();
-    });
-
-  } catch (error) {
-    console.error('Error en el servidor:', error);
-    if (!res.headersSent) res.status(500).send('Error interno');
-  }
-});
-
 app.get('/download', (req, res) => {
     const videoId = req.query.id;
-
-    if (!videoId) {
-        return res.status(400).send('Debes proporcionar un ID de YouTube');
-    }
-
-    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-    
-    res.setHeader('Content-Type', 'audio/mpeg');
-    res.setHeader('Content-Disposition', `attachment; filename="${videoId}.mp3"`);
 
     const yt = spawn('yt-dlp', [
         '--no-check-certificates',
         '--quiet',
-        '--no-warnings',
-        '--extract-audio',
-        '--audio-format', 'mp3',
-        '--audio-quality', '0',
-        '--impersonate-client', 'chrome', 
-        '--extractor-args', 'youtube:player_client=android,web', 
+        '--cookies', '/app/cookies.txt',
+        '-f', '140/bestaudio[ext=m4a]/ba', 
         '-o', '-', 
-        videoUrl
+        `https://www.youtube.com/watch?v=${videoId}`
     ]);
 
+    res.setHeader('Content-Type', 'audio/mp4'); 
+    res.setHeader('Content-Disposition', `attachment; filename="${videoId}.m4a"`);
     yt.stdout.pipe(res);
-
     yt.stderr.on('data', (data) => {
         console.error(`[yt-dlp error]: ${data.toString()}`);
     });
-
-    req.on('close', () => {
-        if (!yt.killed) {
-            yt.kill('SIGTERM');
-            console.log(`Descarga cancelada por el usuario: ${videoId}`);
-        }
-    });
-
-    yt.on('close', (code) => {
-        if (code !== 0 && !res.headersSent) {
-            console.error(`yt-dlp terminó con código ${code}`);
-        }
-    });
+    req.on('close', () => yt.kill());
 });
 
 app.listen(PORT, () => {
