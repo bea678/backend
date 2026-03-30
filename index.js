@@ -10,8 +10,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { executeCronHive, consultarHive5 } from './hive5.js';
 import youtubeDl from 'youtube-dl-exec';
-const { exec } = youtubeDl; // Extraemos exec manualmente
+const { exec } = youtubeDl; 
 import ffmpeg from 'ffmpeg-static';
+import { spawn } from 'node:child_process';
 
 const app = express();
 
@@ -319,7 +320,7 @@ app.get('/arbitrage_opportunities', async (req, res) => {
         if (user_id && user_id !== 'undefined') {
             selectFields += `, IF(ub.id IS NOT NULL, true, false) AS isUserIn`;
             joinClause = ` LEFT JOIN user_bets ub ON ao.id = ub.opportunity_id AND ub.user_id = ?`;
-            params.push(Number(user_id)); 
+            params.push(Number(user_id));
         } else {
             selectFields += `, false AS isUserIn`;
         }
@@ -420,7 +421,7 @@ export const getUserById = async (id) => {
             return null;
         }
 
-        return rows[0]; 
+        return rows[0];
     } catch (error) {
         console.error('❌ Error al obtener usuario:', error.message);
         throw error;
@@ -461,6 +462,7 @@ app.put('/update-token', async (req, res) => {
     }
 });
 
+// Ejemplo si usas la librería 'youtube-dl-exec'
 app.get('/download-music/:id', async (req, res) => {
   const { id } = req.params;
   const videoURL = `https://www.youtube.com/watch?v=${id}`;
@@ -472,17 +474,18 @@ app.get('/download-music/:id', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="audio-${id}.mp3"`);
 
     const subprocess = exec(videoURL, {
-      extractAudio: true,
-      audioFormat: 'mp3',
-      output: '-',
-      ffmpegLocation: ffmpeg,
-      noCheckCertificates: true,
-      addHeader: [
-        'User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
-      ]
-    }, {
-      childProcess: true 
-    });
+        extractAudio: true,
+        audioFormat: 'mp3',
+        output: '-',
+        ffmpegLocation: ffmpeg,
+        noCheckCertificates: true,
+        cookies: './cookies.txt',
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        youtubeSkipDashManifest: true,
+        format: 'bestaudio/best',
+        }, {
+        childProcess: true 
+        });
 
     subprocess.stdout.pipe(res);
 
@@ -504,37 +507,37 @@ app.get('/download-music/:id', async (req, res) => {
   }
 });
 
-app.get('/check-system', (req, res) => {
-    const commands = {
-        python: 'python3 --version',
-        ffmpeg: 'ffmpeg -version | head -n 1',
-        path: 'echo $PATH',
-        wherePython: 'which python3'
-    };
+app.get('/download', (req, res) => {
+    const videoId = req.query.id;
 
-    let results = {};
-    let completed = 0;
-    const total = Object.keys(commands).length;
+    if (!videoId) {
+        return res.status(400).send('Debes proporcionar un ID de YouTube');
+    }
 
-    Object.entries(commands).forEach(([key, cmd]) => {
-        exec(cmd, (error, stdout, stderr) => {
-            results[key] = {
-                output: stdout.trim(),
-                error: stderr.trim() || (error ? error.message : null)
-            };
-            
-            completed++;
-            if (completed === total) {
-                // Si python.output está vacío, es que NO está instalado
-                const isReady = results.python.output.includes('Python');
-                
-                res.json({
-                    status: isReady ? "✅ SISTEMA LISTO" : "❌ FALTA PYTHON",
-                    diagnostics: results,
-                    tip: "Si falta Python, asegúrate de que nixpacks.toml tenga 'python3' en aptPkgs."
-                });
+    res.setHeader('Content-Disposition', `attachment; filename="${videoId}.mp3"`);
+    res.setHeader('Content-Type', 'audio/mpeg');
+
+    const yt = spawn('yt-dlp', [
+        '-x',                     // Extraer audio
+        '--audio-format', 'mp3',  // Formato de salida
+        '--audio-quality', '0',   // Mejor calidad
+        '-o', '-',                // Enviar a la salida estándar (stdout)
+        `https://www.youtube.com/watch?v=${videoId}`
+    ]);
+
+    yt.stdout.pipe(res);
+
+    yt.stderr.on('data', (data) => {
+        console.error(`Error de yt-dlp: ${data}`);
+    });
+
+    yt.on('close', (code) => {
+        if (code !== 0) {
+            console.error(`El proceso yt-dlp terminó con código de error ${code}`);
+            if (!res.headersSent) {
+                res.status(500).send('Error al procesar el audio');
             }
-        });
+        }
     });
 });
 
@@ -542,6 +545,5 @@ app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
 
-    //executeCronHive()
-    //consultarHive5('loansForInvestment');
+    executeCronHive()
 });
