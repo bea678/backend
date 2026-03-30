@@ -12,7 +12,7 @@ import { executeCronHive, consultarHive5 } from './hive5.js';
 import youtubeDl from 'youtube-dl-exec';
 const { exec } = youtubeDl; 
 import ffmpeg from 'ffmpeg-static';
-import { spawn } from 'node:child_process';
+import { spawn, execSync } from 'node:child_process';
 
 const app = express();
 
@@ -514,29 +514,69 @@ app.get('/download', (req, res) => {
         return res.status(400).send('Debes proporcionar un ID de YouTube');
     }
 
-    res.setHeader('Content-Disposition', `attachment; filename="${videoId}.mp3"`);
-    res.setHeader('Content-Type', 'audio/mpeg');
+    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
+    try {
+        // 1. Obtener el tamaño estimado (Sincrónico para simplificar el flujo de headers)
+        const sizeInfo = execSync(
+            `yt-dlp --get-size-approx --extract-audio --audio-format mp3 "${videoUrl}"`,
+            { timeout: 5000 }
+        ).toString().trim();
+
+        let fileSizeInBytes = 0;
+        const match = sizeInfo.match(/^(\d+\.?\d*)([KMG]iB)$/);
+        
+        if (match) {
+            const value = parseFloat(match[1]);
+            const unit = match[2];
+            const multipliers = { 'KiB': 1024, 'MiB': 1024**2, 'GiB': 1024**3 };
+            fileSizeInBytes = Math.round(value * multipliers[unit]);
+        }
+
+        // 2. Configurar Headers para el Cliente (React Native)
+        res.setHeader('Content-Type', 'audio/mpeg');
+        res.setHeader('Content-Disposition', `attachment; filename="${videoId}.mp3"`);
+        
+        if (fileSizeInBytes > 0) {
+            // Este header es la LLAVE para que el progreso funcione en la App
+            res.setHeader('Content-Length', fileSizeInBytes);
+        }
+
+    } catch (error) {
+        console.error("Error obteniendo metadatos:", error.message);
+        // Si falla la estimación, el stream continúa pero la App verá 0% hasta el final
+    }
+
+    // 3. Iniciar el stream de audio con yt-dlp
     const yt = spawn('yt-dlp', [
-        '-x',                     // Extraer audio
-        '--audio-format', 'mp3',  // Formato de salida
-        '--audio-quality', '0',   // Mejor calidad
-        '-o', '-',                // Enviar a la salida estándar (stdout)
-        `https://www.youtube.com/watch?v=${videoId}`
+        '-q',                     // Modo silencioso (evita basura en el stream)
+        '--no-warnings',
+        '-x',                     // Extraer solo audio
+        '--audio-format', 'mp3', 
+        '--audio-quality', '0',   // Mejor calidad (VBR)
+        '-o', '-',                // Salida a stdout
+        videoUrl
     ]);
 
+    // Redirigir la salida de yt-dlp directamente a la respuesta HTTP
     yt.stdout.pipe(res);
 
+    // Manejar errores de yt-dlp
     yt.stderr.on('data', (data) => {
-        console.error(`Error de yt-dlp: ${data}`);
+        console.error(`yt-dlp stderr: ${data}`);
+    });
+
+    // 4. Gestión de recursos: Si el usuario cancela en la App, matamos el proceso
+    req.on('close', () => {
+        if (!yt.killed) {
+            yt.kill('SIGTERM');
+            console.log(`Descarga cancelada para el video: ${videoId}`);
+        }
     });
 
     yt.on('close', (code) => {
-        if (code !== 0) {
-            console.error(`El proceso yt-dlp terminó con código de error ${code}`);
-            if (!res.headersSent) {
-                res.status(500).send('Error al procesar el audio');
-            }
+        if (code !== 0 && !res.headersSent) {
+            res.status(500).send('Error interno al procesar el audio');
         }
     });
 });
