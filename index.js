@@ -379,7 +379,7 @@ app.get('/', async (req, res) => {
  * @param {string} title - Título de la notificación
  * @param {string} body - Contenido del mensaje
  */
-const sendPushNotification = async (fcmToken, title, body) => {
+export const sendPushNotification = async (fcmToken, title, body) => {
     const message = {
         notification: {
             title: title,
@@ -515,68 +515,39 @@ app.get('/download', (req, res) => {
     }
 
     const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    
+    res.setHeader('Content-Type', 'audio/mpeg');
+    res.setHeader('Content-Disposition', `attachment; filename="${videoId}.mp3"`);
 
-    try {
-        // 1. Obtener el tamaño estimado (Sincrónico para simplificar el flujo de headers)
-        const sizeInfo = execSync(
-            `yt-dlp --get-size-approx --extract-audio --audio-format mp3 "${videoUrl}"`,
-            { timeout: 5000 }
-        ).toString().trim();
-
-        let fileSizeInBytes = 0;
-        const match = sizeInfo.match(/^(\d+\.?\d*)([KMG]iB)$/);
-        
-        if (match) {
-            const value = parseFloat(match[1]);
-            const unit = match[2];
-            const multipliers = { 'KiB': 1024, 'MiB': 1024**2, 'GiB': 1024**3 };
-            fileSizeInBytes = Math.round(value * multipliers[unit]);
-        }
-
-        // 2. Configurar Headers para el Cliente (React Native)
-        res.setHeader('Content-Type', 'audio/mpeg');
-        res.setHeader('Content-Disposition', `attachment; filename="${videoId}.mp3"`);
-        
-        if (fileSizeInBytes > 0) {
-            // Este header es la LLAVE para que el progreso funcione en la App
-            res.setHeader('Content-Length', fileSizeInBytes);
-        }
-
-    } catch (error) {
-        console.error("Error obteniendo metadatos:", error.message);
-        // Si falla la estimación, el stream continúa pero la App verá 0% hasta el final
-    }
-
-    // 3. Iniciar el stream de audio con yt-dlp
     const yt = spawn('yt-dlp', [
-        '-q',                     // Modo silencioso (evita basura en el stream)
+        '--no-check-certificates',
+        '--quiet',
         '--no-warnings',
-        '-x',                     // Extraer solo audio
-        '--audio-format', 'mp3', 
-        '--audio-quality', '0',   // Mejor calidad (VBR)
-        '-o', '-',                // Salida a stdout
+        '--extract-audio',
+        '--audio-format', 'mp3',
+        '--audio-quality', '0',
+        '--impersonate-client', 'chrome', 
+        '--extractor-args', 'youtube:player_client=android,web', 
+        '-o', '-', 
         videoUrl
     ]);
 
-    // Redirigir la salida de yt-dlp directamente a la respuesta HTTP
     yt.stdout.pipe(res);
 
-    // Manejar errores de yt-dlp
     yt.stderr.on('data', (data) => {
-        console.error(`yt-dlp stderr: ${data}`);
+        console.error(`[yt-dlp error]: ${data.toString()}`);
     });
 
-    // 4. Gestión de recursos: Si el usuario cancela en la App, matamos el proceso
     req.on('close', () => {
         if (!yt.killed) {
             yt.kill('SIGTERM');
-            console.log(`Descarga cancelada para el video: ${videoId}`);
+            console.log(`Descarga cancelada por el usuario: ${videoId}`);
         }
     });
 
     yt.on('close', (code) => {
         if (code !== 0 && !res.headersSent) {
-            res.status(500).send('Error interno al procesar el audio');
+            console.error(`yt-dlp terminó con código ${code}`);
         }
     });
 });
