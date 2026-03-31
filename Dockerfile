@@ -23,6 +23,8 @@ RUN npm install
 # 6. Copiamos el resto del código
 COPY . .
 
+RUN ls -la /app && chmod 644 /app/cookies.txt || echo "Archivo no encontrado en el build"
+
 # 7. Railway usa el puerto 3000 por defecto (o la variable PORT)
 EXPOSE 3000
 
