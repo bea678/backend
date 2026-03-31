@@ -31,7 +31,7 @@ app.get('/download', (req, res) => {
         console.error(`❌ ERROR: No se encontró cookies.txt en ${cookiesPath}`);
     }
 
-    const yt = spawn('yt-dlp', [
+  /*  const yt = spawn('yt-dlp', [
         '--no-check-certificates',
         '--quiet',
         '--no-warnings',
@@ -40,7 +40,20 @@ app.get('/download', (req, res) => {
         '-f', '140/bestaudio[ext=m4a]/ba', 
         '-o', '-', 
         `https://www.youtube.com/watch?v=${videoId}`
-    ]);
+    ]);*/
+
+  const yt = spawn('yt-dlp', [
+    '--no-check-certificates',
+    // IMPORTANTE: NO ponemos el flag --cookies
+    '--js-runtime', 'node',
+    // Forzamos el cliente de Android, que es el más "abierto"
+    '--extractor-args', 'youtube:player_client=android,web_embedded',
+    '--user-agent', 'com.google.android.youtube/19.10.35 (Linux; U; Android 14; es_ES; Pixel 7 Pro)',
+    // Usamos un filtrado de formato más flexible por si acaso
+    '-f', 'ba[ext=m4a]/ba/best',
+    '-o', '-', 
+    `https://www.youtube.com/watch?v=${videoId}`
+]);
 
     res.setHeader('Content-Type', 'audio/mp4'); 
     res.setHeader('Content-Disposition', `attachment; filename="${videoId}.m4a"`);

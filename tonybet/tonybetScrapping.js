@@ -5,22 +5,24 @@ export function generarIdUnico(home, away, hora) {
     const normalizar = (str) => {
         if (!str) return "";
         return str.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .replace(/\bii\b/g, 'b')
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
+            .replace(/\bii\b/g, 'b') 
             .replace(/fc|sd|ud|cd|united|real|club|deportivo|atletico|atl\.|de|el|la|the|deportiva/g, '')
             .replace(/\(espana\)|\bespana\b|\besp\b/g, '')
-            .replace(/[^a-z0-9]/g, '')
+            .replace(/[^a-z0-9]/g, '') 
             .trim();
     };
 
     const h = normalizar(home);
     const a = normalizar(away);
+    
     const equipos = [h, a].sort().join('_');
-    const horaFinal = hora.replace(/[^0-9]/g, '').slice(-4);
+    const horaFinal = hora.replace(/[^0-9]/g, '').slice(-4); 
+
     return `${horaFinal}_${equipos}`;
 }
 
-async function extraerApuestas1X2() {
+export async function scrapeTonyBetFootball() {
     const url = 'https://tonybet.es/prematch/football';
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     const mapaResultados = {};
@@ -148,5 +150,3 @@ async function extraerApuestas1X2() {
          await browser.close();
     }
 }
-
-extraerApuestas1X2();

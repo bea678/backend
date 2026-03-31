@@ -46,5 +46,3 @@ coverage/
 *.sln
 *.sw?
 .DS_Store
-
-cookies.txt

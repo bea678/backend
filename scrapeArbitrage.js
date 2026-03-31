@@ -1,6 +1,7 @@
 import { scrapeBetfairFootball } from "./betfair/betfairScrapping.js";
 import { scrapeLeoVegasFootball } from "./leovegas/leovegasScrapping.js";
 import { scrapeLuckiaFootball } from "./luckia/luckiaScraping.js";
+import { scrapeTonyBetFootball } from "./tonybet/tonybetScrapping.js";
 import fs from 'fs/promises';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
@@ -96,15 +97,17 @@ export async function scrapeArbitrageFootball() {
         console.log('📂 Verificando archivos de caché...');
         
         // Intentamos leer los 3 archivos en paralelo para ahorrar tiempo
-        const [bfCache, lvCache, lcCache] = await Promise.all([
+        const [bfCache, lvCache, lcCache, tonyCache] = await Promise.all([
             fs.readFile('betfair_cache.json', 'utf-8'),
             fs.readFile('leovegas_cache.json', 'utf-8'),
-            fs.readFile('luckia_cache.json', 'utf-8')
+            fs.readFile('luckia_cache.json', 'utf-8'),
+            fs.readFile('tonybet_cache.json', 'utf-8')
         ]);
 
         bfData = JSON.parse(bfCache);
         lvData = JSON.parse(lvCache);
         lcData = JSON.parse(lcCache);
+        tonyData = JSON.parse(tonyCache);
 
         console.log('✅ Datos cargados desde la caché local para agilizar.');
 
@@ -112,17 +115,19 @@ export async function scrapeArbitrageFootball() {
         console.log('🌐 Caché incompleta o no encontrada. Iniciando scrapers (esto tardará un poco)...');
         
         // Si falla la lectura de cualquiera, ejecutamos los scrapers
-        [bfData, lvData, lcData] = await Promise.all([
+        [bfData, lvData, lcData, tonyData] = await Promise.all([
             scrapeBetfairFootball(), 
             scrapeLeoVegasFootball(), 
-            scrapeLuckiaFootball()
+            scrapeLuckiaFootball(),
+            scrapeTonyBetFootball()
         ]);
 
         // Guardamos los nuevos datos en caché para la próxima vez
         await Promise.all([
             fs.writeFile('betfair_cache.json', JSON.stringify(bfData, null, 2)),
             fs.writeFile('leovegas_cache.json', JSON.stringify(lvData, null, 2)),
-            fs.writeFile('luckia_cache.json', JSON.stringify(lcData, null, 2))
+            fs.writeFile('luckia_cache.json', JSON.stringify(lcData, null, 2)),
+            fs.writeFile('tonybet_cache.json', JSON.stringify(tonyData, null, 2))
         ]);
         
         console.log('💾 Nueva caché generada correctamente.');
@@ -132,7 +137,8 @@ export async function scrapeArbitrageFootball() {
     const masterMap = unificarCuotas([
         { nombre: 'BF', data: bfData },
         { nombre: 'LV', data: lvData },
-        { nombre: 'LC', data: lcData }
+        { nombre: 'LC', data: lcData },
+        { nombre: 'TB', data: tonyData }
     ]);
 
     const coincidencias = [];

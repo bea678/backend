@@ -461,57 +461,52 @@ app.put('/update-token', async (req, res) => {
 });
 
 app.get('/download', (req, res) => {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
+    const videoId = req.query.id;
 
-    const videoId = req.query.id; 
-    const cookiesPath = path.join(__dirname, 'cookies.txt');
 
-    // 1. Verificamos si el archivo existe físicamente
-    if (!fs.existsSync(cookiesPath)) {
-        console.error(`❌ ERROR: No se encontró el fichero en: ${cookiesPath}`);
-        return res.status(500).json({ 
-            error: 'Fichero de cookies no encontrado',
-            path: cookiesPath 
-        });
-    }
-    
+    /* const yt = spawn('yt-dlp', [
+         '--no-check-certificates',
+         '--quiet',
+         '--no-warnings',
+         '--cookies', cookiesPath,
+         '--js-runtime', 'node', 
+         '-f', '140/bestaudio[ext=m4a]/ba', 
+         '-o', '-', 
+         `https://www.youtube.com/watch?v=${videoId}`
+     ]);*/
+
     const yt = spawn('yt-dlp', [
         '--no-check-certificates',
-        '--quiet',
-        '--no-warnings',
-        '--cookies', cookiesPath,
-        '--js-runtime', 'node', 
-        '-f', '140/bestaudio[ext=m4a]/ba', 
-        '-o', '-', 
+        '--js-runtime', 'node',
+        '--extractor-args', 'youtube:player_client=android,web_embedded',
+        '--user-agent', 'com.google.android.youtube/19.10.35 (Linux; U; Android 14; es_ES; Pixel 7 Pro)',
+        '-f', 'ba[ext=m4a]/ba/best',
+        '-o', '-',
         `https://www.youtube.com/watch?v=${videoId}`
     ]);
 
     let errorOccurred = false;
     let stderrData = '';
 
-    // Capturamos el error de yt-dlp
     yt.stderr.on('data', (data) => {
         const msg = data.toString();
         stderrData += msg;
         console.error(`[yt-dlp log]: ${msg}`);
 
-        // Si detectamos ERROR en la salida y aún no hemos enviado respuesta exitosa
         if ((msg.includes('ERROR') || msg.includes('Sign in')) && !res.headersSent) {
             errorOccurred = true;
-            res.status(500).json({ 
-                error: 'YouTube detectó un bot o error de cookies', 
-                details: msg.trim() 
+            res.status(500).json({
+                error: 'YouTube detectó un bot o error de cookies',
+                details: msg.trim()
             });
-            yt.kill(); // Detenemos el proceso
+            yt.kill(); 
         }
     });
 
-    // Solo hacemos el pipe si no ha saltado un error inmediato
     yt.stdout.on('data', (chunk) => {
         if (!errorOccurred) {
             if (!res.headersSent) {
-                res.setHeader('Content-Type', 'audio/mp4'); 
+                res.setHeader('Content-Type', 'audio/mp4');
                 res.setHeader('Content-Disposition', `attachment; filename="${videoId}.m4a"`);
             }
             res.write(chunk);
