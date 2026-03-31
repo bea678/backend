@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { generarIdUnico } from './scrapeArbitrage.js';
+import { generarIdUnico } from '../scrapeArbitrage.js';
 
 puppeteer.use(StealthPlugin());
 

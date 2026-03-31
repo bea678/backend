@@ -1,9 +1,9 @@
-import { scrapeBetfairFootball } from "./betfairScrapping.js";
-import { scrapeLeoVegasFootball } from "./leovegasScrapping.js";
+import { scrapeBetfairFootball } from "./betfair/betfairScrapping.js";
+import { scrapeLeoVegasFootball } from "./leovegas/leovegasScrapping.js";
+import { scrapeLuckiaFootball } from "./luckia/luckiaScraping.js";
 import fs from 'fs/promises';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
-import { scrapeLuckiaFootball } from "./luckiaScraping.js";
 
 puppeteer.use(StealthPlugin());
 

@@ -1,607 +1,486 @@
 {
-  "1145_cerdanyolvalles_funegrama": {
-    "eventId": "0_FUN",
-    "partido": "Fun. E.Grama vs Cerdanyola Del Valles",
+  "1800_chipre_moldavia": {
+    "eventId": "0_CHI",
+    "partido": "Chipre vs Moldavia",
     "cuotas": [
-      1.75,
+      1.65,
+      3.5,
+      5
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "30 Mar 18:00"
+  },
+  "1930_estonia_ruanda": {
+    "eventId": "1_RUA",
+    "partido": "Ruanda vs Estonia",
+    "cuotas": [
+      1.56,
+      3.3,
+      5.1
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "30 Mar 19:30"
+  },
+  "2045_alemania_ghana": {
+    "eventId": "2_ALE",
+    "partido": "Alemania vs Ghana",
+    "cuotas": [
+      1.13,
+      7.9,
+      14
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "30 Mar 20:45"
+  },
+  "2100_bize_guyana": {
+    "eventId": "3_GUY",
+    "partido": "Guyana vs Belize",
+    "cuotas": [
+      1.5,
+      4.2,
+      4.4
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "30 Mar 21:00"
+  },
+  "0000_dominica_sanmartinparteneersa": {
+    "eventId": "4_DOM",
+    "partido": "Dominica vs San Martín (Parte Neerladesa)",
+    "cuotas": [
       3.2,
-      4
+      3.45,
+      1.86
     ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 11:45"
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 00:00"
   },
-  "1145_montanesa_uetona": {
-    "eventId": "1_UE ",
-    "partido": "UE Tona vs Montanesa",
+  "0800_camerun_china": {
+    "eventId": "5_CAM",
+    "partido": "Camerún vs China",
     "cuotas": [
-      2.08,
-      3,
-      3
+      1.35,
+      4,
+      6.5
     ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 11:45"
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 08:00"
   },
-  "1200_ceeuropab_peradacf": {
-    "eventId": "2_CE ",
-    "partido": "CE Europa B vs Peralada CF",
+  "1100_guineaecuatorial_madagascar": {
+    "eventId": "6_GUI",
+    "partido": "Guinea Ecuatorial vs Madagascar",
     "cuotas": [
-      2.31,
-      2.9,
-      2.76
+      2.72,
+      3.1,
+      2.37
     ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 12:00"
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 11:00"
   },
-  "1200_cehospitalet_cfcanvidalet": {
-    "eventId": "3_CE ",
-    "partido": "CE Hospitalet vs CF Can Vidalet",
+  "1110_australia_curazao": {
+    "eventId": "7_AUS",
+    "partido": "Australia vs Curazao",
     "cuotas": [
-      1.45,
+      1.36,
+      3.9,
+      6.6
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 11:10"
+  },
+  "1700_liberia_libya": {
+    "eventId": "8_LIB",
+    "partido": "Liberia vs Libya",
+    "cuotas": [
+      2.97,
+      2.86,
+      2.48
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 17:00"
+  },
+  "1800_botswana_mawi": {
+    "eventId": "9_MAL",
+    "partido": "Malawi vs Botswana",
+    "cuotas": [
+      2.81,
+      2.92,
+      2.48
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 18:00"
+  },
+  "1800_eslovenia_montenegro": {
+    "eventId": "10_MON",
+    "partido": "Montenegro vs Eslovenia",
+    "cuotas": [
+      2.86,
+      3.2,
+      2.28
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 18:00"
+  },
+  "1800_noruega_suiza": {
+    "eventId": "11_NOR",
+    "partido": "Noruega vs Suiza",
+    "cuotas": [
+      2,
+      3.6,
+      3.25
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 18:00"
+  },
+  "1800_andorra_sanmarino": {
+    "eventId": "12_SAN",
+    "partido": "San Marino vs Andorra",
+    "cuotas": [
+      3.9,
+      3.2,
+      1.88
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 18:00"
+  },
+  "1830_haiti_isndia": {
+    "eventId": "13_HAI",
+    "partido": "Haití vs Islandia",
+    "cuotas": [
+      3.15,
+      3.35,
+      2.06
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 18:30"
+  },
+  "1900_mali_rusia": {
+    "eventId": "14_RUS",
+    "partido": "Rusia vs Mali",
+    "cuotas": [
+      1.53,
+      3.85,
+      5.4
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 19:00"
+  },
+  "1900_grecia_hungria": {
+    "eventId": "15_HUN",
+    "partido": "Hungría vs Grecia",
+    "cuotas": [
+      2.35,
+      3.1,
+      2.84
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 19:00"
+  },
+  "1930_panama_safrica": {
+    "eventId": "16_SUD",
+    "partido": "Sudáfrica vs Panamá",
+    "cuotas": [
+      2.12,
+      3.2,
+      3.2
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 19:30"
+  },
+  "1930_jordania_nigeria": {
+    "eventId": "17_JOR",
+    "partido": "Jordania vs Nigeria",
+    "cuotas": [
+      4.45,
+      3.45,
+      1.72
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 19:30"
+  },
+  "2000_honduras_peru": {
+    "eventId": "18_PER",
+    "partido": "Perù vs Honduras",
+    "cuotas": [
+      1.98,
+      3.25,
+      3.5
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:00"
+  },
+  "2000_marruecos_paraguay": {
+    "eventId": "19_MAR",
+    "partido": "Marruecos vs Paraguay",
+    "cuotas": [
+      2.04,
+      3.15,
+      3.4
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:00"
+  },
+  "2000_benin_republicaguinea": {
+    "eventId": "20_BEN",
+    "partido": "Benin vs República de Guinea",
+    "cuotas": [
+      3.3,
+      3.1,
+      2.13
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:00"
+  },
+  "2030_costamarfil_escocia": {
+    "eventId": "21_ESC",
+    "partido": "Escocia vs Costa de Marfil",
+    "cuotas": [
+      3.35,
+      3.2,
+      2.05
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:30"
+  },
+  "2030_argia_uruguay": {
+    "eventId": "22_ARG",
+    "partido": "Argelia vs Uruguay",
+    "cuotas": [
+      3.35,
+      3.2,
+      2.03
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:30"
+  },
+  "2045_ingterra_japon": {
+    "eventId": "23_ING",
+    "partido": "Inglaterra vs Japón",
+    "cuotas": [
+      1.53,
+      4,
+      5.4
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2045_irnda_macedonialnorte": {
+    "eventId": "24_IRL",
+    "partido": "Irlanda vs Macedonia del Norte",
+    "cuotas": [
+      1.61,
+      3.8,
+      4.65
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2045_gales_irndalnorte": {
+    "eventId": "25_GAL",
+    "partido": "Gales vs Irlanda del Norte",
+    "cuotas": [
+      1.73,
+      3.5,
+      4.25
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2045_ecuador_paisesbajos": {
+    "eventId": "26_PAÍ",
+    "partido": "Países Bajos vs Ecuador",
+    "cuotas": [
+      1.5,
+      3.85,
+      5.8
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2045_eslovaquia_rumania": {
+    "eventId": "27_ESL",
+    "partido": "Eslovaquia vs Rumania",
+    "cuotas": [
+      2.05,
+      3.15,
+      3.4
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2045_albania_ucrania": {
+    "eventId": "28_UCR",
+    "partido": "Ucrania vs Albania",
+    "cuotas": [
+      2.27,
+      3.2,
+      2.86
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2045_austria_corealsur": {
+    "eventId": "29_AUS",
+    "partido": "Austria vs Corea del Sur",
+    "cuotas": [
+      1.51,
+      4,
+      5.2
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 20:45"
+  },
+  "2100_gambia_senegal": {
+    "eventId": "30_SEN",
+    "partido": "Senegal vs Gambia",
+    "cuotas": [
+      1.17,
+      6,
+      12
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 21:00"
+  },
+  "2100__egipto": {
+    "eventId": "31_ESP",
+    "partido": "España vs Egipto",
+    "cuotas": [
+      1.16,
+      7.3,
+      14
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "31 Mar 21:00"
+  },
+  "0100_estadosunidos_portugal": {
+    "eventId": "32_EST",
+    "partido": "Estados Unidos vs Portugal",
+    "cuotas": [
+      4,
+      3.7,
+      1.73
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "01 Abr 01:00"
+  },
+  "0115_argentina_zambia": {
+    "eventId": "33_ARG",
+    "partido": "Argentina vs Zambia",
+    "cuotas": [
+      1.04,
+      13,
+      31
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "01 Abr 01:15"
+  },
+  "0130_canada_tunez": {
+    "eventId": "34_CAN",
+    "partido": "Canadá vs Túnez",
+    "cuotas": [
+      1.76,
+      3.5,
+      4.1
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "01 Abr 01:30"
+  },
+  "0200_brasil_croacia": {
+    "eventId": "35_BRA",
+    "partido": "Brasil vs Croacia",
+    "cuotas": [
+      1.83,
       3.75,
-      5.5
+      3.9
     ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 12:00"
+    "competicion": "Partidos Amistosos",
+    "hora": "01 Abr 02:00"
   },
-  "1230_lesca_sancristobal": {
-    "eventId": "4_FC ",
-    "partido": "FC L Escala vs San Cristobal",
+  "0300_bgica_mexico": {
+    "eventId": "36_MÉX",
+    "partido": "México vs Bélgica",
+    "cuotas": [
+      3.15,
+      3.35,
+      2.24
+    ],
+    "competicion": "Partidos Amistosos",
+    "hora": "01 Abr 03:00"
+  },
+  "1800_haugesund_sandnesulf": {
+    "eventId": "37_SAN",
+    "partido": "Sandnes Ulf vs Haugesund",
+    "cuotas": [
+      2.62,
+      3.45,
+      2.18
+    ],
+    "competicion": "Amistosos Clubes",
+    "hora": "30 Mar 18:00"
+  },
+  "1800_23argia_drcongo": {
+    "eventId": "38_23/",
+    "partido": "23/Argelia vs DR Congo",
     "cuotas": [
       1.78,
       3.25,
-      3.65
+      4.15
     ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 12:30"
+    "competicion": "Amistosos Sub-23",
+    "hora": "30 Mar 18:00"
   },
-  "1700_cfbadalona_uelleida": {
-    "eventId": "5_UE ",
-    "partido": "UE Lleida vs CF Badalona",
+  "0900_23corealnorte_23thaind": {
+    "eventId": "39_23/",
+    "partido": "23/Corea del norte vs 23/Thailand",
     "cuotas": [
-      6.7,
-      3.5,
-      1.42
-    ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 17:00"
-  },
-  "1800_cfvinovaigtru_corn": {
-    "eventId": "6_CF ",
-    "partido": "CF Vilanova I LA Geltru vs UD Cornella",
-    "cuotas": [
-      2.77,
-      2.78,
-      2.38
-    ],
-    "competicion": "España Tercera RFEF Grupo 5",
-    "hora": "29 Mar 18:00"
-  },
-  "1200_alcorcon_ibizaeivissa": {
-    "eventId": "7_UD ",
-    "partido": "UD Ibiza Eivissa vs Alcorcón",
-    "cuotas": [
-      1.97,
-      2.97,
-      3.75
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_athbilbaob_ctab": {
-    "eventId": "8_CEL",
-    "partido": "Celta B vs Ath.Bilbao B",
-    "cuotas": [
-      2.22,
-      3.1,
-      3
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_caosasunab_guadajara": {
-    "eventId": "9_CA ",
-    "partido": "CA Osasuna B vs Guadalajara",
-    "cuotas": [
-      2.4,
-      2.95,
-      2.83
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_ourensecf_ponferradina": {
-    "eventId": "10_OUR",
-    "partido": "Ourense Cf vs Ponferradina",
-    "cuotas": [
-      2.52,
-      2.82,
-      2.78
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1415_antequera_madridb": {
-    "eventId": "11_ATL",
-    "partido": "Atl.Madrid B vs Antequera",
-    "cuotas": [
-      1.74,
-      3.15,
-      4.6
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 14:15"
-  },
-  "1600_cesaball_vilrbcf": {
-    "eventId": "12_VIL",
-    "partido": "Villarreal B CF vs CE Sabadell",
-    "cuotas": [
-      2.63,
-      2.78,
-      2.7
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 16:00"
-  },
-  "1630_nse_sociedadtarazona": {
-    "eventId": "13_SOC",
-    "partido": "Sociedad Deportivo Tarazona vs CD Eldense",
-    "cuotas": [
-      2.9,
-      2.86,
-      2.4
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 16:30"
-  },
-  "1630_rmurcia_sevil": {
-    "eventId": "14_SEV",
-    "partido": "Sevilla Atlético vs R.Murcia",
-    "cuotas": [
-      4.25,
-      2.94,
-      1.87
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 16:30"
-  },
-  "1845_hercules_marb": {
-    "eventId": "15_HÉR",
-    "partido": "Hércules vs Marbella",
-    "cuotas": [
-      1.83,
-      3.15,
-      4.1
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 18:45"
-  },
-  "2100_cpcacerenosad_lugo": {
-    "eventId": "16_CP ",
-    "partido": "Cp Cacereno Sad vs Lugo",
-    "cuotas": [
-      2.61,
-      2.9,
-      2.62
-    ],
-    "competicion": "España Primera Federación",
-    "hora": "29 Mar 21:00"
-  },
-  "1200_ceandratx_poblense": {
-    "eventId": "17_UD ",
-    "partido": "Ud Poblense vs CE Andratx",
-    "cuotas": [
-      1.5,
-      3.6,
-      5.5
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_baleares_olot": {
-    "eventId": "18_ATL",
-    "partido": "Atl.Baleares vs Olot",
-    "cuotas": [
-      1.77,
-      3,
-      4.2
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_alca_rayomajadahonda": {
-    "eventId": "19_RAY",
-    "partido": "Rayo Majadahonda vs Alcalá",
-    "cuotas": [
-      1.48,
-      3.6,
-      5.7
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_gironab_ibizaisspitiusas": {
-    "eventId": "20_GIR",
-    "partido": "Girona B vs Cd Ibiza Islas Pitiusas",
-    "cuotas": [
-      1.83,
-      3.1,
-      3.85
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_orihuacf_tenerifeb": {
-    "eventId": "21_TEN",
-    "partido": "Tenerife B vs Orihuela CF",
-    "cuotas": [
-      1.92,
-      3.35,
-      3.25
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_amorebieta_eibarb": {
-    "eventId": "22_SD ",
-    "partido": "SD Amorebieta vs SD Eibar B",
-    "cuotas": [
-      2.2,
-      2.9,
-      3
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_getafebcf_rayovallecanob": {
-    "eventId": "23_RAY",
-    "partido": "Rayo Vallecano B vs Getafe B CF",
-    "cuotas": [
-      3.8,
-      3.35,
-      1.77
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_barbastro_espanyolbarb": {
-    "eventId": "24_BAR",
-    "partido": "Barbastro vs Espanyol Bar.B",
-    "cuotas": [
-      2.6,
-      2.78,
-      2.6
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_aragon_tano": {
-    "eventId": "25_DEP",
-    "partido": "Deportivo Aragon vs CD Tudelano",
-    "cuotas": [
-      3.35,
-      3.15,
-      1.94
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:00"
-  },
-  "1230_oviedob_racingsantanrb": {
-    "eventId": "26_RÁC",
-    "partido": "Rácing Santander B vs Real Oviedo B",
-    "cuotas": [
-      2.66,
-      3.35,
-      2.2
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 12:30"
-  },
-  "1300_intercity_spalmasb": {
-    "eventId": "27_UD ",
-    "partido": "UD Las Palmas B vs Intercity",
-    "cuotas": [
-      2.05,
+      2.13,
       3.2,
       3
     ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 13:00"
+    "competicion": "Amistosos Sub-23",
+    "hora": "31 Mar 09:00"
   },
-  "1700_numancia_sarriana": {
-    "eventId": "28_NUM",
-    "partido": "Numancia vs SD Sarriana",
+  "1335_23china_23vietnam": {
+    "eventId": "40_23/",
+    "partido": "23/China vs 23/Vietnam",
     "cuotas": [
-      1.26,
-      4.65,
-      8.2
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1700_astorga_pcorunab": {
-    "eventId": "29_DEP",
-    "partido": "Dep.La Coruna B vs Atletico Astorga",
-    "cuotas": [
-      1.36,
-      4.2,
-      6.4
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1700_avesb_logrones": {
-    "eventId": "30_LOG",
-    "partido": "Logrones vs Deportivo Alaves B",
-    "cuotas": [
-      1.66,
-      3.25,
-      4.55
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1700_extremadura_portivaminera": {
-    "eventId": "31_CD ",
-    "partido": "CD Extremadura vs Deportiva Minera",
-    "cuotas": [
-      2.24,
-      3,
-      2.84
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1700_gimsegoviana_valdolidb": {
-    "eventId": "32_GIM",
-    "partido": "Gim.Segoviana vs Real Valladolid B",
-    "cuotas": [
-      1.84,
-      3.25,
-      3.6
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1700_bergantinos_coruxo": {
-    "eventId": "33_BER",
-    "partido": "Bergantinos vs Coruxo FC",
-    "cuotas": [
-      2.6,
-      2.84,
-      2.54
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1700_naxara_sestaor": {
-    "eventId": "34_NÁX",
-    "partido": "Náxara vs Sestao R.",
-    "cuotas": [
-      3.65,
-      2.95,
-      1.93
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:00"
-  },
-  "1730_anavalcarnero_quintanarlrey": {
-    "eventId": "35_CD ",
-    "partido": "Cd Quintanar Del Rey vs CDA Navalcarnero",
-    "cuotas": [
-      2.28,
-      3,
-      2.78
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 17:30"
-  },
-  "1800_alcoyano_torrent": {
-    "eventId": "36_CD ",
-    "partido": "CD Alcoyano vs Torrent",
-    "cuotas": [
-      1.6,
-      3.15,
-      5
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 18:00"
-  },
-  "1800_atleticlleidace_reusreddis": {
-    "eventId": "37_REU",
-    "partido": "Reus Fc Reddis vs Atletic Lleida CE",
-    "cuotas": [
-      1.84,
-      3,
-      3.75
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 18:00"
-  },
-  "1800_ruirun_utebo": {
-    "eventId": "38_UTE",
-    "partido": "Utebo FC vs RU Irún",
-    "cuotas": [
-      2.74,
-      3.15,
-      2.18
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 18:00"
-  },
-  "1800_marinoluanco_ourense": {
-    "eventId": "39_MAR",
-    "partido": "Marino de Luanco vs Ourense",
-    "cuotas": [
-      2.53,
-      2.75,
-      2.62
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 18:00"
-  },
-  "1800_burgospromesas_lealtad": {
-    "eventId": "40_CD ",
-    "partido": "Cd Lealtad vs Burgos Promesas",
-    "cuotas": [
-      2.05,
-      3,
-      3.1
-    ],
-    "competicion": "España Segunda Federación",
-    "hora": "29 Mar 18:00"
-  },
-  "1200_logrono_rsociedad": {
-    "eventId": "41_R.S",
-    "partido": "R.Sociedad vs Logrono",
-    "cuotas": [
-      1.11,
-      7,
-      14
-    ],
-    "competicion": "Espana Primera División (Fem)",
-    "hora": "29 Mar 12:00"
-  },
-  "1300_gtenerife_madridccf": {
-    "eventId": "42_UDG",
-    "partido": "Udg Tenerife vs Madrid Ccf",
-    "cuotas": [
-      1.66,
-      3.7,
-      4.2
-    ],
-    "competicion": "Espana Primera División (Fem)",
-    "hora": "29 Mar 13:00"
-  },
-  "1700_athbilbao_fmadrid": {
-    "eventId": "43_ATH",
-    "partido": "Ath.Bilbao vs F/Atl. Madrid",
-    "cuotas": [
-      3.55,
-      3.25,
-      1.92
-    ],
-    "competicion": "Espana Primera División (Fem)",
-    "hora": "29 Mar 17:00"
-  },
-  "2100_barcona_madridcf": {
-    "eventId": "44_REA",
-    "partido": "Real Madrid CF vs Barcelona",
-    "cuotas": [
-      9,
-      6.2,
-      1.2
-    ],
-    "competicion": "Espana Primera División (Fem)",
-    "hora": "29 Mar 21:00"
-  },
-  "1200_alondrascf_juventcambados": {
-    "eventId": "45_ALO",
-    "partido": "Alondras Cf vs Club Juventud Cambados",
-    "cuotas": [
-      1.68,
-      3.15,
-      4.3
-    ],
-    "competicion": "España Tercera RFEF Grupo 1",
-    "hora": "29 Mar 12:00"
-  },
-  "1615_corunamontaneroscf_viveiro": {
-    "eventId": "46_ATL",
-    "partido": "Atletico Coruna Montaneros CF vs Viveiro",
-    "cuotas": [
-      1.64,
-      3.3,
-      4.4
-    ],
-    "competicion": "España Tercera RFEF Grupo 1",
-    "hora": "29 Mar 16:15"
-  },
-  "1700_arosasc_somozas": {
-    "eventId": "47_ARO",
-    "partido": "Arosa SC vs Ud Somozas",
-    "cuotas": [
-      1.57,
+      1.77,
       3.4,
-      4.8
+      4
     ],
-    "competicion": "España Tercera RFEF Grupo 1",
-    "hora": "29 Mar 17:00"
+    "competicion": "Amistosos Sub-23",
+    "hora": "31 Mar 13:35"
   },
-  "1730_barbadas_boiro": {
-    "eventId": "48_UD ",
-    "partido": "UD Barbadas vs Cd Boiro",
-    "cuotas": [
-      4.5,
-      3.25,
-      1.64
-    ],
-    "competicion": "España Tercera RFEF Grupo 1",
-    "hora": "29 Mar 17:30"
-  },
-  "1200_navarrocf_praviano": {
-    "eventId": "49_CD ",
-    "partido": "Cd Praviano vs Navarro CF",
-    "cuotas": [
-      1.83,
-      3.1,
-      3.7
-    ],
-    "competicion": "España Tercera RFEF Grupo 2",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_lentregu_titanico": {
-    "eventId": "50_REA",
-    "partido": "Real Titanico vs L Entregu",
-    "cuotas": [
-      4.7,
-      3.45,
-      1.57
-    ],
-    "competicion": "España Tercera RFEF Grupo 2",
-    "hora": "29 Mar 12:00"
-  },
-  "1200_lnes_sportinggijonb": {
-    "eventId": "51_CD ",
-    "partido": "Cd Llanes vs Sporting Gijón B",
+  "1800_bayerleverkusen_fhamburgersv": {
+    "eventId": "41_F/H",
+    "partido": "F/Hamburger Sv vs Bayer Leverkusen",
     "cuotas": [
       5.6,
-      3.85,
+      4.4,
       1.42
     ],
-    "competicion": "España Tercera RFEF Grupo 2",
-    "hora": "29 Mar 12:00"
+    "competicion": "Alemania Bundesliga (f)",
+    "hora": "30 Mar 18:00"
   },
-  "1230_colunga_lnera": {
-    "eventId": "52_LLA",
-    "partido": "Llanera vs CD Colunga",
+  "1830_21bgica_21paisesbajos": {
+    "eventId": "42_21/",
+    "partido": "21/Países Bajos vs 21/Bélgica",
     "cuotas": [
-      1.16,
-      5.4,
-      11
+      2.23,
+      3.55,
+      2.65
     ],
-    "competicion": "España Tercera RFEF Grupo 2",
-    "hora": "29 Mar 12:30"
+    "competicion": "Amistosos Sub-21",
+    "hora": "30 Mar 18:30"
   },
-  "1800_gijonindustrial_tuil": {
-    "eventId": "53_UD ",
-    "partido": "UD Gijon Industrial vs Cd Tuilla",
+  "1830_skakhabarovsk_torpedom": {
+    "eventId": "43_TOR",
+    "partido": "Torpedo M. vs SKA Khabarovsk",
     "cuotas": [
-      1.86,
-      3.15,
-      3.5
+      1.71,
+      3.3,
+      4.5
     ],
-    "competicion": "España Tercera RFEF Grupo 2",
-    "hora": "29 Mar 18:00"
-  },
-  "1815_avilesstadiumcf_mosconia": {
-    "eventId": "54_AVI",
-    "partido": "Aviles Stadium CF vs Cd Mosconia",
-    "cuotas": [
-      4.25,
-      3.1,
-      1.73
-    ],
-    "competicion": "España Tercera RFEF Grupo 2",
-    "hora": "29 Mar 18:15"
+    "competicion": "Rusia 1. Liga",
+    "hora": "30 Mar 18:30"
   }
 }

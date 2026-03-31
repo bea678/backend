@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { generarIdUnico, obtenerHoraInicio } from './scrapeArbitrage.js';
+import { generarIdUnico, obtenerHoraInicio } from '../scrapeArbitrage.js';
 
 export async function scrapeBetfairFootball() {
     const url = 'https://www.betfair.es/sport/football';

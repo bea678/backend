@@ -460,12 +460,14 @@ app.put('/update-token', async (req, res) => {
 });
 
 app.get('/download', (req, res) => {
-    const videoId = req.query.id;
+    const videoId = req.query.id; 
 
     const yt = spawn('yt-dlp', [
         '--no-check-certificates',
         '--quiet',
+        '--no-warnings',
         '--cookies', '/app/cookies.txt',
+        '--js-runtime', 'node', 
         '-f', '140/bestaudio[ext=m4a]/ba', 
         '-o', '-', 
         `https://www.youtube.com/watch?v=${videoId}`
@@ -473,10 +475,16 @@ app.get('/download', (req, res) => {
 
     res.setHeader('Content-Type', 'audio/mp4'); 
     res.setHeader('Content-Disposition', `attachment; filename="${videoId}.m4a"`);
+
     yt.stdout.pipe(res);
+
     yt.stderr.on('data', (data) => {
-        console.error(`[yt-dlp error]: ${data.toString()}`);
+        const msg = data.toString();
+        if (msg.includes('ERROR')) {
+            console.error(`[yt-dlp error]: ${msg}`);
+        }
     });
+
     req.on('close', () => yt.kill());
 });
 

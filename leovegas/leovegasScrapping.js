@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import puppeteer from 'puppeteer';
-import { generarIdUnico } from './scrapeArbitrage.js';
+import { generarIdUnico } from '../scrapeArbitrage.js';
 
 export async function scrapeLeoVegasFootball() {
     const browser = await puppeteer.launch({
