@@ -1,19 +1,26 @@
 import sys
-import os
-from pytubefix import YouTube
+import yt_dlp
 
 def descargar_audio_por_id(video_id):
-    url_base = f'https://www.youtube.com/watch?v={video_id}'
+    url = f'https://www.youtube.com/watch?v={video_id}'
+    
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'outtmpl': f'{video_id}.%(ext)s',  # Nombre del archivo
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        # Estas opciones ayudan a evitar la detección de bot
+        'quiet': True,
+        'no_warnings': True,
+    }
+
     try:
-        yt = YouTube(url_base)
-        audio_stream = yt.streams.filter(only_audio=True).order_by('abr').desc().first()
-        
-        if audio_stream:
-            filename = f"{video_id}.mp3"
-            audio_stream.download(filename=filename)
-            sys.exit(0) 
-        else:
-            sys.exit(1)
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
+        sys.exit(0)
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
