@@ -1,14 +1,14 @@
 import mysql from 'mysql2/promise';
 
-const dbConfig = process.env.MYSQL_PUBLIC_URL 
-    ? { uri: process.env.MYSQL_PUBLIC_URL } 
+const dbConfig = process.env.MYSQL_PUBLIC_URL
+    ? { uri: process.env.MYSQL_PUBLIC_URL }
     : {
         host: process.env.DB_HOST || 'localhost',
         user: process.env.DB_USER || 'root',
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'mi_base_de_datos',
         port: process.env.DB_PORT || 3306
-      };
+    };
 
 const finalConfig = {
     ...dbConfig,
@@ -54,7 +54,7 @@ const initTable = async () => {
                 net_profit DOUBLE,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )`;
-        
+
         // 3. TABLA DE APUESTAS 
         const queryUserBets = `
             CREATE TABLE IF NOT EXISTS user_bets (
@@ -83,7 +83,7 @@ const initTable = async () => {
 
         await db.execute(queryOpportunities);
         console.log("🗄️ Tabla 'arbitrage_opportunities' lista.");
-        
+
         await db.execute(queryUserBets);
         console.log("📈 Tabla 'user_bets' lista para seguimiento.");
 

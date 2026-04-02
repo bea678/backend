@@ -1,8 +1,8 @@
 import cron from 'node-cron';
 import * as cheerio from 'cheerio';
-import { getUserById } from './index.js';
 import axios from 'axios';
-import { sendPushNotification } from './index.js';
+import { sendPushNotification } from '../generalFunctions.js';
+import { getUserById } from '../generalFunctions.js';
 
 let sessionCookie = 'PHPSESSID=b6bd15cb890d52fd3c884e70c55b8763';
 

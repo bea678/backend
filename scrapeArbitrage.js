@@ -1,39 +1,14 @@
 import { scrapeBetfairFootball } from "./betfair/betfairScrapping.js";
+import { getUserById } from "./generalFunctions.js";
 import { scrapeLeoVegasFootball } from "./leovegas/leovegasScrapping.js";
 import { scrapeLuckiaFootball } from "./luckia/luckiaScraping.js";
 import { scrapeTonyBetFootball } from "./tonybet/tonybetScrapping.js";
 import fs from 'fs/promises';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { sendPushNotification } from "./generalFunctions.js";
 
 puppeteer.use(StealthPlugin());
-
-export function obtenerHoraInicio(minutosParaEmpezar) {
-    const ahora = new Date();
-    const horaInicio = new Date(ahora.getTime() + (minutosParaEmpezar || 0) * 60000);
-    return `${horaInicio.getHours().toString().padStart(2, '0')}:${horaInicio.getMinutes().toString().padStart(2, '0')}`;
-}
-
-export function generarIdUnico(home, away, hora) {
-    const normalizar = (str) => {
-        if (!str) return "";
-        return str.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-            .replace(/\bii\b/g, 'b') 
-            .replace(/fc|sd|ud|cd|united|real|club|deportivo|atletico|atl\.|de|el|la|the|deportiva/g, '')
-            .replace(/\(espana\)|\bespana\b|\besp\b/g, '')
-            .replace(/[^a-z0-9]/g, '') 
-            .trim();
-    };
-
-    const h = normalizar(home);
-    const a = normalizar(away);
-    
-    const equipos = [h, a].sort().join('_');
-    const horaFinal = hora.replace(/[^0-9]/g, '').slice(-4); 
-
-    return `${horaFinal}_${equipos}`;
-}
 
 export function calcularDetalleArbitraje(q1, qX, q2) {
     if (!q1 || !qX || !q2) return { hayArbitraje: false };
@@ -72,7 +47,7 @@ function unificarCuotas(fuentes) {
                     detalles: {}
                 };
             }
-            
+
             master[key].detalles[nombre] = p.cuotas;
 
             p.cuotas.forEach((cuota, i) => {
@@ -86,107 +61,80 @@ function unificarCuotas(fuentes) {
     return master;
 }
 
-// --- FUNCIÓN PRINCIPAL CON GESTIÓN DE CACHÉ INTELIGENTE ---
-
 export async function scrapeArbitrageFootball() {
-    console.log('--- 🚀 INICIANDO RADAR MULTICASA ---');
-    
-    let bfData, lvData, lcData;
-    
+    console.log('\n--- 🚀 INICIANDO RADAR MULTICASA (MODO LIMPIEZA PROFUNDA) ---');
+
+    const pausar = (ms) => new Promise(r => setTimeout(r, ms));
+
+    // 1. Betfair (Es el más pesado, lo dejamos para el final o le damos mucha pausa después)
+    let bfData = {};
     try {
-        console.log('📂 Verificando archivos de caché...');
-        
-        // Intentamos leer los 3 archivos en paralelo para ahorrar tiempo
-        const [bfCache, lvCache, lcCache, tonyCache] = await Promise.all([
-            fs.readFile('betfair_cache.json', 'utf-8'),
-            fs.readFile('leovegas_cache.json', 'utf-8'),
-            fs.readFile('luckia_cache.json', 'utf-8'),
-            fs.readFile('tonybet_cache.json', 'utf-8')
-        ]);
+        bfData = await scrapeBetfairFootball();
+        console.log(`   ✅ Betfair finalizado (${Object.keys(bfData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Betfair:", e.message); }
+    
+    console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
+    await pausar(10000); 
 
-        bfData = JSON.parse(bfCache);
-        lvData = JSON.parse(lvCache);
-        lcData = JSON.parse(lcCache);
-        tonyData = JSON.parse(tonyCache);
+    //2. Luckia
+    let lcData = {};
+    try {
+        lcData = await scrapeLuckiaFootball();
+        console.log(`   ✅ Luckia finalizado (${Object.keys(lcData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Luckia:", e.message); }
 
-        console.log('✅ Datos cargados desde la caché local para agilizar.');
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
 
-    } catch (e) {
-        console.log('🌐 Caché incompleta o no encontrada. Iniciando scrapers (esto tardará un poco)...');
-        
-        // Si falla la lectura de cualquiera, ejecutamos los scrapers
-        [bfData, lvData, lcData, tonyData] = await Promise.all([
-            scrapeBetfairFootball(), 
-            scrapeLeoVegasFootball(), 
-            scrapeLuckiaFootball(),
-            scrapeTonyBetFootball()
-        ]);
+    // 1. LeoVegas
+    let lvData = {};
+    try {
+        console.log('Empiezo con LeoVegas...')
+        lvData = await scrapeLeoVegasFootball();
+        console.log(`   ✅ LeoVegas finalizado (${Object.keys(lvData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en LeoVegas:", e.message); }
 
-        // Guardamos los nuevos datos en caché para la próxima vez
-        await Promise.all([
-            fs.writeFile('betfair_cache.json', JSON.stringify(bfData, null, 2)),
-            fs.writeFile('leovegas_cache.json', JSON.stringify(lvData, null, 2)),
-            fs.writeFile('luckia_cache.json', JSON.stringify(lcData, null, 2)),
-            fs.writeFile('tonybet_cache.json', JSON.stringify(tonyData, null, 2))
-        ]);
-        
-        console.log('💾 Nueva caché generada correctamente.');
-    }
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
 
-    // Unificamos usando el masterMap
-    const masterMap = unificarCuotas([
+    // 4. TonyBet
+    /*let tonyData = {};
+    try {
+        console.log('Empiezo con TonyBet...')
+        tonyData = await scrapeTonyBetFootball();
+        console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en TonyBet:", e.message); }*/
+
+    // --- PROCESAMIENTO FINAL ---
+    /*const fuentes = [
         { nombre: 'BF', data: bfData },
         { nombre: 'LV', data: lvData },
         { nombre: 'LC', data: lcData },
         { nombre: 'TB', data: tonyData }
-    ]);
+    ];
 
-    const coincidencias = [];
+    const masterMap = unificarCuotas(fuentes);
+
     const surebets = [];
+    const coincidencias = [];
 
     Object.keys(masterMap).forEach(key => {
         const m = masterMap[key];
-        const casasQueLoTienen = Object.keys(m.detalles);
-        
-        // Coincidencia si el partido está en 2 o más casas cualesquiera
-        if (casasQueLoTienen.length >= 2) {
+        if (Object.keys(m.detalles).length >= 2) {
             const arb = calcularDetalleArbitraje(...m.mejoresCuotas);
-            
-            const infoBase = {
-                Partido: m.partido,
-                Hora: m.hora,
-                'Casas': casasQueLoTienen.join(' / '),
-                'Mejores Cuotas': m.mejoresCuotas.join(' | '),
-                'Fuentes': m.origen.join(' / ')
-            };
-
-            coincidencias.push(infoBase);
-
-            if (arb.hayArbitraje) {
-                surebets.push({ 
-                    ...infoBase, 
-                    ROI: arb.roi + "%", 
-                    Stakes: `1:${arb.stakes.local} X:${arb.stakes.empate} 2:${arb.stakes.visitante}` 
-                });
-            }
+            const info = { Partido: m.partido, Hora: m.hora, Casas: Object.keys(m.detalles).join('/') };
+            coincidencias.push(info);
+            if (arb.hayArbitraje) surebets.push({ ...info, ROI: arb.roi + "%" });
         }
     });
 
-    console.log(`\n✅ Análisis finalizado.`);
-    console.log(`📊 Partidos unificados: ${Object.keys(masterMap).length}`);
-    console.log(`🤝 Coincidencias multicasa encontradas: ${coincidencias.length}`);
+    console.log(`\n✅ Radar completado. Unificados: ${Object.keys(masterMap).length} | Coincidencias: ${coincidencias.length}`);
+    
+    if (surebets.length > 0) console.table(surebets);
 
-    if (coincidencias.length > 0) {
-        console.log('\n--- 🤝 DETALLE DE COINCIDENCIAS (TODAS LAS COMBINACIONES) ---');
-        console.table(coincidencias.sort((a, b) => a.Hora.localeCompare(b.Hora)));
-    }
-
-    if (surebets.length > 0) {
-        console.log('\n--- 🔥 OPORTUNIDADES DE ARBITRAJE ---');
-        console.table(surebets.sort((a, b) => parseFloat(b.ROI) - parseFloat(a.ROI)));
-    } else {
-        console.log('\n☹️ No se han encontrado Surebets actualmente.');
-    }
+    // Notificación
+    const user = await getUserById(1);
+    if (user?.pushToken) {
+        await sendPushNotification(user.pushToken, "Radar Finalizado", `BF:${Object.keys(bfData).length} LC:${Object.keys(lcData).length} LV:${Object.keys(lvData).length} TB:${Object.keys(tonyData).length}`);
+    }*/
 }
-
-scrapeArbitrageFootball().catch(console.error);

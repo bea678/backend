@@ -18,56 +18,33 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/download', (req, res) => {
-    const videoId = req.query.id; 
-    const cookiesPath = './cookies.txt'; // Ruta en Railway
+    const videoId = req.query.id;
+    if (!videoId) return res.status(400).send('Falta el ID');
 
-    // 1. Comprobamos si el archivo existe
-    if (fs.existsSync(cookiesPath)) {
-        console.log(`✅ Archivo de cookies encontrado en: ${cookiesPath}`);
-        // Opcional: ver tamaño para saber si está vacío
-        const stats = fs.statSync(cookiesPath);
-        console.log(`📏 Tamaño del archivo: ${stats.size} bytes`);
-    } else {
-        console.error(`❌ ERROR: No se encontró cookies.txt en ${cookiesPath}`);
-    }
+    // 1. Python descarga el archivo al disco duro del servidor
+    const pythonProcess = spawn('python3', ['downloadMP3.py', videoId]);
 
-  /*  const yt = spawn('yt-dlp', [
-        '--no-check-certificates',
-        '--quiet',
-        '--no-warnings',
-        '--cookies', cookiesPath,
-        '--js-runtime', 'node', 
-        '-f', '140/bestaudio[ext=m4a]/ba', 
-        '-o', '-', 
-        `https://www.youtube.com/watch?v=${videoId}`
-    ]);*/
+    pythonProcess.on('close', (code) => {
+        if (code === 0) {
+            const fileName = `${videoId}.mp3`;
+            const filePath = path.resolve(fileName); // Ruta absoluta del archivo en el servidor
 
-  const yt = spawn('yt-dlp', [
-    '--no-check-certificates',
-    // IMPORTANTE: NO ponemos el flag --cookies
-    '--js-runtime', 'node',
-    // Forzamos el cliente de Android, que es el más "abierto"
-    '--extractor-args', 'youtube:player_client=android,web_embedded',
-    '--user-agent', 'com.google.android.youtube/19.10.35 (Linux; U; Android 14; es_ES; Pixel 7 Pro)',
-    // Usamos un filtrado de formato más flexible por si acaso
-    '-f', 'ba[ext=m4a]/ba/best',
-    '-o', '-', 
-    `https://www.youtube.com/watch?v=${videoId}`
-]);
-
-    res.setHeader('Content-Type', 'audio/mp4'); 
-    res.setHeader('Content-Disposition', `attachment; filename="${videoId}.m4a"`);
-
-    yt.stdout.pipe(res);
-
-    yt.stderr.on('data', (data) => {
-        const msg = data.toString();
-        if (msg.includes('ERROR') || msg.includes('cookie')) {
-            console.error(`[yt-dlp log]: ${msg}`);
+            if (fs.existsSync(filePath)) {
+                // 2. Node envía el archivo del servidor al navegador (Chrome)
+                res.download(filePath, `audio_${videoId}.mp3`, (err) => {
+                    if (err) {
+                        console.error("Error enviando a Chrome:", err);
+                    }
+                    // 3. Limpieza: Borramos el archivo del servidor después de enviarlo
+                    fs.unlinkSync(filePath);
+                });
+            } else {
+                res.status(500).send("Archivo no generado");
+            }
+        } else {
+            res.status(500).send("Error en Python");
         }
     });
-
-    req.on('close', () => yt.kill());
 });
 
 app.listen(PORT, () => {

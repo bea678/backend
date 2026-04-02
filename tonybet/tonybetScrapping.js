@@ -1,119 +1,130 @@
 import 'dotenv/config';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { generarIdUnico } from '../bearbitrage/scrape.js';
+import fs from 'fs';
+import path from 'path';
 
-export function generarIdUnico(home, away, hora) {
-    const normalizar = (str) => {
-        if (!str) return "";
-        return str.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") 
-            .replace(/\bii\b/g, 'b') 
-            .replace(/fc|sd|ud|cd|united|real|club|deportivo|atletico|atl\.|de|el|la|the|deportiva/g, '')
-            .replace(/\(espana\)|\bespana\b|\besp\b/g, '')
-            .replace(/[^a-z0-9]/g, '') 
-            .trim();
-    };
+puppeteer.use(StealthPlugin());
 
-    const h = normalizar(home);
-    const a = normalizar(away);
-    
-    const equipos = [h, a].sort().join('_');
-    const horaFinal = hora.replace(/[^0-9]/g, '').slice(-4); 
-
-    return `${horaFinal}_${equipos}`;
-}
-
-export async function scrapeTonyBetFootball() {
+/**
+ * @param {import('puppeteer').Browser} browserParam 
+ */
+export async function scrapeTonyBetFootball(browserParam) {
+    const ngrokAddr = '5.tcp.eu.ngrok.io:19911'; 
     const url = 'https://tonybet.es/prematch/football';
-    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    const publicDir = path.join(process.cwd(), 'public');
     const mapaResultados = {};
 
-    console.log('🚀 Iniciando navegador...');
-    const browser = await puppeteer.launch({
-        headless: false, 
-        args: ['--no-sandbox', '--window-size=1920,15000']
+    console.log(`🚀 [TONYBET] Iniciando radar modo "Single-Browser"...`);
+    
+    // Si no viene del unificador, lanzamos uno (para pruebas sueltas)
+    const browser = browserParam || await puppeteer.launch({
+        headless: "new",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-zygote',
+            '--single-process',
+            '--window-size=1920,1080',
+            '--disable-http2', // HTTP/1.1 es más estable para Ngrok
+            '--disable-blink-features=AutomationControlled', // Oculta rastro de bot
+            `--proxy-server=http://${ngrokAddr}`
+        ]
     });
-
+    
     const page = await browser.newPage();
 
-    page.on('console', msg => {
-        const texto = msg.text();
-        if (texto.startsWith('MIO:')) {
-            console.log('✅ DEBUG:', texto.replace('MIO:', ''));
-        }
-    });
-
-    await page.setViewport({ width: 1920, height: 15000 });
-
     try {
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
-
-        console.log(`📡 Navegando a: ${url}`);
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-        
-        await delay(4000); 
-
-        const cookieBtn = '#onetrust-accept-btn-handler';
-        const banner = await page.waitForSelector(cookieBtn, { timeout: 15000, visible: true }).catch(() => null);
-
-        if (banner) {
-            await page.evaluate((selector) => {
-                const btn = document.querySelector(selector);
-                if (btn) btn.click();
-            }, cookieBtn);
-            console.log('✅ Cookies cerradas.');
-            await delay(2000);
-        }
-        
-        await page.evaluate(async () => {
-            await new Promise((resolve) => {
-                let totalHeight = 0;
-                let distance = 600;
-                let timer = setInterval(() => {
-                    let scrollHeight = document.body.scrollHeight;
-                    totalHeight += distance;
-                    window.scrollBy(0, totalHeight);
-
-
-                    if (totalHeight >= scrollHeight || totalHeight > 1000000) {
-                        clearInterval(timer);
-                        resolve();
-                    }
-                }, 400); 
-            });
+        // Bypass de advertencia de Ngrok
+        await page.setExtraHTTPHeaders({
+            'ngrok-skip-browser-warning': 'true',
+            'Bypass-Tunnel-Reminder': 'true'
         });
 
-        await delay(5000); 
+        await page.setViewport({ width: 1920, height: 1080 });
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
 
+        // Simulación de humano
+        await page.evaluateOnNewDocument(() => {
+            Object.defineProperty(navigator, 'webdriver', { get: () => false });
+        });
+
+        console.log(`📡 [TONYBET] Navegando a: ${url}`);
+        
+        // Tonybet necesita networkidle2 porque carga muchísimos scripts de Cloudfront
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 90000 });
+        
+        console.log('⏳ [TONYBET] Página base recibida. Forzando hidratación con scroll...');
+
+        // TRUCO: Scroll por pasos para que los scripts de la App se disparen
+        for(let i=0; i<4; i++) {
+            await page.mouse.wheel({ deltaY: 250 });
+            await new Promise(r => setTimeout(r, 1000));
+        }
+
+        // ESPERA CRÍTICA: Aguardamos a que los elementos de carga desaparezcan
+        console.log('⏳ [TONYBET] Esperando a que el cargador se oculte...');
+        try {
+            await page.waitForFunction(() => {
+                const loader = document.getElementById('app-loader');
+                const newLoader = document.getElementById('new_loader');
+                const content = document.getElementById('load_content');
+                // Retorna TRUE cuando ninguno de los cargadores sea visible o exista
+                return (!loader || loader.style.display === 'none') && !newLoader && !content;
+            }, { timeout: 40000 });
+            console.log('✅ [TONYBET] Cargador desaparecido.');
+        } catch (e) {
+            console.log('⚠️ [TONYBET] El cargador no se fue a tiempo, intentando extraer igual...');
+        }
+
+        // Damos 5 segundos extra para que las cuotas se pinten tras el loader
+        await new Promise(r => setTimeout(r, 5000));
+
+        // GUARDAR HTML DE DEBUG
+        const html = await page.content();
+        fs.writeFileSync(path.join(publicDir, 'debug_tonybet_real.html'), html);
+        await page.screenshot({ path: path.join(publicDir, 'debug_tonybet.png') });
+
+        // Gestión de Cookies si aparecen
+        try {
+            const cookieBtn = '#onetrust-accept-btn-handler';
+            if (await page.$(cookieBtn)) {
+                await page.click(cookieBtn);
+                console.log('✅ [TONYBET] Cookies aceptadas.');
+            }
+        } catch (e) {}
+        
+        console.log('📊 [TONYBET] Extrayendo partidos...');
         const partidos = await page.evaluate(() => {
-            const rows = document.querySelectorAll('[data-test="eventTableRow"]');
+            // Buscamos las filas de la tabla de eventos
+            const rows = document.querySelectorAll('[data-test="event-table-row"], [data-test="eventTableRow"], .event-table__row');
             const lista = [];
 
             rows.forEach(fila => {
-                const teams = fila.querySelectorAll('[data-test="teamName"] span');
+                // Buscamos nombres de equipos
+                const teams = fila.querySelectorAll('[data-test="team-name"], [data-test="teamName"], .event-team__name');
                 if (teams.length < 2) return;
                 
-                const dateEl = fila.querySelector('[data-test="eventDate"]');
-                const timeEl = fila.querySelector('[data-test="eventTime"]');
-                const ligaEl = fila.querySelector('[data-test="leagueLink"]');
-
-                const fechaText = dateEl ? dateEl.innerText.trim() : 'FECHA NO ENCONTRADA';
-                const horaText = timeEl ? timeEl.innerText.trim() : 'HORA NO ENCONTRADA';
-                const ligaText = ligaEl ? ligaEl.innerText.trim() : 'LIGA NO ENCONTRADA';
-
                 const t1 = teams[0].innerText.trim();
                 const t2 = teams[1].innerText.trim();
-                
-                if (!t1 || t1 === "") return;
 
-                const bloque1X2 = fila.querySelector('.SZxOo');
-                if (bloque1X2) {
-                    const cuotasNodes = bloque1X2.querySelectorAll('[data-test="outcome"]');
-                    const cuotas = Array.from(cuotasNodes)
-                                        .map(nodo => nodo.innerText.trim())
-                                        .slice(0, 3);
+                // Buscamos las cuotas (usualmente 3 valores para 1X2)
+                const cuotasNodes = fila.querySelectorAll('[data-test="outcome-value"], .event-outcome__value, [data-test="outcome"]');
+                if (cuotasNodes.length >= 3) {
+                    const cuotas = [
+                        parseFloat(cuotasNodes[0].innerText.trim().replace(',', '.')),
+                        parseFloat(cuotasNodes[1].innerText.trim().replace(',', '.')),
+                        parseFloat(cuotasNodes[2].innerText.trim().replace(',', '.'))
+                    ];
 
-                    if (cuotas.length >= 2) {
-                        lista.push({ t1, t2, fechaText, horaText, cuotas, ligaText });
+                    const hora = fila.querySelector('[data-test="event-time"], .event-time, [data-test="eventTime"]')?.innerText.trim() || "00:00";
+                    
+                    // Si la cuota 1 es un número válido, el partido es bueno
+                    if (!isNaN(cuotas[0]) && t1 && t2) {
+                        lista.push({ t1, t2, hora, cuotas });
                     }
                 }
             });
@@ -121,32 +132,25 @@ export async function scrapeTonyBetFootball() {
         });
 
         partidos.forEach((p, i) => {
-            const key = generarIdUnico(p.t1, p.t2, p.horaText);
+            const key = generarIdUnico(p.t1, p.t2, p.hora);
             mapaResultados[key] = {
-                eventId: `${i}_${p.t1.substring(0,3).toUpperCase()}`,
                 partido: `${p.t1} vs ${p.t2}`,
                 cuotas: p.cuotas,
-                competicion: p.ligaText,
-                hora: p.horaText,
-                fecha: p.fechaText
+                competicion: "Fútbol", // Tonybet a veces no da la liga fácil en la fila
+                hora: p.hora,
+                casa: 'TonyBet'
             };
         });
-        console.log('\n--- RESULTADOS 1 X 2 ---');
-        console.log(`✅ Éxito final: ${Object.keys(mapaResultados).length} eventos en el mapa.`);
 
-        console.log('\n--- LISTADO DETALLADO ---');
-        Object.entries(mapaResultados).forEach(([key, info]) => {
-            console.log(`ID: ${key}`);
-            console.log(`  ⚽ Partido: ${info.partido}`);
-            console.log(`  📊 Cuotas: 1:${info.cuotas[0]} | X:${info.cuotas[1]} | 2:${info.cuotas[2]}`);
-            console.log(`  ⏰ Hora: ${info.hora}`);
-            console.log(`  🏆 Competición: ${info.competicion}`);
-            console.log('---------------------------');
-        });
-        return mapaResultados
+        console.log(`✅ [TONYBET] Éxito: ${Object.keys(mapaResultados).length} partidos obtenidos.`);
+        return mapaResultados;
+
     } catch (error) {
-        console.error('❌ Error detectado:', error.message);
+        console.error('❌ [TONYBET] Error crítico:', error.message);
+        return {};
     } finally {
-         await browser.close();
+         console.log('🚪 [TONYBET] Cerrando pestaña TonyBet...');
+         await page.close();
+         if (!browserParam) await browser.close();
     }
 }

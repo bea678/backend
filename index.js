@@ -8,9 +8,10 @@ import { PORT } from './config.js';
 import admin from 'firebase-admin';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { executeCronHive, consultarHive5 } from './hive5.js';
-import { spawn } from 'node:child_process';
-import fs from 'node:fs'; // Asegúrate de importar fs arriba del todo
+import { executeCronHive } from './hive5/hive5.js';
+import bearMusicRoutes from './bearMusic/routes.js';
+import { processAndSaveValueBets } from './bearbitrage/functions.js';
+import { scrapeArbitrageFootball } from './scrapeArbitrage.js';
 
 const app = express();
 
@@ -39,59 +40,7 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
 
-export async function processAndSaveValueBets(allValueBets, sourceApi) {
-    try {
-        const deleteQuery = `DELETE FROM arbitrage_opportunities WHERE DATE(commence_time) < CURDATE()`;
-        await db.execute(deleteQuery);
-    } catch (err) {
-        console.error("❌ Error cleaning records:", err.message);
-    }
-
-    for (const bet of allValueBets) {
-        const mysqlReadyTime = bet.event.date.replace('T', ' ').split('.')[0].replace('Z', '');
-
-        let homePrice = 0, homeBookie = null;
-        let awayPrice = 0, awayBookie = null;
-
-        if (bet.betSide === 'home') {
-            homePrice = parseFloat(bet.bookmakerOdds.home);
-            homeBookie = bet.bookmaker;
-        } else if (bet.betSide === 'away') {
-            awayPrice = parseFloat(bet.bookmakerOdds.away);
-            awayBookie = bet.bookmaker;
-        } else if (bet.betSide === 'draw') {
-            homePrice = parseFloat(bet.bookmakerOdds.draw);
-            homeBookie = `${bet.bookmaker} (Draw)`;
-        }
-
-        const query = `INSERT INTO arbitrage_opportunities 
-            (source_api, sport_key, sport_title, home_team, away_team, commence_time, 
-             best_home_price, home_bookmaker, best_away_price, away_bookmaker, 
-             total_probability, profit_percentage, net_profit) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-
-        try {
-            await db.execute(query, [
-                sourceApi,
-                bet.event.sport,
-                bet.event.league,
-                bet.event.home,
-                bet.event.away,
-                mysqlReadyTime,
-                homePrice,
-                homeBookie,
-                awayPrice,
-                awayBookie,
-                0,
-                bet.expectedValue,
-                0
-            ]);
-        } catch (err) {
-            console.error(`❌ Error inserting bet ${bet.id}:`, err.message);
-        }
-    }
-    console.log(`✅ Proceso finalizado para ${sourceApi}.`);
-}
+app.use(bearMusicRoutes);
 
 app.get('/refresh_data_io', async (req, res) => {
     const bookmakers = ['LeoVegas ES', 'Betfair ES'];
@@ -371,61 +320,6 @@ app.get('/', async (req, res) => {
     res.json('holabea');
 })
 
-/**
- * Función para enviar la notificación
- * @param {string} fcmToken - El token que obtuviste en React Native
- * @param {string} title - Título de la notificación
- * @param {string} body - Contenido del mensaje
- */
-export const sendPushNotification = async (fcmToken, title, body) => {
-    const message = {
-        notification: {
-            title: title,
-            body: body,
-        },
-        android: {
-            priority: 'high',
-            notification: {
-                channelId: 'high_importance_channel',
-                sound: 'default',
-                priority: 'high',
-                clickAction: 'fcm.ACTION_EVENT',
-                icon: 'ic_notification_bear',
-            },
-        },
-        data: {
-            tipo: 'arbitraje_alert',
-            id: '12345'
-        },
-        token: fcmToken,
-    };
-
-    try {
-        const response = await admin.messaging().send(message);
-        console.log('✅ Mensaje enviado exitosamente:', response);
-        return response;
-    } catch (error) {
-        console.error('❌ Error enviando el mensaje:', error);
-        throw error;
-    }
-};
-export const getUserById = async (id) => {
-    try {
-        const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
-        const [rows] = await db.execute(query, [id]);
-
-        if (rows.length === 0) {
-            console.log(`⚠️ No se encontró el usuario con ID: ${id}`);
-            return null;
-        }
-
-        return rows[0];
-    } catch (error) {
-        console.error('❌ Error al obtener usuario:', error.message);
-        throw error;
-    }
-};
-
 app.put('/update-token', async (req, res) => {
     const { userId, pushToken } = req.body;
 
@@ -458,70 +352,6 @@ app.put('/update-token', async (req, res) => {
         console.error('❌ Error SQL:', error.message);
         res.status(500).json({ error: error.message });
     }
-});
-
-app.get('/download', (req, res) => {
-    const videoId = req.query.id;
-
-
-    /* const yt = spawn('yt-dlp', [
-         '--no-check-certificates',
-         '--quiet',
-         '--no-warnings',
-         '--cookies', cookiesPath,
-         '--js-runtime', 'node', 
-         '-f', '140/bestaudio[ext=m4a]/ba', 
-         '-o', '-', 
-         `https://www.youtube.com/watch?v=${videoId}`
-     ]);*/
-
-    const yt = spawn('yt-dlp', [
-        '--no-check-certificates',
-        '--js-runtime', 'node',
-        '--extractor-args', 'youtube:player_client=android,web_embedded',
-        '--user-agent', 'com.google.android.youtube/19.10.35 (Linux; U; Android 14; es_ES; Pixel 7 Pro)',
-        '-f', 'ba[ext=m4a]/ba/best',
-        '-o', '-',
-        `https://www.youtube.com/watch?v=${videoId}`
-    ]);
-
-    let errorOccurred = false;
-    let stderrData = '';
-
-    yt.stderr.on('data', (data) => {
-        const msg = data.toString();
-        stderrData += msg;
-        console.error(`[yt-dlp log]: ${msg}`);
-
-        if ((msg.includes('ERROR') || msg.includes('Sign in')) && !res.headersSent) {
-            errorOccurred = true;
-            res.status(500).json({
-                error: 'YouTube detectó un bot o error de cookies',
-                details: msg.trim()
-            });
-            yt.kill(); 
-        }
-    });
-
-    yt.stdout.on('data', (chunk) => {
-        if (!errorOccurred) {
-            if (!res.headersSent) {
-                res.setHeader('Content-Type', 'audio/mp4');
-                res.setHeader('Content-Disposition', `attachment; filename="${videoId}.m4a"`);
-            }
-            res.write(chunk);
-        }
-    });
-
-    yt.on('close', (code) => {
-        if (code !== 0 && !res.headersSent) {
-            res.status(500).json({ error: 'yt-dlp falló', details: stderrData });
-        } else {
-            res.end();
-        }
-    });
-
-    req.on('close', () => yt.kill());
 });
 
 app.listen(PORT, () => {

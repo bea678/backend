@@ -1,55 +1,134 @@
 import 'dotenv/config';
-import axios from 'axios';
-import * as cheerio from 'cheerio';
-import { generarIdUnico, obtenerHoraInicio } from '../scrapeArbitrage.js';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import { generarIdUnico } from '../bearbitrage/scrape.js';
+
+puppeteer.use(StealthPlugin());
 
 export async function scrapeBetfairFootball() {
+    // ⚠️ USA TU URL DE NGROK ACTUAL
+    const ngrokAddr = '5.tcp.eu.ngrok.io:19911'; 
     const url = 'https://www.betfair.es/sport/football';
-    const headers = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36'
-    };
+    const mapaResultados = {};
+
+    console.log(`🚀 [BETFAIR] Iniciando radar vía Puente: ${ngrokAddr}`);
+
+   const browser = await puppeteer.launch({
+        headless: "new",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-zygote',
+            '--single-process',
+            '--window-size=1920,1080',
+            // --- FLAGS PARA QUE EL TÚNEL NO PETE ---
+            '--disable-http2',              // CRÍTICO: Fuerza HTTP/1.1 para no saturar los sockets de Ngrok
+            '--disable-connection-pool',    // Evita mantener conexiones abiertas innecesarias
+            '--disable-extensions',         // Quita basura
+            '--disable-component-update',   // Evita que Chrome intente actualizarse en segundo plano
+            '--no-default-browser-check',
+            `--proxy-server=http://${ngrokAddr}`
+        ]
+    });
+
+    const page = await browser.newPage();
+
+    // Bypass de advertencias de túnel
+    await page.setExtraHTTPHeaders({
+        'ngrok-skip-browser-warning': 'true',
+        'Bypass-Tunnel-Reminder': 'true'
+    });
 
     try {
-        const { data } = await axios.get(url, { headers });
-        const $ = cheerio.load(data);
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
 
-        const seccionHoy = $('li.section').filter((i, el) => {
-            return $(el).find('.section-header-title').text().trim() === 'Hoy';
-        });
+        console.log('🌐 [BETFAIR] Navegando a la web...');
+        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
-        if (seccionHoy.length === 0) return {};
+        // 1. CERRAR COOKIES (Lo que faltaba)
+        console.log('🍪 [BETFAIR] Gestionando cookies...');
+        try {
+            const cookieBtn = '#onetrust-accept-btn-handler';
+            await page.waitForSelector(cookieBtn, { timeout: 10000 });
+            await page.click(cookieBtn);
+            console.log('✅ [BETFAIR] Cookies aceptadas.');
+            await new Promise(r => setTimeout(r, 2000));
+        } catch (e) {
+            console.log('ℹ️ [BETFAIR] No se detectó banner de cookies.');
+        }
 
-        const items = seccionHoy.find('li.com-coupon-line-new-layout.betbutton-layout.avb-row.avb-table.market-avb.quarter-template.market-2-columns');
-        const mapaResultados = {};
+        // 2. EXTRAER PARTIDOS (Basado en el HTML que me pasaste)
+        console.log('📊 [BETFAIR] Extrayendo eventos...');
+        const partidosData = await page.evaluate(() => {
+            const lista = [];
+            // Buscamos todas las secciones (En Juego, Hoy, Mañana...)
+            const secciones = document.querySelectorAll('li.section');
 
-        items.each((i, el) => {
-            const $el = $(el);
-            const homeTeam = $el.find('.team-name').first().text().trim();
-            const awayTeam = $el.find('.team-name').last().text().trim();
-            const minutos = parseInt($el.find('.ui-countdown').attr('data-countdown'), 10);
-            const hora = obtenerHoraInicio(minutos);
-            
-            const cuotas = [];
-            $el.find('div.details-market.market-3-runners .ui-display-decimal-price').each((idx, p) => {
-                cuotas.push(parseFloat($(p).text().trim()));
+            secciones.forEach(seccion => {
+                const tituloSeccion = seccion.querySelector('.section-header-title')?.innerText.trim() || "";
+                
+                // Solo procesamos "Hoy" o "En Juego" (puedes ajustar esto)
+                const filas = seccion.querySelectorAll('.com-coupon-line-new-layout');
+
+                filas.forEach(row => {
+                    const teams = row.querySelectorAll('.team-name');
+                    if (teams.length < 2) return;
+
+                    const home = teams[0].innerText.trim();
+                    const away = teams[1].innerText.trim();
+                    
+                    // Betfair separa las cuotas 1X2 en .market-3-runners
+                    const market1X2 = row.querySelector('.market-3-runners');
+                    if (!market1X2) return;
+
+                    const botones = market1X2.querySelectorAll('.ui-display-decimal-price');
+                    
+                    if (botones.length >= 3) {
+                        const cuotas = [
+                            parseFloat(botones[0].innerText.trim().replace(',', '.')),
+                            parseFloat(botones[1].innerText.trim().replace(',', '.')),
+                            parseFloat(botones[2].innerText.trim().replace(',', '.'))
+                        ];
+
+                        const hora = row.querySelector('.date')?.innerText.trim() || 
+                                     row.querySelector('.event-inplay-state')?.innerText.trim() || "00:00";
+                        
+                        const liga = row.querySelector('.event-link')?.getAttribute('data-competition') || "Fútbol";
+
+                        if (!isNaN(cuotas[0]) && home && away) {
+                            lista.push({ home, away, cuotas, hora, liga });
+                        }
+                    }
+                });
             });
-
-            if (homeTeam && awayTeam && cuotas.length === 3) {
-                const key = generarIdUnico(homeTeam, awayTeam, hora);
-                mapaResultados[key] = {
-                    eventId: $el.find('.event-information').attr('data-eventId') || i.toString(),
-                    partido: `${homeTeam} vs ${awayTeam}`,
-                    cuotas: cuotas,
-                    competicion: $el.find('a.event-link').attr('data-competition') || "Liga",
-                    hora: hora
-                };
-            }
+            return lista;
         });
 
+        // 3. UNIFICAR EN TU MAPA
+        partidosData.forEach((p, i) => {
+            try {
+                const key = generarIdUnico(p.home, p.away, p.hora);
+                mapaResultados[key] = {
+                    eventId: `${i}_BF_${p.home.substring(0,3).toUpperCase()}`,
+                    partido: `${p.home} vs ${p.away}`,
+                    cuotas: p.cuotas,
+                    competicion: p.liga,
+                    hora: p.hora,
+                    casa: 'Betfair'
+                };
+            } catch (err) {}
+        });
+
+        console.log(`✅ [BETFAIR] Éxito: ${Object.keys(mapaResultados).length} partidos encontrados.`);
         return mapaResultados;
+
     } catch (error) {
-        console.error('❌ Error en Betfair:', error.message);
+        console.error('❌ [BETFAIR] Error crítico:', error.message);
         return {};
+    } finally {
+        console.log('🚪 [BETFAIR] Cerrando navegador...');
+        await browser.close();
     }
 }
