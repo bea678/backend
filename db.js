@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-const dbConfig = process.env.MYSQL_PUBLIC_URL
+/*const dbConfig = process.env.MYSQL_PUBLIC_URL
     ? { uri: process.env.MYSQL_PUBLIC_URL }
     : {
         host: process.env.DB_HOST || 'localhost',
@@ -8,8 +8,17 @@ const dbConfig = process.env.MYSQL_PUBLIC_URL
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'mi_base_de_datos',
         port: process.env.DB_PORT || 3306
+    };*/
+
+const dbConfig = {
+        host: process.env.DB_HOST || 'localhost',
+        user: process.env.DB_USER || 'root',
+        password: process.env.DB_PASSWORD || '',
+        database: process.env.DB_NAME || 'mi_base_de_datos',
+        port: process.env.DB_PORT || 3306
     };
 
+    // TODO BEA UNCOMMENT THIS
 const finalConfig = {
     ...dbConfig,
     timezone: 'Z',
@@ -78,6 +87,20 @@ const initTable = async () => {
                     ON DELETE CASCADE
             )`;
 
+        // 4. TABLA DE CRÉDITOS DE YOUTUBE (Fila única garantizada)
+        const queryYoutubeCredits = `
+            CREATE TABLE IF NOT EXISTS youtube_credits (
+                id INT NOT NULL DEFAULT 1,
+                resting_points INT NOT NULL DEFAULT 0,
+                PRIMARY KEY (id),
+                CONSTRAINT singleton_row CHECK (id = 1)
+            )`;
+
+        // Insertamos la fila inicial si no existe (el IGNORE evita errores si ya está creada)
+        const initYoutubeCreditsRow = `
+            INSERT IGNORE INTO youtube_credits (id, resting_points) VALUES (1, 90000)
+        `;
+
         await db.execute(queryUsers);
         console.log("👤 Tabla 'users' lista.");
 
@@ -86,6 +109,10 @@ const initTable = async () => {
 
         await db.execute(queryUserBets);
         console.log("📈 Tabla 'user_bets' lista para seguimiento.");
+
+        await db.execute(queryYoutubeCredits);
+        await db.execute(initYoutubeCreditsRow);
+        console.log("▶️ Tabla 'youtube_credits' lista (Modo fila única).");
 
     } catch (err) {
         console.error("❌ Error de MySQL:", err.message);

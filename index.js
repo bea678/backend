@@ -355,6 +355,64 @@ app.put('/update-token', async (req, res) => {
     }
 });
 
+app.get('/youtube_credits', async (req, res) => {
+    try {
+        const query = 'SELECT resting_points FROM youtube_credits WHERE id = 1';
+        const [rows] = await db.query(query);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ 
+                status: "error", 
+                message: "No se encontró el registro de créditos." 
+            });
+        }
+
+        res.json({ 
+            status: "success", 
+            resting_points: rows[0].resting_points 
+        });
+
+    } catch (error) {
+        console.error("❌ Error al obtener los créditos:", error.message);
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+app.put('/youtube_credits', async (req, res) => {
+    const { resting_points } = req.body;
+
+    // Comprobamos que no sea undefined o null (pero permitimos que sea 0)
+    if (resting_points === undefined || resting_points === null) {
+        return res.status(400).json({ 
+            status: "error", 
+            message: "El campo resting_points es obligatorio en el body." 
+        });
+    }
+
+    try {
+        const query = 'UPDATE youtube_credits SET resting_points = ? WHERE id = 1';
+        const [result] = await db.execute(query, [Number(resting_points)]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ 
+                status: "error", 
+                message: "No se pudo actualizar. Fila no encontrada." 
+            });
+        }
+
+        console.log(`▶️ Créditos de YouTube actualizados a: ${resting_points}`);
+        res.json({ 
+            status: "success", 
+            message: "Créditos actualizados correctamente",
+            resting_points: Number(resting_points)
+        });
+
+    } catch (error) {
+        console.error("❌ Error al actualizar los créditos:", error.message);
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
