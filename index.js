@@ -12,6 +12,7 @@ import { executeCronHive } from './hive5/hive5.js';
 import bearMusicRoutes from './bearMusic/routes.js';
 import { processAndSaveValueBets } from './bearbitrage/functions.js';
 import { scrapeArbitrageFootball } from './scrapeArbitrage.js';
+import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
 
 const app = express();
 
@@ -359,4 +360,5 @@ app.listen(PORT, () => {
     console.log(`🚀 Server running en: `, PORT);
 
     executeCronHive()
+    executeCronMobile()
 });

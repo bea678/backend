@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 import db from './db.js';
 
-export const sendPushNotification = async (fcmToken, title, body) => {
+export const sendPushNotification = async (fcmToken, title, body, iconName = 'ic_notification_bear') => {
     const message = {
         notification: {
             title: title,
@@ -14,7 +14,7 @@ export const sendPushNotification = async (fcmToken, title, body) => {
                 sound: 'default',
                 priority: 'high',
                 clickAction: 'fcm.ACTION_EVENT',
-                icon: 'ic_notification_bear',
+                icon: iconName, 
             },
         },
         data: {
@@ -33,6 +33,7 @@ export const sendPushNotification = async (fcmToken, title, body) => {
         throw error;
     }
 };
+
 export const getUserById = async (id) => {
     try {
         const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
