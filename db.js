@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-/*const dbConfig = process.env.MYSQL_PUBLIC_URL
+const dbConfig = process.env.MYSQL_PUBLIC_URL
     ? { uri: process.env.MYSQL_PUBLIC_URL }
     : {
         host: process.env.DB_HOST || 'localhost',
@@ -8,17 +8,8 @@ import mysql from 'mysql2/promise';
         password: process.env.DB_PASSWORD || '',
         database: process.env.DB_NAME || 'mi_base_de_datos',
         port: process.env.DB_PORT || 3306
-    };*/
-
-const dbConfig = {
-        host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || '',
-        database: process.env.DB_NAME || 'mi_base_de_datos',
-        port: process.env.DB_PORT || 3306
     };
-
-    // TODO BEA UNCOMMENT THIS
+    
 const finalConfig = {
     ...dbConfig,
     timezone: 'Z',
