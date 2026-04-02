@@ -413,10 +413,34 @@ app.put('/youtube_credits', async (req, res) => {
     }
 });
 
+export const executeCronYoutubeCredits = async () => {
+    cron.schedule('0 0 * * *', async () => {
+        try {
+            console.log('🔄 [CRON] Iniciando reseteo diario de créditos de YouTube...');
+            
+            const query = 'UPDATE youtube_credits SET resting_points = 90000 WHERE id = 1';
+            const [result] = await db.execute(query);
+            
+            if (result.affectedRows > 0) {
+                console.log('✅ [CRON] Créditos de YouTube recargados a 90000 exitosamente.');
+            } else {
+                console.warn('⚠️ [CRON] Cuidado: No se encontró la fila en youtube_credits.');
+            }
+
+        } catch (error) {
+            console.error('❌ [CRON] Error al reiniciar los créditos de YouTube:', error.message);
+        }
+    }, {
+        scheduled: true,
+        timezone: "Europe/Madrid" 
+    });
+};
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
 
     executeCronHive()
     executeCronMobile()
+    executeCronYoutubeCredits()
 });
