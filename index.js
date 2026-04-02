@@ -11,7 +11,7 @@ import { fileURLToPath } from 'url';
 import { executeCronHive } from './hive5/hive5.js';
 import bearMusicRoutes from './bearMusic/routes.js';
 import { processAndSaveValueBets } from './bearbitrage/functions.js';
-import { scrapeArbitrageFootball } from './scrapeArbitrage.js';
+import cron from 'node-cron';
 import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
 
 const app = express();
