@@ -400,7 +400,6 @@ app.put('/youtube_credits', async (req, res) => {
             });
         }
 
-        console.log(`▶️ Créditos de YouTube actualizados a: ${resting_points}`);
         res.json({ 
             status: "success", 
             message: "Créditos actualizados correctamente",
