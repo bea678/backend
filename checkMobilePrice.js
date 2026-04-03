@@ -14,7 +14,7 @@ export async function checkMobilePrice() {
     try {
         const { data } = await axios.get(url, { headers });
         const $ = cheerio.load(data);
-        const textoPrecio = $('[data-test="price"]').text().trim(); 
+        const textoPrecio = $('[data-test="price"]').text().trim();
         const coincidencia = textoPrecio.match(/\d+/);
         const precio = coincidencia ? Number(coincidencia[0]) : null;
         return precio;
@@ -26,7 +26,7 @@ export async function checkMobilePrice() {
 
 function numerosEnNegrita(texto) {
     const mapa = {
-        '0': '𝟬', '1': '𝟭', '2': '𝟮', '3': '𝟯', '4': '𝟰', 
+        '0': '𝟬', '1': '𝟭', '2': '𝟮', '3': '𝟯', '4': '𝟰',
         '5': '𝟱', '6': '𝟲', '7': '𝟳', '8': '𝟴', '9': '𝟵',
         '.': '.', ',': ',' // Dejamos puntos y comas igual
     };
@@ -34,9 +34,9 @@ function numerosEnNegrita(texto) {
 }
 
 export const executeCronMobile = async () => {
-    cron.schedule('0 9 * * *', async () => {
+    //cron.schedule('0 9 * * *', async () => {
+    cron.schedule('40 10 * * *', async () => {
         const user = await getUserById(1);
-        console.log('token: ', user.pushToken);
         console.log('--- Ejecutando consulta Google Pixel ---');
 
         try {
@@ -64,5 +64,8 @@ export const executeCronMobile = async () => {
         } catch (error) {
             console.error('❌ Error en el ciclo del Cron:', error.message);
         }
+    }, {
+        scheduled: true,
+        timezone: "Europe/Madrid"
     });
 }

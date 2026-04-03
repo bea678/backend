@@ -14,7 +14,7 @@ export async function consultarHive5(idABuscar) {
     formData.append('interest-to', '');
     formData.append('originator', '');
     formData.append('period-from', '');
-    formData.append('period-to', '35'); 
+    formData.append('period-to', '35');
     formData.append('amount-left-from', '');
     formData.append('amount-left-to', '');
     formData.append('type', '');
@@ -24,9 +24,6 @@ export async function consultarHive5(idABuscar) {
     formData.append('amount-left-invest', '10');
 
     try {
-        console.log(`\n--- 🔍 INICIANDO CONEXIÓN A HIVE5 ---`);
-        console.log(`🌐 URL: ${url}`);
-
         const response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -45,28 +42,13 @@ export async function consultarHive5(idABuscar) {
             body: formData
         });
 
-        console.log(`📡 Status Code: ${response.status} (${response.statusText})`);
-        
-        if (!response.ok) {
-            console.error(`🔴 ERROR: El servidor respondió con un error. ¿Ha caducado la Cookie?`);
-            return null;
-        }
+        if (!response.ok) return null;
 
         const html = await response.text();
 
-
-        const tamanoKB = (html.length / 1024).toFixed(2);
-        console.log(`📄 Datos recibidos: ${tamanoKB} KB`);
-
         if (html.includes('registration-block') || html.includes('name="login"') || html.length < 5000) {
-            const user = await getUserById(1);
-
-            console.error(`⚠️ ALERTA: La sesión ha caducado. El servidor envió la página de Login en lugar de los préstamos.`);
-
             let newSession = await loginHive5();
             sessionCookie = newSession;
-            console.log('new Cookie is: ', sessionCookie)
-
             consultarHive5('loansForInvestment');
         }
 
@@ -75,10 +57,8 @@ export async function consultarHive5(idABuscar) {
 
         if (elemento.length > 0) {
             const contenido = elemento.text().trim();
-            console.log(`✅ ÉXITO: Elemento #${idABuscar} localizado.`);
             return contenido;
         } else {
-            console.log(`⚠️ ID NO ENCONTRADO: La conexión fue exitosa pero el ID #${idABuscar} no está en el HTML.`);            
             return null;
         }
 
@@ -91,8 +71,6 @@ export async function consultarHive5(idABuscar) {
 export const executeCronHive = async () => {
     cron.schedule('*/10 7-22 * * *', async () => {
         const user = await getUserById(1);
-        console.log('--- Ejecutando consulta programada a Hive5 (cada 10 min) ---');
-
         try {
             const data = await consultarHive5('loansForInvestment');
             if (data && data.length > 0) {
@@ -103,11 +81,7 @@ export const executeCronHive = async () => {
                         `Hay préstamos nuevos para inversión.`,
                     );
                 }
-                console.log('✅ Notificación enviada con éxito');
-            } else {
-                console.log('ℹ️ Consulta realizada: No hay novedades relevantes.');
             }
-
         } catch (error) {
             console.error('❌ Error en el ciclo del Cron:', error.message);
         }
@@ -122,7 +96,6 @@ async function loginHive5() {
     params.append('password', process.env.HIVE5_PASSWORD);
 
     try {
-        console.log("🔐 Intentando login en Hive5...");
         const response = await axios.post(loginUrl, params, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -137,7 +110,6 @@ async function loginHive5() {
             const phpSession = cookies.find(c => c.startsWith('PHPSESSID'));
             if (phpSession) {
                 sessionCookie = phpSession.split(';')[0];
-                console.log("✅ Nueva Cookie obtenida:", sessionCookie);
                 return sessionCookie;
             }
         }
