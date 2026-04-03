@@ -34,8 +34,7 @@ function numerosEnNegrita(texto) {
 }
 
 export const executeCronMobile = async () => {
-    //cron.schedule('0 9 * * *', async () => {
-    cron.schedule('40 10 * * *', async () => {
+    cron.schedule('0 9 * * *', async () => {
         const user = await getUserById(1);
         console.log('--- Ejecutando consulta Google Pixel ---');
 
@@ -52,7 +51,7 @@ export const executeCronMobile = async () => {
                     await sendPushNotification(
                         user.pushToken,
                         "Precio Google Pixel 9a",
-                        `Total ${priceStrong}€.   ${monthStrong} €/mes`,
+                        `Total ${priceStrong}€${"        "}${monthStrong} €/mes`,
                         'ic_notification_purchase'
                     );
                 }
