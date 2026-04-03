@@ -9,7 +9,7 @@ def descargar_audio_por_id(video_id):
     try:
         # Inicializamos YouTube con pytubefix
         # 'use_oauth=True' ayuda a evitar bloqueos de bots si tienes problemas
-        yt = YouTube(url, on_progress_callback=on_progress)
+        yt = YouTube(url, on_progress_callback=on_progress, use_po_token=True)
         
         # Filtramos para obtener solo el audio con la mejor calidad posible
         # Normalmente el formato mp4 o m4a de audio es el más compatible
