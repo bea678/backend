@@ -43,6 +43,17 @@ admin.initializeApp({
 
 app.use(bearMusicRoutes);
 
+app.use((req, res, next) => {
+    const now = new Date().toLocaleTimeString();
+    console.log(`[${now}] ${req.method} ${req.url}`);
+    
+    if (Object.keys(req.body).length > 0) {
+        console.log('Body:', JSON.stringify(req.body, null, 2));
+    }
+    
+    next();
+});
+
 app.get('/refresh_data_io', async (req, res) => {
     const bookmakers = ['LeoVegas ES', 'Betfair ES'];
 
