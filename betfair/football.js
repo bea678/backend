@@ -6,12 +6,8 @@ import { generarIdUnico } from '../bearbitrage/scrape.js';
 puppeteer.use(StealthPlugin());
 
 export async function scrapeBetfairFootball() {
-    // ⚠️ USA TU URL DE NGROK ACTUAL
-    const ngrokAddr = '5.tcp.eu.ngrok.io:19911'; 
     const url = 'https://www.betfair.es/sport/football';
     const mapaResultados = {};
-
-    console.log(`🚀 [BETFAIR] Iniciando radar vía Puente: ${ngrokAddr}`);
 
    const browser = await puppeteer.launch({
         headless: "new",
@@ -23,13 +19,11 @@ export async function scrapeBetfairFootball() {
             '--no-zygote',
             '--single-process',
             '--window-size=1920,1080',
-            // --- FLAGS PARA QUE EL TÚNEL NO PETE ---
-            '--disable-http2',              // CRÍTICO: Fuerza HTTP/1.1 para no saturar los sockets de Ngrok
-            '--disable-connection-pool',    // Evita mantener conexiones abiertas innecesarias
-            '--disable-extensions',         // Quita basura
-            '--disable-component-update',   // Evita que Chrome intente actualizarse en segundo plano
+            '--disable-http2',              
+            '--disable-connection-pool',    
+            '--disable-extensions',         
+            '--disable-component-update',  
             '--no-default-browser-check',
-            `--proxy-server=http://${ngrokAddr}`
         ]
     });
 
@@ -58,7 +52,6 @@ export async function scrapeBetfairFootball() {
         } catch (e) {
             console.log('ℹ️ [BETFAIR] No se detectó banner de cookies.');
         }
-
         // 2. EXTRAER PARTIDOS (Basado en el HTML que me pasaste)
         console.log('📊 [BETFAIR] Extrayendo eventos...');
         const partidosData = await page.evaluate(() => {
@@ -67,9 +60,13 @@ export async function scrapeBetfairFootball() {
             const secciones = document.querySelectorAll('li.section');
 
             secciones.forEach(seccion => {
-                const tituloSeccion = seccion.querySelector('.section-header-title')?.innerText.trim() || "";
-                
-                // Solo procesamos "Hoy" o "En Juego" (puedes ajustar esto)
+               const tituloSeccion = seccion.querySelector('.section-header-title')?.innerText.trim() || "";
+
+                // Pasamos a minúsculas para asegurar que lo pilla siempre, sin importar cómo lo escriba Betfair
+                if (tituloSeccion.toLowerCase() === 'en juego') {
+                    return; // Salta al siguiente elemento del forEach
+                }
+
                 const filas = seccion.querySelectorAll('.com-coupon-line-new-layout');
 
                 filas.forEach(row => {
@@ -92,9 +89,22 @@ export async function scrapeBetfairFootball() {
                             parseFloat(botones[2].innerText.trim().replace(',', '.'))
                         ];
 
-                        const hora = row.querySelector('.date')?.innerText.trim() || 
+                        let hora = row.querySelector('.date')?.innerText.trim() || 
                                      row.querySelector('.event-inplay-state')?.innerText.trim() || "00:00";
-                        
+                                     
+                        if (hora.includes('Comienza en')) {
+                            const match = hora.match(/Comienza en (\d+)/); 
+                            
+                            if (match && match[1]) { 
+                                const minutosASumar = parseInt(match[1], 10);
+                                const ahora = new Date(); 
+                                ahora.setMinutes(ahora.getMinutes() + minutosASumar);
+                                const horasTexto = String(ahora.getHours()).padStart(2, '0');
+                                const minutosTexto = String(ahora.getMinutes()).padStart(2, '0');
+                                hora = `${horasTexto}:${minutosTexto}`;
+                            }
+                        }
+
                         const liga = row.querySelector('.event-link')?.getAttribute('data-competition') || "Fútbol";
 
                         if (!isNaN(cuotas[0]) && home && away) {

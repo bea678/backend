@@ -7,10 +7,7 @@ import path from 'path';
 
 puppeteer.use(StealthPlugin());
 
-export async function scrapeLeoVegasFootball(browserParam) {
-    const ngrokAddr = '5.tcp.eu.ngrok.io:19911'; 
-    const publicDir = path.join(process.cwd(), 'public');
-    
+export async function scrapeLeovegasBasketball(browserParam) {        
     const browser = browserParam || await puppeteer.launch({
         headless: 'new', 
         args: [
@@ -24,7 +21,6 @@ export async function scrapeLeoVegasFootball(browserParam) {
             '--disable-http2',
             '--disable-connection-pool',
             '--blink-settings=imagesEnabled=false',
-            `--proxy-server=http://${ngrokAddr}`
         ]
     });
 
@@ -42,19 +38,32 @@ export async function scrapeLeoVegasFootball(browserParam) {
         console.log('⏳ [LEOVEGAS] Pausa técnica de 15s para carga de scripts...');
         await new Promise(r => setTimeout(r, 15000)); 
 
-        // --- CAPTURA 1: Ver si hay cookies o si la página está bloqueada ---
-        const htmlCookies = await page.content();
-        //fs.writeFileSync(path.join(publicDir, 'debug_leovegas_cookies.html'), htmlCookies);
-
         console.log('🍪 [LEOVEGAS] Gestionando cookies...');
         try {
             const acceptSelector = 'button[data-testid="accept-button"]';
             await page.waitForSelector(acceptSelector, { timeout: 10000, visible: true });
             await page.click(acceptSelector);
-            console.log('✅ Cookies aceptadas.');
+            console.log('✅ [LEOVEGAS] Cookies aceptadas.');
             await new Promise(r => setTimeout(r, 3000));
-        } catch (e) { console.log('ℹ️ Banner de cookies no detectado.'); }
+        } catch (e) { console.log('ℹ️ Banner de cookies no detectado.'); }       
 
+        // 👇 NUEVO BLOQUE: CLIC EN BALONCESTO 👇
+        console.log('🏀 [LEOVEGAS] Buscando la pestaña de Baloncesto...');
+        try {
+            const basketSelector = 'button[data-testid="menuitem-Baloncesto"]';
+            await page.waitForSelector(basketSelector, { timeout: 10000, visible: true });
+            await page.click(basketSelector);
+            console.log('✅ [LEOVEGAS] Clic en Baloncesto realizado con éxito.');
+            
+            // Pausa obligatoria para que el DOM reaccione al clic y cargue los partidos
+            console.log('⏳ [LEOVEGAS] Esperando a que se carguen los partidos de basket...');
+            await new Promise(r => setTimeout(r, 5000)); 
+        } catch (e) { 
+            console.log('⚠️ [LEOVEGAS] No se pudo hacer clic en Baloncesto.', e.message); 
+        }
+        // 👆 FIN DEL BLOQUE 👆
+
+        
         console.log('⏳ [LEOVEGAS] Aplicando filtro 24h...');
         try {
             await page.evaluate(() => {
@@ -66,18 +75,11 @@ export async function scrapeLeoVegasFootball(browserParam) {
         } catch (e) { console.log('⚠️ No se pudo aplicar filtro 24h.'); }
 
         // --- CAPTURA 2: Rayos X del Sportsbook ---
-        console.log('💾 [LEOVEGAS] Guardando HTML final para análisis...');
-        const htmlFinal = await page.content();
-        fs.writeFileSync(path.join(publicDir, 'debug_leovegas_real.html'), htmlFinal);
-        await page.screenshot({ path: path.join(publicDir, 'debug_leovegas.png'), fullPage: true });
-
         const mapaResultados = {};
-        // Selector genérico para las ligas de Kambi
         const selectorHeader = '[class*="headerContainer"], [data-testid="collapsible-container"], .KambiBC-collapsible-header';
 
         console.log('📊 [LEOVEGAS] Intentando extraer eventos...');
         
-        // No lanzamos error aquí para que el flujo siga, pero informamos
         const headersExist = await page.$(selectorHeader);
         if (!headersExist) {
             console.log('❌ [LEOVEGAS] No se encontraron las cabeceras de liga con los selectores actuales.');
@@ -89,15 +91,20 @@ export async function scrapeLeoVegasFootball(browserParam) {
 
         for (let i = 0; i < numHeaders; i++) {
             try {
+                if (i % 20 === 0) console.log(`   ⏳ [LEOVEGAS] Procesando liga ${i + 1} de ${numHeaders}...`);
+
                 const headers = await page.$$(selectorHeader);
                 const currentHeader = headers[i];
+                
+                if (!currentHeader) continue;
 
                 const nombreLiga = await page.evaluate(el => el.innerText.split('\n')[0].trim(), currentHeader);
                 if (nombreLiga.toUpperCase().includes('VIVO') || !nombreLiga) continue;
 
                 await currentHeader.scrollIntoView();
                 await page.evaluate(el => el.click(), currentHeader);
-                await new Promise(r => setTimeout(r, 1500));
+                
+                await new Promise(r => setTimeout(r, 500));
 
                 const partidos = await page.evaluate((ligaNombre) => {
                     const cards = Array.from(document.querySelectorAll('[class*="eventCard"], [data-testid="event-card"]'));
@@ -105,10 +112,11 @@ export async function scrapeLeoVegasFootball(browserParam) {
                         const home = card.querySelector('[data-testid="homeName"]')?.innerText.trim();
                         const away = card.querySelector('[data-testid="awayName"]')?.innerText.trim();
                         const cuotasEls = Array.from(card.querySelectorAll('[class*="outcome-value"], [class*="label-3"]'));
+                        // NOTA: Para basket en LeoVegas (MoneyLine), asegúrate de que esto cuadre con 2 cuotas en vez de 3
                         const cuotas = cuotasEls.slice(0, 3).map(c => parseFloat(c.innerText.replace(',', '.')));
                         const hora = card.querySelector('[data-testid="clock"]')?.innerText.trim() || "00:00";
 
-                        if (home && away && cuotas.length >= 3) {
+                        if (home && away && cuotas.length >= 2) {
                             return { home, away, hora, cuotas, liga: ligaNombre };
                         }
                         return null;
@@ -117,6 +125,7 @@ export async function scrapeLeoVegasFootball(browserParam) {
 
                 partidos.forEach(p => {
                     const key = generarIdUnico(p.home, p.away, p.hora);
+
                     mapaResultados[key] = {
                         partido: `${p.home} vs ${p.away}`,
                         cuotas: p.cuotas,
@@ -125,11 +134,13 @@ export async function scrapeLeoVegasFootball(browserParam) {
                         casa: 'LeoVegas'
                     };
                 });
-            } catch (err) { }
-        }
+            } catch (err) {
+                console.log(`   ⚠️ [LEOVEGAS] Error silencioso en sección ${i}:`, err.message);
+            }
+        }   
 
-        return mapaResultados;
-
+        console.log(`   ✅ [LEOVEGAS] Eventos extraidos: ${Object.keys(mapaResultados).length}`);
+        return mapaResultados; 
     } catch (e) {
         console.error("❌ [LEOVEGAS] Fallo:", e.message);
         return {};

@@ -7,10 +7,6 @@ import path from 'path';
 puppeteer.use(StealthPlugin());
 
 export async function scrapeLuckiaFootball() {
-    const ngrokAddr = '5.tcp.eu.ngrok.io:19911'; 
-
-    console.log(`🚀 [LUCKIA] Iniciando radar vía Ngrok-TCP`);
-
     const browser = await puppeteer.launch({
         headless: "new",
         args: [
@@ -22,7 +18,6 @@ export async function scrapeLuckiaFootball() {
             '--single-process',
             '--window-size=1920,1080',
             '--disable-connection-pool',
-            `--proxy-server=http://${ngrokAddr}`
         ]
     });
 
@@ -34,13 +29,20 @@ export async function scrapeLuckiaFootball() {
     const publicDir = path.join(process.cwd(), 'public');
     const mapaResultados = {};
 
+    // --- CÁLCULO DE FECHAS (Hoy) ---
+    const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+    const fechaActual = new Date();
+    const diaHoy = String(fechaActual.getDate()).padStart(2, '0');
+    const mesHoy = meses[fechaActual.getMonth()];
+    const stringHoy = `${diaHoy} ${mesHoy}`; 
+
     try {
-        // 1. Verificación de IP (Crucial para saber si el túnel sigue vivo)
+        // 1. Verificación de IP
         console.log('📡 [LUCKIA] Verificando IP de salida...');
         try {
             await page.goto('https://api.ipify.org', { waitUntil: 'networkidle2', timeout: 15000 });
             const myIp = await page.evaluate(() => document.body.innerText);
-            console.log(`🌍 [LUCKIA] IP Confirmada: ${myIp} (Tu casa)`);
+            console.log(`🌍 [LUCKIA] IP Confirmada: ${myIp}`);
         } catch (e) {
             console.log('⚠️ [LUCKIA] No se pudo verificar la IP, pero intentamos Luckia...');
         }
@@ -66,7 +68,6 @@ export async function scrapeLuckiaFootball() {
         console.log('⏳ [LUCKIA] Localizando iframe #sbtechBC...');
         await page.waitForSelector('#sbtechBC', { timeout: 35000 });
         
-        // Función interna para obtener el frame de forma segura
         const getLuckiaFrame = async () => {
             const element = await page.$('#sbtechBC');
             return await element.contentFrame();
@@ -75,33 +76,51 @@ export async function scrapeLuckiaFootball() {
         let frame = await getLuckiaFrame();
         if (!frame) throw new Error("No se pudo acceder al contenido del iframe.");
 
-        // 5. Scroll Robusto (Evita el error de Context Destroyed)
-        console.log('🖱️ [LUCKIA] Cargando más eventos con scroll...');
-        try {
-            await frame.evaluate(async () => {
-                await new Promise((resolve) => {
-                    let totalHeight = 0;
-                    let distance = 500;
-                    let timer = setInterval(() => {
-                        window.scrollBy(0, distance);
-                        totalHeight += distance;
-                        if (totalHeight >= 3500) {
-                            clearInterval(timer);
-                            resolve();
-                        }
-                    }, 300);
+        // 5. Scroll Dinámico y Click en "Ver más"
+        console.log('🖱️ [LUCKIA] Explorando eventos en la página...');
+        let intentosSinBoton = 0;
+        const maxScrolls = 35; 
+
+        for (let i = 0; i < maxScrolls; i++) {
+            try {
+                // Hacer scroll hasta abajo del todo dentro del iframe
+                await frame.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                await new Promise(r => setTimeout(r, 1500)); // Esperamos a que cargue el lazy load
+
+                // Evaluar si el botón existe y clicarlo
+                const botonClicado = await frame.evaluate(() => {
+                    const btn = document.querySelector('button#view-more-upcoming-btn');
+                    if (btn && btn.offsetParent !== null && !btn.disabled) { 
+                        btn.click();
+                        return true;
+                    }
+                    return false;
                 });
-            });
-        } catch (scrollError) {
-            console.log('ℹ️ [LUCKIA] El contexto cambió durante el scroll, reintentando extracción...');
+
+                if (botonClicado) {
+                    console.log(`   🔄 [LUCKIA] Clic en "Ver más" (Iteración ${i + 1})`);
+                    intentosSinBoton = 0; // Reiniciamos contador porque hemos encontrado más partidos explícitamente
+                    await new Promise(r => setTimeout(r, 2000));
+                } else {
+                    intentosSinBoton++;
+                    // Si hacemos scroll 4 veces y no vemos el botón, asumimos que llegamos al final total
+                    if (intentosSinBoton >= 4) {
+                        console.log('   ✅ [LUCKIA] Fin del contenido detectado. Terminando scroll.');
+                        break;
+                    }
+                }
+            } catch (scrollError) {
+                console.log('ℹ️ [LUCKIA] Contexto perdido durante el scroll, re-enganchando iframe...');
+                frame = await getLuckiaFrame();
+            }
         }
 
-        // Espera de seguridad para que las cuotas se estabilicen
-        await new Promise(r => setTimeout(r, 4000));
+        // Espera para estabilizar el DOM antes de la extracción final
+        await new Promise(r => setTimeout(r, 3000));
 
-        // 6. Extracción de datos (Re-localizamos el frame por si hubo refresco)
+        // 6. Extracción de datos
         frame = await getLuckiaFrame();
-        console.log('📊 [LUCKIA] Extrayendo partidos finales...');
+        console.log('📊 [LUCKIA] Extrayendo partidos (Ignorando los días posteriores)...');
         
         const partidosData = await frame.evaluate(() => {
             const events = Array.from(document.querySelectorAll('.lp-event'));
@@ -111,7 +130,6 @@ export async function scrapeLuckiaFootball() {
                 const hora = row.querySelector('.lp-event__extra-date')?.innerText.trim();
                 const liga = row.closest('.lp-event-family')?.querySelector('.header-group-title strong')?.innerText.trim() || 'Fútbol';
 
-                // Selector de mercado 1X2
                 const market1X2 = row.querySelector('.lp-event__picks-group[data-bettypeid="3000100100000"]');
                 let cuotas = null;
 
@@ -126,33 +144,45 @@ export async function scrapeLuckiaFootball() {
                     }
                 }
                 return { home, away, hora, liga, cuotas };
-            }).filter(p => p.home && p.cuotas && !isNaN(p.cuotas[0]));
+            }).filter(p => p.home && p.cuotas && !isNaN(p.cuotas[0]) && p.hora);
         });
 
-        // 7. Procesar y guardar resultados
+        // 7. Procesar, filtrar por HOY y limpiar la hora
         partidosData.forEach((p, i) => {
             try {
-                const key = generarIdUnico(p.home, p.away, p.hora);
+                // Filtro para saber si es un partido de hoy (El resto se ignoran y no entran al mapaResultados)
+                const esHoy = p.hora.includes(stringHoy) || 
+                              p.hora.toLowerCase().includes('hoy') || 
+                              /^\d{2}:\d{2}/.test(p.hora.trim());
+
+                if (!esHoy) return; 
+
+                // Extraemos ÚNICAMENTE la hora en formato HH:MM
+                let horaLimpia = p.hora;
+                const extraerHora = p.hora.match(/\d{2}:\d{2}/);
+                if (extraerHora) {
+                    horaLimpia = extraerHora[0];
+                }
+
+                const key = generarIdUnico(p.home, p.away, horaLimpia);
                 mapaResultados[key] = {
                     eventId: `${i}_LUC_${p.home.substring(0,3).toUpperCase()}`,
                     partido: `${p.home} vs ${p.away}`,
                     cuotas: p.cuotas,
                     competicion: p.liga,
-                    hora: p.hora,
+                    hora: horaLimpia,
                     casa: 'Luckia'
                 };
             } catch (idErr) {
-                // Error silencioso en generación de ID
+                // Error silencioso en generación de ID individual
             }
         });
 
-        console.log(`✅ [LUCKIA] Éxito: ${Object.keys(mapaResultados).length} partidos procesados.`);
+        console.log(`✅ [LUCKIA] Éxito: ${Object.keys(mapaResultados).length} partidos de HOY procesados.`);
         return mapaResultados;
 
     } catch (error) {
         console.error('❌ [LUCKIA] Error crítico:', error.message);
-        
-        // Guardar captura de pantalla en caso de error para ver qué pasó
         try {
             await page.screenshot({ path: path.join(publicDir, 'error_luckia.png') });
             const html = await page.content();

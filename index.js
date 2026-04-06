@@ -13,6 +13,7 @@ import bearMusicRoutes from './bearMusic/routes.js';
 import { processAndSaveValueBets } from './bearbitrage/functions.js';
 import cron from 'node-cron';
 import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
+import { scrapeArbitrageFootball, scrapeArbitrageBasketball } from './scrapeArbitrage.js';
 
 const app = express();
 
@@ -453,4 +454,7 @@ app.listen(PORT, () => {
     executeCronHive()
     executeCronMobile()
     executeCronYoutubeCredits()
+
+    //scrapeArbitrageFootball()
+    //scrapeArbitrageBasketball()
 });
