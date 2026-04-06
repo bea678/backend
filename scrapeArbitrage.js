@@ -12,6 +12,8 @@ import { scrapeWinamaxBasketball } from "./winamax/basketball.js";
 import { scrapeLeovegasBasketball } from "./leovegas/basketball.js";
 import { unificarCuotas } from "./bearbitrage/scrape.js";
 import { calcularDetalleArbitraje } from "./bearbitrage/scrape.js";
+import { scrapeBetfairTennis } from "./betfair/tennis.js";
+import { scrapeLuckiaTennis } from "./luckia/tennis.js";
 
 puppeteer.use(StealthPlugin());
 
@@ -181,6 +183,94 @@ export async function scrapeArbitrageBasketball() {
     console.log(`\n✅ Radar Basket completado. Unificados: ${Object.keys(masterMap).length} | Coincidencias: ${coincidencias.length}`);
 
     if (surebets.length > 0) console.table(surebets);
+
+    return;
+}
+
+export async function scrapeArbitrageTennis() {
+    console.log('\n--- 🚀 INICIANDO RADAR MULTICASA (MODO LIMPIEZA PROFUNDA) ---');
+
+    const pausar = (ms) => new Promise(r => setTimeout(r, ms));
+
+    // 1. Betfair
+    /*let bfData = {};
+    try {
+        bfData = await scrapeBetfairTennis();
+        console.log(`   ✅ Betfair tenis finalizado (${Object.keys(bfData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Betfair:", e.message); }*/
+    
+    //2. Luckia
+    let lcData = {};
+    try {
+        lcData = await scrapeLuckiaTennis();
+        console.log(`   ✅ Luckia finalizado (${Object.keys(lcData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Luckia:", e.message); }
+
+    Object.keys(lcData).forEach((k) => {
+        console.log('Partido: ', lcData[k].partido);
+        console.log('Cuotas: ', lcData[k].cuotas);
+        console.log('Horas: ', lcData[k].hora);
+    })
+
+    /*console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
+    // 3. LeoVegas
+    let lvData = {};
+    try {
+        console.log('Empiezo con LeoVegas...')
+        lvData = await scrapeLeovegasBasketball();
+        console.log(`   ✅ LeoVegas finalizado (${Object.keys(lvData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en LeoVegas:", e.message); }
+
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
+    // 4. TonyBet
+    let tonyData = {};
+    try {
+        console.log('Empiezo con TonyBet...')
+        tonyData = await scrapeTonybetBasketball();
+        console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en TonyBet:", e.message); } 
+
+    // 5. Winimax
+    let winiData = {};
+    try {
+        console.log('Empiezo con Winimax...')
+        winiData = await scrapeWinamaxBasketball();
+        console.log(`   ✅ TonyBet finalizado (${Object.keys(winiData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Winimax:", e.message); }
+
+    console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
+    await pausar(10000);
+
+    const fuentes = [
+        { nombre: 'BF', data: bfData },
+        { nombre: 'LV', data: lvData },
+        { nombre: 'LC', data: lcData },
+        { nombre: 'TB', data: tonyData },
+        { nombre: 'WM', data: winiData }
+    ];
+
+    const masterMap = unificarCuotas(fuentes);
+
+    const surebets = [];
+    const coincidencias = [];
+
+    Object.keys(masterMap).forEach(key => {
+        const m = masterMap[key];
+        if (Object.keys(m.detalles).length >= 2) {
+            const arb = calcularDetalleArbitraje(...m.mejoresCuotas);
+            const info = { Partido: m.partido, Hora: m.hora, Casas: Object.keys(m.detalles).join('/') };
+            coincidencias.push(info);
+            if (arb.hayArbitraje) surebets.push({ ...info, ROI: arb.roi + "%" });
+        }
+    });
+
+    console.log(`\n✅ Radar Basket completado. Unificados: ${Object.keys(masterMap).length} | Coincidencias: ${coincidencias.length}`);
+
+    if (surebets.length > 0) console.table(surebets);*/
 
     return;
 }
