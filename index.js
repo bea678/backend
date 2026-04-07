@@ -472,8 +472,13 @@ app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
 
-    executeCronHive()
+    /*executeCronHive()
     executeCronMobile()
     executeCronYoutubeCredits() 
-    executeCronArbitrage()
+    executeCronArbitrage()*/
+
+    //scrapeArbitrageFootball()
+    //scrapeArbitrageBasketball()
+    scrapeArbitrageTennis()
+    //scrapeArbitrageIceHockey()
 });
