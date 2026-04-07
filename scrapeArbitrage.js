@@ -205,7 +205,7 @@ export async function scrapeArbitrageTennis() {
     const pausar = (ms) => new Promise(r => setTimeout(r, ms));
 
     // 1. Betfair
-    let bfData = {};
+   /* let bfData = {};
     try {
         bfData = await scrapeBetfairTennis();
         console.log(`   ✅ Betfair tenis finalizado (${Object.keys(bfData).length} partidos)`);
@@ -219,7 +219,7 @@ export async function scrapeArbitrageTennis() {
     } catch (e) { console.error("❌ Error en Luckia:", e.message); }
 
     console.log('⏱️ Esperando 8 segundos...');
-    await pausar(8000);
+    await pausar(8000);*/
 
     // 3. LeoVegas
     let lvData = {};
@@ -244,7 +244,7 @@ export async function scrapeArbitrageTennis() {
     await pausar(8000);
 
     // 5. Winimax
-    let winiData = {};
+   /* let winiData = {};
     try {
         console.log('Empiezo con Winimax...')
         winiData = await scrapeWinamaxTennis();
@@ -285,7 +285,7 @@ export async function scrapeArbitrageTennis() {
     if (user?.pushToken) {
         await sendPushNotification(user.pushToken, "Radar Tenis Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}.         Coincidencias: ${coincidencias.length}
         .    Subrets:  ${surebets.length}`);
-    }
+    }*/
 }
 
 export async function scrapeArbitrageIceHockey() {
