@@ -1,24 +1,6 @@
 import 'dotenv/config';
 import puppeteer from 'puppeteer';
-
-export function generarIdUnico(home, away, hora) {
-    const normalizar = (str) => {
-        if (!str) return "";
-        return str.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-            .replace(/\bii\b/g, 'b')
-            .replace(/fc|sd|ud|cd|united|real|club|deportivo|atletico|atl\.|de|el|la|the|deportiva/g, '')
-            .replace(/\(espana\)|\bespana\b|\besp\b/g, '')
-            .replace(/[^a-z0-9]/g, '')
-            .trim();
-    };
-
-    const h = normalizar(home);
-    const a = normalizar(away);
-    const equipos = [h, a].sort().join('_');
-    const horaFinal = hora.replace(/[^0-9]/g, '').slice(-4);
-    return `${horaFinal}_${equipos}`;
-}
+import { generarIdUnico } from '../bearbitrage/scrape.js';
 
 export async function scrapeTonyBetFootball() {
     const url = 'https://tonybet.es/prematch/football';
@@ -27,7 +9,8 @@ export async function scrapeTonyBetFootball() {
 
     console.log('🚀 Iniciando navegador en modo oculto...');
     const browser = await puppeteer.launch({
-        headless: 'new', // Modo oculto moderno e indetectable
+        headless: 'true', 
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox', 
             '--disable-setuid-sandbox',

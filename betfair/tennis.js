@@ -17,8 +17,6 @@ export async function scrapeBetfairTennis() {
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
-            '--no-zygote',
-            '--single-process',
             '--window-size=1920,1080',
             '--disable-http2',              
             '--disable-connection-pool',    

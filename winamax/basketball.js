@@ -9,6 +9,7 @@ export async function scrapeWinamaxBasketball(browserParam) {
     const browser = browserParam || await puppeteer.launch({
         headless: true,
         protocolTimeout: 240000, 
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--window-size=1920,1080',

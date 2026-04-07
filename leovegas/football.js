@@ -2,21 +2,18 @@ import 'dotenv/config';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { generarIdUnico } from '../bearbitrage/scrape.js';
-import fs from 'fs';
-import path from 'path';
 
 puppeteer.use(StealthPlugin());
 
 export async function scrapeLeoVegasFootball(browserParam) {    
     const browser = browserParam || await puppeteer.launch({
-        headless: 'new', 
+        headless: 'true', 
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage', 
             '--disable-gpu',
-            '--no-zygote',
-            '--single-process',
             '--window-size=1920,1080',
             '--disable-http2',
             '--disable-connection-pool',

@@ -8,14 +8,13 @@ puppeteer.use(StealthPlugin());
 
 export async function scrapeLuckiaIceHockey() {
     const browser = await puppeteer.launch({
-        headless: "new",
+        headless: "true",
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
-            '--no-zygote',
-            '--single-process',
             '--window-size=1920,1080',
             '--disable-connection-pool',
         ]

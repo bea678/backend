@@ -15,8 +15,6 @@ export async function scrapeLuckiaTennis() {
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
-            '--no-zygote',
-            '--single-process',
             '--window-size=1920,1080',
             '--disable-connection-pool',
         ]

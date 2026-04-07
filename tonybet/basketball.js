@@ -10,7 +10,8 @@ export async function scrapeTonybetBasketball() {
 
     console.log('🏀 Iniciando scraper de Baloncesto...');
     const browser = await puppeteer.launch({
-        headless: 'new',
+        headless: 'true',
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox', 
             '--disable-setuid-sandbox',
