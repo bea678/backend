@@ -30,7 +30,7 @@ export async function scrapeTonybetTennis() {
         });
 
         console.log(`📡 Navegando a: ${url}`);
-        await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
         
         await delay(5000); 
 

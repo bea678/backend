@@ -30,7 +30,7 @@ export async function scrapeLuckiaTennis() {
     try {
         console.log('🌐 [LUCKIA TENIS] Navegando a la sección de TENIS...');
         await page.goto('https://www.luckia.es/apuestas/tenis/', {
-            waitUntil: 'networkidle2',
+            waitUntil: 'domcontentloaded',
             timeout: 60000
         });
 

@@ -24,7 +24,7 @@ export async function scrapeWinamaxTennis(browserParam) {
         console.log('🏀 [WINAMAX] Navegando a la sección de Tenis...');
         // Cambio de URL a sports/2 (Tenis)
         await page.goto('https://www.winamax.es/apuestas-deportivas/sports/5', {
-            waitUntil: 'networkidle2',
+            waitUntil: 'domcontentloaded',
             timeout: 60000
         });
 
