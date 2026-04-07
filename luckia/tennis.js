@@ -15,6 +15,8 @@ export async function scrapeLuckiaTennis() {
             '--disable-setuid-sandbox',
             '--disable-dev-shm-usage',
             '--disable-gpu',
+            '--no-zygote',
+            '--single-process',
             '--window-size=1920,1080',
             '--disable-connection-pool',
         ]
@@ -29,60 +31,30 @@ export async function scrapeLuckiaTennis() {
 
     try {
         console.log('🌐 [LUCKIA TENIS] Navegando a la sección de TENIS...');
-        // CORRECCIÓN 1: Evitamos el cuelgue infinito esperando solo al DOM
         await page.goto('https://www.luckia.es/apuestas/tenis/', {
-            waitUntil: 'domcontentloaded',
+            waitUntil: 'networkidle2',
             timeout: 60000
         });
 
-        console.log('🍪 [LUCKIA TENIS] Gestionando cookies...');
         try {
-            // CORRECCIÓN 2: Búsqueda agresiva del botón "Aceptar" para evitar el bloqueo visual
-            await new Promise(r => setTimeout(r, 3000));
-            
-            const cookieClicada = await page.evaluate(() => {
-                const botones = Array.from(document.querySelectorAll('button'));
-                const btnAceptar = botones.find(b => b.innerText.trim().toUpperCase() === 'ACEPTAR');
-                if (btnAceptar) {
-                    btnAceptar.click();
-                    return true;
-                }
-                return false;
-            });
-
-            if (cookieClicada) {
-                console.log('✅ [LUCKIA TENIS] Cookies aceptadas correctamente.');
-                await new Promise(r => setTimeout(r, 2000)); 
-            } else {
-                console.log('ℹ️ [LUCKIA TENIS] No se encontró el botón "Aceptar" (quizás ya estaban aceptadas).');
-            }
+            const cookieBtn = 'button#onetrust-accept-btn-handler';
+            await page.waitForSelector(cookieBtn, { timeout: 10000 });
+            await page.click(cookieBtn);
+            console.log('✅ [LUCKIA TENIS] Cookies aceptadas.');
         } catch (e) {
-            console.log('⚠️ [LUCKIA TENIS] Fallo menor al gestionar cookies:', e.message);
+            console.log('ℹ️ [LUCKIA TENIS] Botón de cookies no detectado o ya aceptado.');
         }
 
-        console.log('⏳ [LUCKIA TENIS] Localizando el contexto de los eventos...');
-        await new Promise(r => setTimeout(r, 8000));
-
-        // CORRECCIÓN 3: Buscador inteligente para soportar iframes o DOM nativo
+        console.log('⏳ [LUCKIA TENIS] Localizando iframe #sbtechBC...');
+        await page.waitForSelector('#sbtechBC', { timeout: 35000 });
+        
         const getLuckiaFrame = async () => {
-            const iframes = await page.$$('iframe');
-            for (const el of iframes) {
-                const f = await el.contentFrame();
-                if (f && await f.$('.lp-event').catch(() => null)) {
-                    return f; 
-                }
-            }
-            return page; // Si no hay iframe, usamos la página principal
+            const element = await page.$('#sbtechBC');
+            return await element.contentFrame();
         };
 
         let frame = await getLuckiaFrame();
-        
-        const eventosExisten = await frame.$('.lp-event').catch(() => null);
-        if (!eventosExisten) {
-            throw new Error("No se encontró la clase '.lp-event'. La página no ha cargado los datos o estás bloqueado.");
-        }
-        
-        console.log('✅ [LUCKIA TENIS] Contexto de datos localizado con éxito.');
+        if (!frame) throw new Error("No se pudo acceder al contenido del iframe.");
 
         console.log('🖱️ [LUCKIA TENIS] Explorando eventos en la página...');
         let intentosSinBoton = 0;
@@ -113,7 +85,7 @@ export async function scrapeLuckiaTennis() {
                     }
                 }
             } catch (scrollError) {
-                console.log('ℹ️ [LUCKIA TENIS] Contexto perdido durante el scroll, re-enganchando...');
+                console.log('ℹ️ [LUCKIA TENIS] Contexto perdido durante el scroll, re-enganchando iframe...');
                 frame = await getLuckiaFrame();
             }
         }
@@ -124,6 +96,7 @@ export async function scrapeLuckiaTennis() {
         console.log('📊 [LUCKIA TENIS] Extrayendo partidos (Ignorando los días posteriores)...');
         
         const partidosData = await frame.evaluate(() => {
+            // Arrays en minúscula para que coincida perfectamente
             const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
             const fechaActual = new Date();
             const diaHoy = String(fechaActual.getDate()).padStart(2, '0');
@@ -132,9 +105,13 @@ export async function scrapeLuckiaTennis() {
 
             const events = Array.from(document.querySelectorAll('.lp-event'));
             return events.map(row => {
+                // Cambiado todo a textContent para evitar problemas de parseo
                 const home = row.querySelector('.lp-event__team-name.top .lp-event__team-name-text')?.textContent.trim();
                 const away = row.querySelector('.lp-event__team-name.bottom .lp-event__team-name-text')?.textContent.trim();
+                
+                // CORRECCIÓN: row.querySelector y fallback a string vacío
                 const horaRaw = row.querySelector('.lp-event__extra-date.event-header-date-date')?.textContent.trim() || "";
+                
                 const liga = row.closest('.lp-event-family')?.querySelector('.header-group-title strong')?.textContent.trim() || 'TENIS';
                 
                 let hora = null;
@@ -158,9 +135,11 @@ export async function scrapeLuckiaTennis() {
                     cuotas.push(cuota2);
                 }
                 return { home, away, hora, liga, cuotas };
+            // CORRECCIÓN: p !== null para que no pete al leer nulos
             }).filter(p => p !== null && p.home && p.cuotas && p.cuotas.length > 0 && !isNaN(p.cuotas[0]));
         });
 
+        // CORRECCIÓN: usamos p.hora en lugar de la variable fantasma horaLimpia
         partidosData.forEach((p, i) => {
             try {
                 const key = generarIdUnico(p.home, p.away, p.hora);
@@ -183,17 +162,10 @@ export async function scrapeLuckiaTennis() {
     } catch (error) {
         console.error('❌ [LUCKIA TENIS] Error crítico:', error.message);
         try {
-            // Aseguramos que el directorio exista antes de guardar la foto para que no pete
-            if (!fs.existsSync(publicDir)) {
-                fs.mkdirSync(publicDir, { recursive: true });
-            }
             await page.screenshot({ path: path.join(publicDir, 'error_luckia_tenis.png') });
             const html = await page.content();
             fs.writeFileSync(path.join(publicDir, 'error_luckia_tenis.html'), html);
-            console.log('📸 [LUCKIA TENIS] Nueva captura de error guardada en /public');
-        } catch (e) {
-            console.error('⚠️ No se pudo guardar la captura de error:', e.message);
-        }
+        } catch (e) {}
         return {};
     } finally {
         console.log('🚪 [LUCKIA TENIS] Cerrando navegador...');

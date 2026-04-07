@@ -2,24 +2,15 @@ FROM node:20-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Instalamos las dependencias de Python/FFmpeg + Chromium y fuentes para Puppeteer
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-full \
     ffmpeg \
     curl \
-    chromium \
-    fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-    --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Instalamos pytubefix para Python
 RUN pip3 install --no-cache-dir --upgrade pytubefix --break-system-packages
-
-# 3. Le decimos a Puppeteer que NO descargue su propio Chromium y use el del sistema
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 WORKDIR /app
 
