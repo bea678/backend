@@ -230,7 +230,7 @@ export async function scrapeArbitrageTennis() {
     } catch (e) { console.error("❌ Error en LeoVegas:", e.message); }
 
     console.log('⏱️ Esperando 8 segundos...');
-    await pausar(8000);*/
+    await pausar(8000);
 
     // 4. TonyBet
     let tonyData = {};
@@ -241,10 +241,10 @@ export async function scrapeArbitrageTennis() {
     } catch (e) { console.error("❌ Error en TonyBet:", e.message); }
 
     console.log('⏱️ Esperando 8 segundos...');
-    await pausar(8000);
+    await pausar(8000);*/
 
     // 5. Winimax
-   /* let winiData = {};
+    let winiData = {};
     try {
         console.log('Empiezo con Winimax...')
         winiData = await scrapeWinamaxTennis();
@@ -254,7 +254,7 @@ export async function scrapeArbitrageTennis() {
     console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
     await pausar(10000);
 
-    const fuentes = [
+   /* const fuentes = [
         { nombre: 'BF', data: bfData },
         { nombre: 'LV', data: lvData },
         { nombre: 'LC', data: lcData },
