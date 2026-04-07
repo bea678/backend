@@ -81,6 +81,8 @@ export const executeCronHive = async () => {
                         `Hay préstamos nuevos para inversión.`,
                     );
                 }
+            } else {
+                console.log('HIVE 5. No hay préstamos disponibles')
             }
         } catch (error) {
             console.error('❌ Error en el ciclo del Cron:', error.message);

@@ -3,10 +3,10 @@ import mysql from 'mysql2/promise';
 const dbConfig = process.env.MYSQL_PUBLIC_URL
     ? { uri: process.env.MYSQL_PUBLIC_URL }
     : {
-        host: process.env.DB_HOST || 'localhost',
-        user: process.env.DB_USER || 'root',
-        password: process.env.DB_PASSWORD || '',
-        database: process.env.DB_NAME || 'mi_base_de_datos',
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
         port: process.env.DB_PORT || 3306
     };
     
