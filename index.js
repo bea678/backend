@@ -109,6 +109,7 @@ app.get('/refresh_data_io', async (req, res) => {
 
 app.get('/refresh_data_com', async (req, res) => {
     try {
+        console.log('process.env.ODS_API: ', process.env.ODS_API)
         const response = await axios.get(process.env.ODS_API, {
             params: {
                 apiKey: API_KEY,
@@ -123,6 +124,7 @@ app.get('/refresh_data_com', async (req, res) => {
         res.json({ status: "success" });
 
     } catch (error) {
+        console.log('error: ', error)
         res.status(500).json({ error: error.message });
     }
 });
