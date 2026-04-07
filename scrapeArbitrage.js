@@ -219,7 +219,7 @@ export async function scrapeArbitrageTennis() {
     } catch (e) { console.error("❌ Error en Luckia:", e.message); }
 
     console.log('⏱️ Esperando 8 segundos...');
-    await pausar(8000);*/
+    await pausar(8000);
 
     // 3. LeoVegas
     let lvData = {};
@@ -230,7 +230,7 @@ export async function scrapeArbitrageTennis() {
     } catch (e) { console.error("❌ Error en LeoVegas:", e.message); }
 
     console.log('⏱️ Esperando 8 segundos...');
-    await pausar(8000);
+    await pausar(8000);*/
 
     // 4. TonyBet
     let tonyData = {};
