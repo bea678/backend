@@ -13,7 +13,7 @@ import bearMusicRoutes from './bearMusic/routes.js';
 import { processAndSaveValueBets } from './bearbitrage/functions.js';
 import cron from 'node-cron';
 import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
-import { scrapeArbitrageFootball, scrapeArbitrageBasketball, scrapeArbitrageTennis } from './scrapeArbitrage.js';
+import { scrapeArbitrageFootball, scrapeArbitrageBasketball, scrapeArbitrageTennis, scrapeArbitrageIceHockey } from './scrapeArbitrage.js';
 
 const app = express();
 
@@ -449,15 +449,36 @@ export const executeCronYoutubeCredits = async () => {
     });
 };
 
+const executeCronArbitrage = async () => {
+    cron.schedule('0 9 * * *', async () => {
+        console.log('--- Ejecutando cron Scraping ---');
+
+        try {
+            scrapeArbitrageFootball()
+            scrapeArbitrageBasketball()
+            scrapeArbitrageTennis()
+            scrapeArbitrageIceHockey()
+        } catch (error) {
+            console.error('❌ Error en el ciclo del Cron:', error.message);
+        }
+    }, {
+        scheduled: true,
+        timezone: "Europe/Madrid"
+    });
+}
+
+
 app.listen(PORT, () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
 
-    executeCronHive()
+    /*executeCronHive()
     executeCronMobile()
     executeCronYoutubeCredits() 
+    executeCronArbitrage()*/
 
-    //scrapeArbitrageFootball()
-    //scrapeArbitrageBasketball()
-    //scrapeArbitrageTennis()
+    scrapeArbitrageFootball()
+    scrapeArbitrageBasketball()
+    scrapeArbitrageTennis()
+    scrapeArbitrageIceHockey()
 });

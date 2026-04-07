@@ -74,7 +74,6 @@ export async function scrapeLuckiaTennis() {
                 });
 
                 if (botonClicado) {
-                    console.log(`   🔄 [LUCKIA TENIS] Clic en "Ver más" (Iteración ${i + 1})`);
                     intentosSinBoton = 0; 
                     await new Promise(r => setTimeout(r, 2000));
                 } else {

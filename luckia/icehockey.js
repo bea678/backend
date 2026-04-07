@@ -6,7 +6,7 @@ import path from 'path';
 
 puppeteer.use(StealthPlugin());
 
-export async function scrapeLuckiaBasketball() {
+export async function scrapeLuckiaIceHockey() {
     const browser = await puppeteer.launch({
         headless: "new",
         args: [
@@ -23,7 +23,7 @@ export async function scrapeLuckiaBasketball() {
 
     const page = await browser.newPage();
     
-    // Configuración de User Agent
+    // Configuración de User Agent para parecer un humano
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36');
 
     const publicDir = path.join(process.cwd(), 'public');
@@ -37,25 +37,25 @@ export async function scrapeLuckiaBasketball() {
     const stringHoy = `${diaHoy} ${mesHoy}`; 
 
     try {
-        // 1. Navegación a Baloncesto
-        console.log('🌐 [LUCKIA BALONCESTO] Navegando a la sección de baloncesto...');
-        await page.goto('https://www.luckia.es/apuestas/baloncesto/', {
+        // 2. Navegación principal
+        console.log('🌐 [LUCKIA] Navegando a la sección de fútbol...');
+        await page.goto('https://www.luckia.es/apuestas/hockey-hielo/', {
             waitUntil: 'networkidle2',
             timeout: 60000
         });
 
-        // 2. Gestión de Cookies
+        // 3. Gestión de Cookies
         try {
             const cookieBtn = 'button#onetrust-accept-btn-handler';
             await page.waitForSelector(cookieBtn, { timeout: 10000 });
             await page.click(cookieBtn);
-            console.log('✅ [LUCKIA BALONCESTO] Cookies aceptadas.');
+            console.log('✅ [LUCKIA] Cookies aceptadas.');
         } catch (e) {
-            console.log('ℹ️ [LUCKIA BALONCESTO] Botón de cookies no detectado o ya aceptado.');
+            console.log('ℹ️ [LUCKIA] Botón de cookies no detectado o ya aceptado.');
         }
 
-        // 3. Localizar el iframe de apuestas
-        console.log('⏳ [LUCKIA BALONCESTO] Localizando iframe #sbtechBC...');
+        // 4. Localizar el iframe de apuestas
+        console.log('⏳ [LUCKIA] Localizando iframe #sbtechBC...');
         await page.waitForSelector('#sbtechBC', { timeout: 35000 });
         
         const getLuckiaFrame = async () => {
@@ -66,10 +66,10 @@ export async function scrapeLuckiaBasketball() {
         let frame = await getLuckiaFrame();
         if (!frame) throw new Error("No se pudo acceder al contenido del iframe.");
 
-        // 4. Scroll Dinámico y Click en "Ver más"
-        console.log('🖱️ [LUCKIA BALONCESTO] Explorando eventos en la página...');
+        // 5. Scroll Dinámico y Click en "Ver más"
+        console.log('🖱️ [LUCKIA] Explorando eventos en la página...');
         let intentosSinBoton = 0;
-        const maxScrolls = 25; // Límite de seguridad máximo
+        const maxScrolls = 35; 
 
         for (let i = 0; i < maxScrolls; i++) {
             try {
@@ -94,12 +94,12 @@ export async function scrapeLuckiaBasketball() {
                     intentosSinBoton++;
                     // Si hacemos scroll 4 veces y no vemos el botón, asumimos que llegamos al final total
                     if (intentosSinBoton >= 4) {
-                        console.log('   ✅ [LUCKIA BALONCESTO] Fin del contenido detectado. Terminando scroll.');
+                        console.log('   ✅ [LUCKIA] Fin del contenido detectado. Terminando scroll.');
                         break;
                     }
                 }
             } catch (scrollError) {
-                console.log('ℹ️ [LUCKIA BALONCESTO] Contexto perdido durante el scroll, re-enganchando iframe...');
+                console.log('ℹ️ [LUCKIA] Contexto perdido durante el scroll, re-enganchando iframe...');
                 frame = await getLuckiaFrame();
             }
         }
@@ -107,9 +107,9 @@ export async function scrapeLuckiaBasketball() {
         // Espera para estabilizar el DOM antes de la extracción final
         await new Promise(r => setTimeout(r, 3000));
 
-        // 5. Extracción de datos
+        // 6. Extracción de datos
         frame = await getLuckiaFrame();
-        console.log('📊 [LUCKIA BALONCESTO] Extrayendo partidos (Ignorando los días posteriores)...');
+        console.log('📊 [LUCKIA] Extrayendo partidos (Ignorando los días posteriores)...');
         
         const partidosData = await frame.evaluate(() => {
             const events = Array.from(document.querySelectorAll('.lp-event'));
@@ -117,27 +117,17 @@ export async function scrapeLuckiaBasketball() {
                 const home = row.querySelector('.lp-event__team-name.top .lp-event__team-name-text')?.innerText.trim();
                 const away = row.querySelector('.lp-event__team-name.bottom .lp-event__team-name-text')?.innerText.trim();
                 const hora = row.querySelector('.lp-event__extra-date')?.innerText.trim();
-                const liga = row.closest('.lp-event-family')?.querySelector('.header-group-title strong')?.innerText.trim() || 'Baloncesto';
+                const liga = row.closest('.lp-event-family')?.querySelector('.header-group-title strong')?.innerText.trim() || 'Fútbol';
 
-                // En baloncesto evitamos usar el data-bettypeid estricto del fútbol y cogemos el primer grupo de cuotas visible
-                const firstMarketGroup = row.querySelector('.lp-event__picks-group');
+                const market1X2 = row.querySelector('.lp-event__picks-group[data-bettypeid="3000100100000"]');
                 let cuotas = null;
 
-                if (firstMarketGroup) {
-                    const picks = firstMarketGroup.querySelectorAll('.lp-event__pick-content');
-                    
-                    // Caso 1: Mercado "Ganador del Partido" (Solo 1 y 2) -> 2 botones
-                    if (picks.length === 2) {
+                if (market1X2) {
+                    const picks = market1X2.querySelectorAll('.lp-event__pick-content');
+                    if (picks.length === 3) {
                         cuotas = [
                             parseFloat(picks[0].innerText.replace(',', '.')),
-                            parseFloat(picks[1].innerText.replace(',', '.'))
-                        ];
-                    } 
-                    // Caso 2: Mercado "1X2" (Local, Empate, Visitante) -> 3 botones
-                    // Extraemos la posición 0 (Local) y la posición 2 (Visitante), omitiendo la X
-                    else if (picks.length >= 3) {
-                        cuotas = [
-                            parseFloat(picks[0].innerText.replace(',', '.')),
+                            parseFloat(picks[1].innerText.replace(',', '.')),
                             parseFloat(picks[2].innerText.replace(',', '.'))
                         ];
                     }
@@ -146,7 +136,7 @@ export async function scrapeLuckiaBasketball() {
             }).filter(p => p.home && p.cuotas && !isNaN(p.cuotas[0]) && p.hora);
         });
 
-        // 6. Procesar, filtrar por HOY y limpiar la hora
+        // 7. Procesar, filtrar por HOY y limpiar la hora
         partidosData.forEach((p, i) => {
             try {
                 // Filtro para saber si es un partido de hoy (El resto se ignoran y no entran al mapaResultados)
@@ -165,7 +155,7 @@ export async function scrapeLuckiaBasketball() {
 
                 const key = generarIdUnico(p.home, p.away, horaLimpia);
                 mapaResultados[key] = {
-                    eventId: `${i}_LUC_BASKET_${p.home.substring(0,3).toUpperCase()}`,
+                    eventId: `${i}_LUC_${p.home.substring(0,3).toUpperCase()}`,
                     partido: `${p.home} vs ${p.away}`,
                     cuotas: p.cuotas,
                     competicion: p.liga,
@@ -173,23 +163,24 @@ export async function scrapeLuckiaBasketball() {
                     casa: 'Luckia'
                 };
             } catch (idErr) {
-                // Silencioso
+                // Error silencioso en generación de ID individual
             }
         });
 
-        console.log(`✅ [LUCKIA BALONCESTO] Éxito: ${Object.keys(mapaResultados).length} partidos de HOY procesados.`);
+        console.log(`✅ [LUCKIA] Éxito: ${Object.keys(mapaResultados).length} partidos de HOY procesados.`);
         return mapaResultados;
 
     } catch (error) {
-        console.error('❌ [LUCKIA BALONCESTO] Error crítico:', error.message);
+        console.error('❌ [LUCKIA] Error crítico:', error.message);
         try {
-            await page.screenshot({ path: path.join(publicDir, 'error_luckia_basket.png') });
+            await page.screenshot({ path: path.join(publicDir, 'error_luckia.png') });
             const html = await page.content();
-            fs.writeFileSync(path.join(publicDir, 'error_luckia_basket.html'), html);
+            fs.writeFileSync(path.join(publicDir, 'error_luckia.html'), html);
         } catch (e) {}
+        
         return {};
     } finally {
-        console.log('🚪 [LUCKIA BALONCESTO] Cerrando navegador...');
+        console.log('🚪 [LUCKIA] Cerrando navegador...');
         await browser.close();
     }
 }

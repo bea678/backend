@@ -37,16 +37,6 @@ export async function scrapeLuckiaFootball() {
     const stringHoy = `${diaHoy} ${mesHoy}`; 
 
     try {
-        // 1. Verificación de IP
-        console.log('📡 [LUCKIA] Verificando IP de salida...');
-        try {
-            await page.goto('https://api.ipify.org', { waitUntil: 'networkidle2', timeout: 15000 });
-            const myIp = await page.evaluate(() => document.body.innerText);
-            console.log(`🌍 [LUCKIA] IP Confirmada: ${myIp}`);
-        } catch (e) {
-            console.log('⚠️ [LUCKIA] No se pudo verificar la IP, pero intentamos Luckia...');
-        }
-
         // 2. Navegación principal
         console.log('🌐 [LUCKIA] Navegando a la sección de fútbol...');
         await page.goto('https://www.luckia.es/apuestas/futbol/', {
@@ -98,7 +88,6 @@ export async function scrapeLuckiaFootball() {
                 });
 
                 if (botonClicado) {
-                    console.log(`   🔄 [LUCKIA] Clic en "Ver más" (Iteración ${i + 1})`);
                     intentosSinBoton = 0; // Reiniciamos contador porque hemos encontrado más partidos explícitamente
                     await new Promise(r => setTimeout(r, 2000));
                 } else {

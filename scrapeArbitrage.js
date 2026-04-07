@@ -17,6 +17,12 @@ import { scrapeLuckiaTennis } from "./luckia/tennis.js";
 import { scrapeLeovegasTenis } from "./leovegas/tennis.js";
 import { scrapeTonybetTennis } from "./tonybet/tennis.js";
 import { scrapeWinamaxTennis } from "./winamax/tennis.js";
+import { scrapeBetfairIceHockey } from "./betfair/icehockey.js";
+import { scrapeLuckiaIceHockey } from "./luckia/icehockey.js";
+import { scrapeLeoVegasIceHockey } from "./leovegas/icehockey.js";
+import { scrapeTonyBetIceHockey } from "./tonybet/icehockey.js";
+import { scrapeWinamaxIceHockey } from "./winamax/icehockey.js";
+import { getUserById, sendPushNotification } from "./generalFunctions.js";
 
 puppeteer.use(StealthPlugin());
 
@@ -99,13 +105,12 @@ export async function scrapeArbitrageFootball() {
 
     if (surebets.length > 0) console.table(surebets);
 
-    return;
-
     // Notificación
-    /* const user = await getUserById(1);
-     if (user?.pushToken) {
-         await sendPushNotification(user.pushToken, "Radar Finalizado", `BF:${Object.keys(bfData).length} LC:${Object.keys(lcData).length} LV:${Object.keys(lvData).length} TB:${Object.keys(tonyData).length}`);
-     }*/
+    const user = await getUserById(1);
+    if (user?.pushToken) {
+        await sendPushNotification(user.pushToken, "Radar Fútbol Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}.       Coincidencias: ${coincidencias.length}
+        .    Subrets:  ${surebets.length}`);
+    }
 }
 
 export async function scrapeArbitrageBasketball() {
@@ -187,7 +192,11 @@ export async function scrapeArbitrageBasketball() {
 
     if (surebets.length > 0) console.table(surebets);
 
-    return;
+    const user = await getUserById(1);
+    if (user?.pushToken) {
+        await sendPushNotification(user.pushToken, "Radar Baloncesto Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}.      Coincidencias: ${coincidencias.length}
+        .    Subrets:  ${surebets.length}`);
+    }
 }
 
 export async function scrapeArbitrageTennis() {
@@ -201,7 +210,7 @@ export async function scrapeArbitrageTennis() {
         bfData = await scrapeBetfairTennis();
         console.log(`   ✅ Betfair tenis finalizado (${Object.keys(bfData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Betfair:", e.message); }
-    
+
     //2. Luckia
     let lcData = {};
     try {
@@ -229,13 +238,13 @@ export async function scrapeArbitrageTennis() {
         console.log('Empiezo con TonyBet...')
         tonyData = await scrapeTonybetTennis();
         console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
-    } catch (e) { console.error("❌ Error en TonyBet:", e.message); } 
+    } catch (e) { console.error("❌ Error en TonyBet:", e.message); }
 
     console.log('⏱️ Esperando 8 segundos...');
     await pausar(8000);
 
     // 5. Winimax
-   let winiData = {};
+    let winiData = {};
     try {
         console.log('Empiezo con Winimax...')
         winiData = await scrapeWinamaxTennis();
@@ -272,5 +281,101 @@ export async function scrapeArbitrageTennis() {
 
     if (surebets.length > 0) console.table(surebets);
 
-    return;
+    const user = await getUserById(1);
+    if (user?.pushToken) {
+        await sendPushNotification(user.pushToken, "Radar Tenis Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}.         Coincidencias: ${coincidencias.length}
+        .    Subrets:  ${surebets.length}`);
+    }
+}
+
+export async function scrapeArbitrageIceHockey() {
+    console.log('\n--- 🚀 INICIANDO RADAR MULTICASA (MODO LIMPIEZA PROFUNDA) ---');
+
+    const pausar = (ms) => new Promise(r => setTimeout(r, ms));
+
+    // 1. Betfair
+    let bfData = {};
+    try {
+        bfData = await scrapeBetfairIceHockey();
+        console.log(`   ✅ Betfair ice hockey finalizado (${Object.keys(bfData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Betfair:", e.message); }
+
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
+    //2. Luckia
+    let lcData = {};
+    try {
+        lcData = await scrapeLuckiaIceHockey();
+        console.log(`   ✅ Luckia finalizado (${Object.keys(lcData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Luckia:", e.message); }
+
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
+    // 3. LeoVegas
+    let lvData = {};
+    try {
+        console.log('Empiezo con LeoVegas...')
+        lvData = await scrapeLeoVegasIceHockey();
+        console.log(`   ✅ LeoVegas finalizado (${Object.keys(lvData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en LeoVegas:", e.message); }
+
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
+    // 4. TonyBet
+    let tonyData = {};
+    try {
+        console.log('Empiezo con TonyBet...')
+        tonyData = await scrapeTonyBetIceHockey();
+        console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en TonyBet:", e.message); }
+
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
+    // 5. Winimax
+    let winiData = {};
+    try {
+        console.log('Empiezo con Winimax...')
+        winiData = await scrapeWinamaxIceHockey();
+        console.log(`   ✅ TonyBet finalizado (${Object.keys(winiData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Winimax:", e.message); }
+
+    console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
+    await pausar(10000);
+
+    const fuentes = [
+        { nombre: 'BF', data: bfData },
+        { nombre: 'LV', data: lvData },
+        { nombre: 'LC', data: lcData },
+        { nombre: 'TB', data: tonyData },
+        { nombre: 'WM', data: winiData }
+    ];
+
+    const masterMap = unificarCuotas(fuentes);
+
+    const surebets = [];
+    const coincidencias = [];
+
+    Object.keys(masterMap).forEach(key => {
+        const m = masterMap[key];
+        if (Object.keys(m.detalles).length >= 2) {
+            const arb = calcularDetalleArbitraje(...m.mejoresCuotas);
+            const info = { Partido: m.partido, Hora: m.hora, Casas: Object.keys(m.detalles).join('/') };
+            coincidencias.push(info);
+            if (arb.hayArbitraje) surebets.push({ ...info, ROI: arb.roi + "%" });
+        }
+    });
+
+    console.log(`\n✅ Radar Hockey sobre hielo completado. Unificados: ${Object.keys(masterMap).length} | Coincidencias: ${coincidencias.length}`);
+
+    if (surebets.length > 0) console.table(surebets);
+
+    const user = await getUserById(1);
+    if (user?.pushToken) {
+        await sendPushNotification(user.pushToken, "Radar Hockey sobre hielo Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}.    
+         Coincidencias: ${coincidencias.length}.    Subrets:  ${surebets.length}`);
+    }
 }

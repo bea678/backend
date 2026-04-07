@@ -14,7 +14,10 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Le decimos a Puppeteer que NO descargue su propio Chromium y use el del sistema
+# 2. Instalamos pytubefix para Python
+RUN pip3 install --no-cache-dir --upgrade pytubefix --break-system-packages
+
+# 3. Le decimos a Puppeteer que NO descargue su propio Chromium y use el del sistema
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
