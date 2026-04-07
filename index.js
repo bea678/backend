@@ -477,8 +477,8 @@ app.listen(PORT, () => {
     executeCronYoutubeCredits() 
     executeCronArbitrage()*/
 
-    scrapeArbitrageFootball()
-    scrapeArbitrageBasketball()
+    //scrapeArbitrageFootball()
+    //scrapeArbitrageBasketball()
     scrapeArbitrageTennis()
-    scrapeArbitrageIceHockey()
+    //scrapeArbitrageIceHockey()
 });

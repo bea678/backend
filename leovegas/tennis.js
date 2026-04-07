@@ -7,7 +7,8 @@ puppeteer.use(StealthPlugin());
 
 export async function scrapeLeovegasTenis(browserParam) {
     const browser = browserParam || await puppeteer.launch({
-        headless: 'new',
+        headless: 'true',
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
