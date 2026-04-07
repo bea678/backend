@@ -1,4 +1,4 @@
-çimport { scrapeBetfairFootball } from "./betfair/football.js";
+import { scrapeBetfairFootball } from "./betfair/football.js";
 import { scrapeLeoVegasFootball } from "./leovegas/football.js";
 import { scrapeLuckiaFootball } from "./luckia/football.js";
 import { scrapeTonyBetFootball } from "./tonybet/football.js";
