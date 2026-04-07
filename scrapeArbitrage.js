@@ -14,6 +14,9 @@ import { unificarCuotas } from "./bearbitrage/scrape.js";
 import { calcularDetalleArbitraje } from "./bearbitrage/scrape.js";
 import { scrapeBetfairTennis } from "./betfair/tennis.js";
 import { scrapeLuckiaTennis } from "./luckia/tennis.js";
+import { scrapeLeovegasTenis } from "./leovegas/tennis.js";
+import { scrapeTonybetTennis } from "./tonybet/tennis.js";
+import { scrapeWinamaxTennis } from "./winamax/tennis.js";
 
 puppeteer.use(StealthPlugin());
 
@@ -23,14 +26,14 @@ export async function scrapeArbitrageFootball() {
     const pausar = (ms) => new Promise(r => setTimeout(r, ms));
 
     // 1. Betfair (Es el más pesado, lo dejamos para el final o le damos mucha pausa después)
-     let bfData = {};
-     try {
-         bfData = await scrapeBetfairFootball();
-         console.log(`   ✅ Betfair finalizado (${Object.keys(bfData).length} partidos)`);
-     } catch (e) { console.error("❌ Error en Betfair:", e.message); }
-     
-     console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
-     await pausar(10000); 
+    let bfData = {};
+    try {
+        bfData = await scrapeBetfairFootball();
+        console.log(`   ✅ Betfair finalizado (${Object.keys(bfData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Betfair:", e.message); }
+
+    console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
+    await pausar(10000);
 
     //2. Luckia
     let lcData = {};
@@ -54,12 +57,12 @@ export async function scrapeArbitrageFootball() {
     await pausar(8000);
 
     // 4. TonyBet
-     let tonyData = {};
-     try {
-         console.log('Empiezo con TonyBet...')
-         tonyData = await scrapeTonyBetFootball();
-         console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
-     } catch (e) { console.error("❌ Error en TonyBet:", e.message); }
+    let tonyData = {};
+    try {
+        console.log('Empiezo con TonyBet...')
+        tonyData = await scrapeTonyBetFootball();
+        console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en TonyBet:", e.message); }
 
     // 5. Winimax
     let winiData = {};
@@ -76,12 +79,12 @@ export async function scrapeArbitrageFootball() {
         { nombre: 'TB', data: tonyData },
         { nombre: 'WM', data: winiData }
     ];
- 
+
     const masterMap = unificarCuotas(fuentes);
- 
+
     const surebets = [];
     const coincidencias = [];
- 
+
     Object.keys(masterMap).forEach(key => {
         const m = masterMap[key];
         if (Object.keys(m.detalles).length >= 2) {
@@ -91,9 +94,9 @@ export async function scrapeArbitrageFootball() {
             if (arb.hayArbitraje) surebets.push({ ...info, ROI: arb.roi + "%" });
         }
     });
- 
+
     console.log(`\n✅ Radar completado. Unificados: ${Object.keys(masterMap).length} | Coincidencias: ${coincidencias.length}`);
-    
+
     if (surebets.length > 0) console.table(surebets);
 
     return;
@@ -116,7 +119,7 @@ export async function scrapeArbitrageBasketball() {
         bfData = await scrapeBetfairBasketball();
         console.log(`   ✅ Betfair basket finalizado (${Object.keys(bfData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Betfair:", e.message); }
-    
+
     //2. Luckia
     let lcData = {};
     try {
@@ -144,7 +147,7 @@ export async function scrapeArbitrageBasketball() {
         console.log('Empiezo con TonyBet...')
         tonyData = await scrapeTonybetBasketball();
         console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
-    } catch (e) { console.error("❌ Error en TonyBet:", e.message); } 
+    } catch (e) { console.error("❌ Error en TonyBet:", e.message); }
 
     // 5. Winimax
     let winiData = {};
@@ -193,11 +196,11 @@ export async function scrapeArbitrageTennis() {
     const pausar = (ms) => new Promise(r => setTimeout(r, ms));
 
     // 1. Betfair
-    /*let bfData = {};
+    let bfData = {};
     try {
         bfData = await scrapeBetfairTennis();
         console.log(`   ✅ Betfair tenis finalizado (${Object.keys(bfData).length} partidos)`);
-    } catch (e) { console.error("❌ Error en Betfair:", e.message); }*/
+    } catch (e) { console.error("❌ Error en Betfair:", e.message); }
     
     //2. Luckia
     let lcData = {};
@@ -206,20 +209,14 @@ export async function scrapeArbitrageTennis() {
         console.log(`   ✅ Luckia finalizado (${Object.keys(lcData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Luckia:", e.message); }
 
-    Object.keys(lcData).forEach((k) => {
-        console.log('Partido: ', lcData[k].partido);
-        console.log('Cuotas: ', lcData[k].cuotas);
-        console.log('Horas: ', lcData[k].hora);
-    })
-
-    /*console.log('⏱️ Esperando 8 segundos...');
+    console.log('⏱️ Esperando 8 segundos...');
     await pausar(8000);
 
     // 3. LeoVegas
     let lvData = {};
     try {
         console.log('Empiezo con LeoVegas...')
-        lvData = await scrapeLeovegasBasketball();
+        lvData = await scrapeLeovegasTenis();
         console.log(`   ✅ LeoVegas finalizado (${Object.keys(lvData).length} partidos)`);
     } catch (e) { console.error("❌ Error en LeoVegas:", e.message); }
 
@@ -230,15 +227,18 @@ export async function scrapeArbitrageTennis() {
     let tonyData = {};
     try {
         console.log('Empiezo con TonyBet...')
-        tonyData = await scrapeTonybetBasketball();
+        tonyData = await scrapeTonybetTennis();
         console.log(`   ✅ TonyBet finalizado (${Object.keys(tonyData).length} partidos)`);
     } catch (e) { console.error("❌ Error en TonyBet:", e.message); } 
 
+    console.log('⏱️ Esperando 8 segundos...');
+    await pausar(8000);
+
     // 5. Winimax
-    let winiData = {};
+   let winiData = {};
     try {
         console.log('Empiezo con Winimax...')
-        winiData = await scrapeWinamaxBasketball();
+        winiData = await scrapeWinamaxTennis();
         console.log(`   ✅ TonyBet finalizado (${Object.keys(winiData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Winimax:", e.message); }
 
@@ -270,7 +270,7 @@ export async function scrapeArbitrageTennis() {
 
     console.log(`\n✅ Radar Basket completado. Unificados: ${Object.keys(masterMap).length} | Coincidencias: ${coincidencias.length}`);
 
-    if (surebets.length > 0) console.table(surebets);*/
+    if (surebets.length > 0) console.table(surebets);
 
     return;
 }

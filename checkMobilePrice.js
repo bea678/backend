@@ -14,11 +14,7 @@ export async function checkMobilePrice() {
     try {
         const { data } = await axios.get(url, { headers });
         const $ = cheerio.load(data);
-<<<<<<< HEAD
-        const textoPrecio = $('[data-test="price"]').text().trim();
-=======
         const textoPrecio = $('[data-test="price"]').text().trim(); 
->>>>>>> 138cb7730ca78d5238bba1eacaa77c25221107ca
         const coincidencia = textoPrecio.match(/\d+/);
         const precio = coincidencia ? Number(coincidencia[0]) : null;
         return precio;
@@ -30,11 +26,7 @@ export async function checkMobilePrice() {
 
 function numerosEnNegrita(texto) {
     const mapa = {
-<<<<<<< HEAD
-        '0': '𝟬', '1': '𝟭', '2': '𝟮', '3': '𝟯', '4': '𝟰',
-=======
         '0': '𝟬', '1': '𝟭', '2': '𝟮', '3': '𝟯', '4': '𝟰', 
->>>>>>> 138cb7730ca78d5238bba1eacaa77c25221107ca
         '5': '𝟱', '6': '𝟲', '7': '𝟳', '8': '𝟴', '9': '𝟵',
         '.': '.', ',': ',' // Dejamos puntos y comas igual
     };
@@ -44,10 +36,6 @@ function numerosEnNegrita(texto) {
 export const executeCronMobile = async () => {
     cron.schedule('0 9 * * *', async () => {
         const user = await getUserById(1);
-<<<<<<< HEAD
-=======
-        console.log('token: ', user.pushToken);
->>>>>>> 138cb7730ca78d5238bba1eacaa77c25221107ca
         console.log('--- Ejecutando consulta Google Pixel ---');
 
         try {
@@ -63,11 +51,7 @@ export const executeCronMobile = async () => {
                     await sendPushNotification(
                         user.pushToken,
                         "Precio Google Pixel 9a",
-<<<<<<< HEAD
                         `Total ${priceStrong}€${"        "}${monthStrong} €/mes`,
-=======
-                        `Total ${priceStrong}€.   ${monthStrong} €/mes`,
->>>>>>> 138cb7730ca78d5238bba1eacaa77c25221107ca
                         'ic_notification_purchase'
                     );
                 }
@@ -79,11 +63,8 @@ export const executeCronMobile = async () => {
         } catch (error) {
             console.error('❌ Error en el ciclo del Cron:', error.message);
         }
-<<<<<<< HEAD
     }, {
         scheduled: true,
         timezone: "Europe/Madrid"
-=======
->>>>>>> 138cb7730ca78d5238bba1eacaa77c25221107ca
     });
 }

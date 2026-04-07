@@ -65,6 +65,8 @@ export async function scrapeBetfairTennis() {
                 for (const row of filas) {
                     let horaElem = row.querySelector('.date') || row.querySelector('.event-inplay-state');
                     let horaRaw = horaElem ? horaElem.textContent.replace(/\s+/g, ' ').trim() : "";
+                    
+                    if (horaRaw.includes('A punto de empezar')) continue;
 
                     if (horaRaw.toLowerCase().includes('mañana')) {
                         return lista; 
