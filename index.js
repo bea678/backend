@@ -14,6 +14,7 @@ import { processAndSaveValueBets } from './bearbitrage/functions.js';
 import cron from 'node-cron';
 import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
 import { scrapeArbitrageFootball, scrapeArbitrageBasketball, scrapeArbitrageTennis, scrapeArbitrageIceHockey } from './scrapeArbitrage.js';
+import { getUserById } from './generalFunctions.js';
 
 const app = express();
 
@@ -469,13 +470,27 @@ const executeCronArbitrage = async () => {
     });
 }
 
-
-app.listen(PORT, () => {
+app.listen(PORT, async () => { 
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
-
-    executeCronHive()
-    executeCronMobile()
-    executeCronYoutubeCredits() 
-    //executeCronArbitrage()
+    
+    // Es buena práctica usar try...catch para operaciones asíncronas en el inicio
+    try {
+        const user = await getUserById(1);
+        if (user && user.pushToken) {
+            await sendPushNotification(
+                user.pushToken,
+                "Hola bea.",
+                `Esto va`,
+            );
+            console.log("Notificación enviada con éxito.");
+        }
+    } catch (error) {
+        console.error("Error al obtener usuario o enviar notificación en el arranque:", error);
+    }
+    
+    executeCronHive();
+    executeCronMobile();
+    executeCronYoutubeCredits(); 
+    //executeCronArbitrage();
 });
