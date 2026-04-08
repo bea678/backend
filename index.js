@@ -14,7 +14,7 @@ import { processAndSaveValueBets } from './bearbitrage/functions.js';
 import cron from 'node-cron';
 import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
 import { scrapeArbitrageFootball, scrapeArbitrageBasketball, scrapeArbitrageTennis, scrapeArbitrageIceHockey } from './scrapeArbitrage.js';
-import { getUserById } from './generalFunctions.js';
+import { getUserById, sendPushNotification } from './generalFunctions.js';
 
 const app = express();
 
