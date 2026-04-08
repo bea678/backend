@@ -474,21 +474,6 @@ app.listen(PORT, async () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
     
-    // Es buena práctica usar try...catch para operaciones asíncronas en el inicio
-    try {
-        const user = await getUserById(1);
-        if (user && user.pushToken) {
-            await sendPushNotification(
-                user.pushToken,
-                "Hola bea.",
-                `Esto va`,
-            );
-            console.log("Notificación enviada con éxito.");
-        }
-    } catch (error) {
-        console.error("Error al obtener usuario o enviar notificación en el arranque:", error);
-    }
-    
     executeCronHive();
     executeCronMobile();
     executeCronYoutubeCredits(); 
