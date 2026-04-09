@@ -8,7 +8,6 @@ puppeteer.use(StealthPlugin());
 export async function scrapeLeoVegasFootball(browserParam) {    
     const browser = browserParam || await puppeteer.launch({
         headless: 'true', 
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',

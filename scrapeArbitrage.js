@@ -23,6 +23,10 @@ import { scrapeLeoVegasIceHockey } from "./leovegas/icehockey.js";
 import { scrapeTonyBetIceHockey } from "./tonybet/icehockey.js";
 import { scrapeWinamaxIceHockey } from "./winamax/icehockey.js";
 import { getUserById, sendPushNotification } from "./generalFunctions.js";
+import { scrapeBwinFootball } from "./bwin/football.js";
+import { scrapeBwinBasketball } from "./bwin/basketball.js";
+import { scrapeBwinTennis } from "./bwin/tennis.js";
+import { scrapeBwinHockey } from "./bwin/icehockey.js";
 
 puppeteer.use(StealthPlugin());
 
@@ -78,12 +82,21 @@ export async function scrapeArbitrageFootball() {
         console.log(`   ✅ Winimax finalizado (${Object.keys(winiData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Winimax:", e.message); }
 
+    // 6. Bwin
+    let bwinData = {};
+    try {
+        console.log('Empiezo con Bwin...')
+        bwinData = await scrapeBwinFootball();
+        console.log(`   ✅ Bwin finalizado (${Object.keys(bwinData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Bwin:", e.message); }
+
     const fuentes = [
         { nombre: 'BF', data: bfData },
         { nombre: 'LV', data: lvData },
         { nombre: 'LC', data: lcData },
         { nombre: 'TB', data: tonyData },
-        { nombre: 'WM', data: winiData }
+        { nombre: 'WM', data: winiData },
+        { nombre: 'BW', data: bwinData }
     ];
 
     const masterMap = unificarCuotas(fuentes);
@@ -108,7 +121,8 @@ export async function scrapeArbitrageFootball() {
     // Notificación
     const user = await getUserById(1);
     if (user?.pushToken) {
-        await sendPushNotification(user.pushToken, "Radar Fútbol Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}.       Coincidencias: ${coincidencias.length}
+        await sendPushNotification(user.pushToken, "Radar Fútbol Finalizado", `BF: ${Object.keys(bfData).length} LC: ${Object.keys(lcData).length} LV: ${Object.keys(lvData).length} TB: ${Object.keys(tonyData).length}. BW: ${Object.keys(bwinData).length}.
+        Coincidencias: ${coincidencias.length}
         .    Subrets:  ${surebets.length}`);
     }
 }
@@ -162,6 +176,14 @@ export async function scrapeArbitrageBasketball() {
         console.log(`   ✅ TonyBet finalizado (${Object.keys(winiData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Winimax:", e.message); }
 
+    // 6. Bwin
+    let bwinData = {};
+    try {
+        console.log('Empiezo con Bwin...')
+        bwinData = await scrapeBwinBasketball();
+        console.log(`   ✅ Bwin finalizado (${Object.keys(bwinData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Bwin:", e.message); }
+
     console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
     await pausar(10000);
 
@@ -170,7 +192,8 @@ export async function scrapeArbitrageBasketball() {
         { nombre: 'LV', data: lvData },
         { nombre: 'LC', data: lcData },
         { nombre: 'TB', data: tonyData },
-        { nombre: 'WM', data: winiData }
+        { nombre: 'WM', data: winiData },
+        { nombre: 'BW', data: bwinData }
     ];
 
     const masterMap = unificarCuotas(fuentes);
@@ -251,6 +274,14 @@ export async function scrapeArbitrageTennis() {
         console.log(`   ✅ TonyBet finalizado (${Object.keys(winiData).length} partidos)`);
     } catch (e) { console.error("❌ Error en Winimax:", e.message); }
 
+    // 6. Bwin
+    let bwinData = {};
+    try {
+        console.log('Empiezo con Bwin...')
+        bwinData = await scrapeBwinTennis();
+        console.log(`   ✅ Bwin finalizado (${Object.keys(bwinData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Bwin:", e.message); }
+
     console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
     await pausar(10000);
 
@@ -259,7 +290,8 @@ export async function scrapeArbitrageTennis() {
         { nombre: 'LV', data: lvData },
         { nombre: 'LC', data: lcData },
         { nombre: 'TB', data: tonyData },
-        { nombre: 'WM', data: winiData }
+        { nombre: 'WM', data: winiData },
+        { nombre: 'BW', data: bwinData }
     ];
 
     const masterMap = unificarCuotas(fuentes);
@@ -346,12 +378,21 @@ export async function scrapeArbitrageIceHockey() {
     console.log('⏱️ Esperando 10 segundos para liberar el túnel de Betfair...');
     await pausar(10000);
 
+    // 6. Bwin
+    let bwinData = {};
+    try {
+        console.log('Empiezo con Bwin...')
+        bwinData = await scrapeBwinHockey();
+        console.log(`   ✅ Bwin finalizado (${Object.keys(bwinData).length} partidos)`);
+    } catch (e) { console.error("❌ Error en Bwin:", e.message); }
+
     const fuentes = [
         { nombre: 'BF', data: bfData },
         { nombre: 'LV', data: lvData },
         { nombre: 'LC', data: lcData },
         { nombre: 'TB', data: tonyData },
-        { nombre: 'WM', data: winiData }
+        { nombre: 'WM', data: winiData },
+        { nombre: 'BW', data: bwinData }
     ];
 
     const masterMap = unificarCuotas(fuentes);

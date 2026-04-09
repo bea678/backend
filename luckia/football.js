@@ -9,7 +9,6 @@ puppeteer.use(StealthPlugin());
 export async function scrapeLuckiaFootball() {
     const browser = await puppeteer.launch({
         headless: "true",
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',

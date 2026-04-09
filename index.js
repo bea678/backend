@@ -15,6 +15,10 @@ import cron from 'node-cron';
 import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
 import { scrapeArbitrageFootball, scrapeArbitrageBasketball, scrapeArbitrageTennis, scrapeArbitrageIceHockey } from './scrapeArbitrage.js';
 import { getUserById, sendPushNotification } from './generalFunctions.js';
+import { scrapeBwinFootball } from './bwin/football.js';
+import { scrapeBwinBasketball } from './bwin/basketball.js';
+import { scrapeBwinTennis } from './bwin/tennis.js';
+import { scrapeBwinHockey } from './bwin/icehockey.js';
 
 const app = express();
 
@@ -474,8 +478,7 @@ app.listen(PORT, async () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
     
-    executeCronHive();
-    executeCronMobile();
-    executeCronYoutubeCredits(); 
-    //executeCronArbitrage();
+    //executeCronHive();
+    //executeCronMobile();
+    //executeCronYoutubeCredits(); 
 });
