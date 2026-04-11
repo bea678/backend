@@ -8,7 +8,6 @@ puppeteer.use(StealthPlugin());
 export async function scrapeLeovegasTenis(browserParam) {
     const browser = browserParam || await puppeteer.launch({
         headless: 'true',
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium', 
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -48,12 +47,12 @@ export async function scrapeLeovegasTenis(browserParam) {
 
         console.log('🏀 [LEOVEGAS] Buscando la pestaña de TENIS...');
         try {
-            const basketSelector = 'button[data-testid="menuitem-Tenis"]';
-            await page.waitForSelector(basketSelector, { timeout: 10000, visible: true });
-            await page.click(basketSelector);
+            const tenisSelector = 'button[data-testid="menuitem-Tenis"]';
+            await page.waitForSelector(tenisSelector, { timeout: 10000, visible: true });
+            await page.click(tenisSelector);
             console.log('✅ [LEOVEGAS] Clic en TENIS realizado con éxito.');
 
-            console.log('⏳ [LEOVEGAS] Esperando a que se carguen los partidos de basket...');
+            console.log('⏳ [LEOVEGAS] Esperando a que se carguen los partidos de tenis...');
             await new Promise(r => setTimeout(r, 5000));
         } catch (e) {
             console.log('⚠️ [LEOVEGAS] No se pudo hacer clic en TENIS.', e.message);
@@ -115,7 +114,6 @@ export async function scrapeLeovegasTenis(browserParam) {
 
                         let horaFinal = horaRaw;
 
-                        // Comprobamos si es una cuenta atrás (formato MM:SS o tiene clase countdown)
                         const partes = horaRaw.split(':');
                         const esCuentaAtras = partes.length === 2 && clockElem.querySelector('[class*="countdown"]');
 

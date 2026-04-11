@@ -19,6 +19,12 @@ import { scrapeBwinFootball } from './bwin/football.js';
 import { scrapeBwinBasketball } from './bwin/basketball.js';
 import { scrapeBwinTennis } from './bwin/tennis.js';
 import { scrapeBwinHockey } from './bwin/icehockey.js';
+import { scrapeBetfairCriquet } from './betfair/cricket.js';
+import { scrapeBetfairRugby } from './betfair/rugby.js';
+import { scrapeBwinRugby } from './bwin/rugby.js';
+import { scrapeLuckiaRugby } from './luckia/rugby.js';
+import { scrapeTonyBetRugby } from './tonybet/rugby.js';
+import { scrapeWinamaxRugby } from './winamax/rugby.js';
 
 const app = express();
 
@@ -478,7 +484,11 @@ app.listen(PORT, async () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
     
-    //executeCronHive();
-    //executeCronMobile();
-    //executeCronYoutubeCredits(); 
+    executeCronHive();
+    executeCronMobile();
+    executeCronYoutubeCredits(); 
+
+    //scrapeBetfairCriquet()
+    //scrapeBetfairRugby()
+    //scrapeBwinRugby()
 });
