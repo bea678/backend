@@ -25,6 +25,7 @@ import { scrapeBwinRugby } from './bwin/rugby.js';
 import { scrapeLuckiaRugby } from './luckia/rugby.js';
 import { scrapeTonyBetRugby } from './tonybet/rugby.js';
 import { scrapeWinamaxRugby } from './winamax/rugby.js';
+import { executeCronMaclear, fetchMaclearBetterDiscount } from './maclear/maclear.js';
 
 const app = express();
 
@@ -487,6 +488,7 @@ app.listen(PORT, async () => {
     executeCronHive();
     executeCronMobile();
     executeCronYoutubeCredits(); 
+    executeCronMaclear()
 
     //scrapeBetfairCriquet()
     //scrapeBetfairRugby()
