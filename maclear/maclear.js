@@ -6,6 +6,7 @@ import * as OTPAuth from 'otpauth';
 
 puppeteer.use(StealthPlugin());
 let lastBetterItems = [];
+let lastShortTermItemId = null; // Para evitar spam de notificaciones si el primer item es el mismo
 
 const MACLEAR_EMAIL = process.env.MACLEAR_EMAIL;
 const MACLEAR_PASSWORD = process.env.MACLEAR_PASSWORD;
@@ -44,10 +45,9 @@ export async function fetchMaclearBetterDiscount() {
 
         console.log(`🔑 Código generado: ${currentCode2FA}. Iniciando login silencioso en la API...`);
 
-        // 2. Inyectamos nuestras variables al navegador y hacemos la magia
         const apiData = await page.evaluate(async (email, password, code2fa) => {
             try {
-                // PASO 1: Login inicial para sacar el token temporal
+                // --- LOGIN ---
                 const loginResponse = await fetch('https://app.maclear.ch/api/v1/auth/login', {
                     method: 'POST',
                     headers: {
@@ -62,7 +62,7 @@ export async function fetchMaclearBetterDiscount() {
                 
                 const tempToken = `Bearer ${loginJson.accessToken}`;
 
-                // PASO 2: Mandamos el 2FA usando el token temporal
+                // --- 2FA ---
                 const twoFaResponse = await fetch('https://app.maclear.ch/api/user/validate-code-two-fa', {
                     method: 'POST',
                     headers: {
@@ -78,7 +78,7 @@ export async function fetchMaclearBetterDiscount() {
 
                 const finalToken = `Bearer ${twoFaJson.accessToken}`;
 
-                // PASO 3: Ya tenemos acceso total. Pedimos los datos del mercado.
+                // --- QUERY 1: Mejor descuento (Existente) ---
                 const marketResponse = await fetch('https://app.maclear.ch/api/v1/market/list', {
                     method: 'POST',
                     headers: {
@@ -90,17 +90,42 @@ export async function fetchMaclearBetterDiscount() {
                         "column": "discount",
                         "page": 1,
                         "per-page": 1500,
-                        "typeSort": 3
+                        "typeSort": 3,
+                        "priceTo": "500",
                     })
                 });
 
                 const marketRawText = await marketResponse.text();
+                if (!marketResponse.ok) return { error: `HTTP ${marketResponse.status} en Query 1`, body: marketRawText };
+                const marketData = JSON.parse(marketRawText);
 
-                if (!marketResponse.ok) {
-                    return { error: `HTTP ${marketResponse.status}`, body: marketRawText };
-                }
+                // --- QUERY 2: Menor tiempo restante (Nueva) ---
+                const shortTermResponse = await fetch('https://app.maclear.ch/api/v1/market/list', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'authorization': finalToken,
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        "column": "loanPeriodLeft",
+                        "page": 1,
+                        "per-page": 30,
+                        "priceTo": "500",
+                        "typeSort": 4
+                    })
+                });
 
-                return JSON.parse(marketRawText);
+                const shortTermRawText = await shortTermResponse.text();
+                if (!shortTermResponse.ok) return { error: `HTTP ${shortTermResponse.status} en Query 2`, body: shortTermRawText };
+                const shortTermData = JSON.parse(shortTermRawText);
+
+                // Devolvemos ambos resultados
+                return { 
+                    marketData: marketData, 
+                    shortTermData: shortTermData 
+                };
+
             } catch (err) {
                 return { error: err.message };
             }
@@ -118,15 +143,41 @@ export async function fetchMaclearBetterDiscount() {
             return;
         }
 
-        // 4. Si todo ha ido bien, procesamos los datos
+        const { marketData, shortTermData } = apiData;
+
+        // -------------------------------------------------------------------------
+        // 4A. Procesamos los datos de la QUERY 2 (Menor tiempo restante)
+        // -------------------------------------------------------------------------
+        if (shortTermData && shortTermData.length > 0) {
+            const firstShortTermItem = shortTermData[0];
+            
+            // Enviamos notificación solo si el primer elemento es nuevo
+            if (lastShortTermItemId !== firstShortTermItem.id) {
+                await sendPushNotification(
+                    user.pushToken,
+                    `Duración Mínima: ${firstShortTermItem.project.loanPeriodLeft} meses`,
+                    `Descuento: ${firstShortTermItem.discount}%\nPrecio: ${firstShortTermItem.price}€\nProyecto: ${firstShortTermItem.project.name}`,
+                    'ic_pie_chart'
+                );
+                lastShortTermItemId = firstShortTermItem.id; // Actualizamos el id para no repetir
+                console.log('🔔 Notificación enviada para el préstamo más corto.');
+            }
+        } else {
+            console.log('⚠️ La query de menor duración está vacía.');
+        }
+
+
+        // -------------------------------------------------------------------------
+        // 4B. Procesamos los datos de la QUERY 1 (Mejor descuento / Lógica original)
+        // -------------------------------------------------------------------------
         let newBetterItems = [];
         
-        if (apiData && apiData.length > 0) {
-            let remainingMonths = apiData[0].project.loanPeriodLeft;
-            let discount = apiData[0].discount;
+        if (marketData && marketData.length > 0) {
+            let remainingMonths = marketData[0].project.loanPeriodLeft;
+            let discount = marketData[0].discount;
             let indexApiData = 1;
-            let indexTotal = apiData.length;
-            let item = apiData[0];
+            let indexTotal = marketData.length;
+            let item = marketData[0];
 
             newBetterItems.push({
                 id: item.id,
@@ -138,7 +189,7 @@ export async function fetchMaclearBetterDiscount() {
             });
 
             while ((discount > 0) && (indexApiData < indexTotal)) {
-                item = apiData[indexApiData];
+                item = marketData[indexApiData];
 
                 if ((item.project.loanPeriodLeft < remainingMonths) && (item.discount > 0)) {
                     newBetterItems.push({
@@ -156,7 +207,7 @@ export async function fetchMaclearBetterDiscount() {
                 indexApiData++;
             }
         } else {
-            console.log('⚠️ El mercado secundario parece estar vacío (0 resultados).');
+            console.log('⚠️ El mercado secundario parece estar vacío (0 resultados en descuentos).');
         }
 
         console.log('Total en newBetterItems: ', newBetterItems.length);
@@ -176,7 +227,7 @@ export async function fetchMaclearBetterDiscount() {
         }
 
         lastBetterItems = newBetterItems;
-        console.log(`Se han procesado ${apiData ? apiData.length : 0} elementos del mercado.\n`);
+        console.log(`Se han procesado ${marketData ? marketData.length : 0} elementos del mercado por descuento.\n`);
 
     } catch (error) {
         console.error('❌ Error general durante la ejecución:', error);
@@ -187,7 +238,7 @@ export async function fetchMaclearBetterDiscount() {
 }
 
 export const executeCronMaclear = () => {
-    cron.schedule('*/25 9-23 * * *', async () => {
+    cron.schedule('*/20 9-23 * * *', async () => {
         try {
             await fetchMaclearBetterDiscount();
         } catch (error) {
