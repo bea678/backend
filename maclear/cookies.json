@@ -9,7 +9,7 @@
         "secure": true,
         "session": true,
         "storeId": "0",
-        "value": "PNl761v5uMgazScxaFAwh"
+        "value": "1qDfwl96jzPQa5OLweJcQ"
     },
     {
         "domain": "app.maclear.ch",
@@ -21,7 +21,19 @@
         "secure": false,
         "session": true,
         "storeId": "0",
-        "value": "a16jfq44qk18s5a1bo3nmegh87"
+        "value": "i39c7a1aa1njqfpcntc8mr8kq0"
+    },
+    {
+        "domain": "app.maclear.ch",
+        "hostOnly": true,
+        "httpOnly": false,
+        "name": "token",
+        "path": "/",
+        "sameSite": "unspecified",
+        "secure": false,
+        "session": true,
+        "storeId": "0",
+        "value": "Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5tYWNsZWFyLmNoIiwiYXVkIjoiaHR0cHM6Ly9tYWNsZWFyLmNoIiwianRpIjoiNGYxZzIzYTEyYWEiLCJpYXQiOjE3NzYwMDkyMjEuNTQ0ODE5LCJleHAiOjE3NzYwMDk1MjEuNTQ0ODE5LCJ1aWQiOjE0ODg5LCJyb2xlIjoiaW52ZXN0b3IiLCJwZXJtaXNzaW9ucyI6IntcImNhbkVtYWlsQ29uZmlybVwiOmZhbHNlLFwiY2FuVmVyaWZpZWRQcm9maWxlXCI6ZmFsc2UsXCJjYW5TZWVEYXNoXCI6dHJ1ZSxcIndhaXRpbmdWZXJpZmljYXRpb25cIjpmYWxzZSxcImFjY2Vzc1RvVGhlUmVmZXJyYWxTeXN0ZW1cIjp0cnVlLFwid2FpdGluZ1BvYVwiOmZhbHNlLFwid2FpdGluZ1RhblwiOmZhbHNlLFwidGFuSXNTaWduZWRcIjp0cnVlLFwiaXNBZG1pblwiOmZhbHNlLFwiaXNCbG9ja2VkQnlBTUxcIjpmYWxzZX0iLCJpZExhYmVsIjoiTUMxNDc5NSJ9.GlrHu5b5W1STPDAZr9IuK8RTlO6gxczguyrz9fplr7SulbLVM4-l6jcMARkWhlTTaL9VFfmWtrGJiwIU0NjqI1kNHczL9CIUbV8yqwNszucCdz8SEizVy3qVEbITDy_K8p8CvDXYORyLCOYP6OcJB4BYt5fwwfFPhsIhIC0tYc53HOa28qtak1GQeouW2J3IrM0ebwF7jttq4wpGD33Z-LfyhO22D_fGHPmGtxGt-6Qw6YZxTDrtUlqlZX7mxW8HvZPWty3_qPh6eiSn09CARu-gDTOQieR_LE5eV-5WRBvVqmOk6Yiy658tC9Sl7IpkrZm2V4KqOdH8rvHrkdZeBNGbJebMb0UUVD3K42Q0nF7IT3cJRETDk6JtPZvS9pSazzeMq7yHM8R6f2zzBwyNUZcuF3_lvSKuCwJc9JKJTDuuqrUC2SGKsf66ZL_uNDuZvzHf_G2ZDxMKW2yVIhdNRhLyMijtjQ_wU4L8Y-jNHzcMTLcB_0MQOKcY7GUz4JcuTIgpy8pMR63wPjjgbzn8Wrole3zfdke3QEmkjRfo4c3r0Xv58PNztuw3M6E8SJoutFy0sOOlMrR2NdguN-yEw6SNAmzRmL1H53Es7Soolw6KGss08BM5GdSf3bWiwAU9RWI61XF8hWx6UqpUpBkSoTzoLW1AWLsmUsvh1u65cRI"
     },
     {
         "domain": "app.maclear.ch",
@@ -38,18 +50,6 @@
     {
         "domain": "app.maclear.ch",
         "hostOnly": true,
-        "httpOnly": false,
-        "name": "token",
-        "path": "/",
-        "sameSite": "unspecified",
-        "secure": false,
-        "session": true,
-        "storeId": "0",
-        "value": "Bearer%20eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5tYWNsZWFyLmNoIiwiYXVkIjoiaHR0cHM6Ly9tYWNsZWFyLmNoIiwianRpIjoiNGYxZzIzYTEyYWEiLCJpYXQiOjE3NzU5OTE1MDcuNTI3ODkyLCJleHAiOjE3NzU5OTE4MDcuNTI3ODkyLCJ1aWQiOjE0ODg5LCJyb2xlIjoiaW52ZXN0b3IiLCJwZXJtaXNzaW9ucyI6IntcImNhbkVtYWlsQ29uZmlybVwiOmZhbHNlLFwiY2FuVmVyaWZpZWRQcm9maWxlXCI6ZmFsc2UsXCJjYW5TZWVEYXNoXCI6dHJ1ZSxcIndhaXRpbmdWZXJpZmljYXRpb25cIjpmYWxzZSxcImFjY2Vzc1RvVGhlUmVmZXJyYWxTeXN0ZW1cIjp0cnVlLFwid2FpdGluZ1BvYVwiOmZhbHNlLFwid2FpdGluZ1RhblwiOmZhbHNlLFwidGFuSXNTaWduZWRcIjp0cnVlLFwiaXNBZG1pblwiOmZhbHNlLFwiaXNCbG9ja2VkQnlBTUxcIjpmYWxzZX0iLCJpZExhYmVsIjoiTUMxNDc5NSJ9.CMMenxfoHFipIK_4I4FYTo1K4FEoezF6KxhH96TX_9zhuBf3GamnHl2aKUqMNo20GkXGyrnEE5oj2ZfuEhEB65LeYFXq7k4FaNiq35MnXLWk8mD0wgHP7gdomBL0pOHFC_UKJUsC_juFomF8b0DW2zwO6HcC3v43ZFACMj5VRQSCpH02TCItMw1HXNLFW3AITdkLMeUF8byG6DBNOlUtt1XHJNmeTHFAzd3HCbFm9SncjeaXVCEAzbUNiGSPabOlmhNq-Dia92Fe_Rh778_76UqkR0pOqm1nTs6yX-3T7__rXDMTkzeLNBT_HYm-oZsjuwFK6cu2gO89TxnUt3E8RUkHw8qa2Cfxmbf6PnX2CHPnTjbJ3z7Q5RER1BSY9W3cJNpQaIkpI2V7qABYm6qz4kE0q9EfkUak9V9hq5IGapSeQkNlJ4ZuEGeRFnKFqe_lNBhuLyw0ibqS-V0xMaRHTYFQIWs-zSbhdlFpIv1oFlzqJgmqlTFaIoAq7Q3Snc3xb0OoFkkk6lCeZ7cjhP1qzeA-IgAHp3iYfQdP6IAg4wWjnxPZc0LMpQ-GU5A-DZw8k0RXb3t-dQZopM8L-rUe6_Gf5wV7RQeQFkxTaLz_fjBavuCVzHTIe65VtvBRz4QYossuGnzSpbnVixE5TLw67OxJoW7QSfCY2U3OlqzjEqk"
-    },
-    {
-        "domain": "app.maclear.ch",
-        "hostOnly": true,
         "httpOnly": true,
         "name": "_csrf",
         "path": "/",
@@ -57,11 +57,11 @@
         "secure": false,
         "session": true,
         "storeId": "0",
-        "value": "54c66df569dfcfe793322ba63be7b2d58cba2243a50ba436495b23e70f2ee823a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%223lhq8nnmnni0XDGec-kwejqPDYDkkD0I%22%3B%7D"
+        "value": "96271299fbc593c3f2cad908d2eb1e89747b810ebe7a0cba8306c1f47218c992a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22XHoOAKVZx84aZuEqLUR7wn-JTn99sKiA%22%3B%7D"
     },
     {
         "domain": ".maclear.ch",
-        "expirationDate": 1807527119.553427,
+        "expirationDate": 1807545221.160771,
         "hostOnly": false,
         "httpOnly": true,
         "name": "cf_clearance",
@@ -74,6 +74,6 @@
         "secure": true,
         "session": false,
         "storeId": "0",
-        "value": "aPsPiMz2eLyvCRTEiPFOnxubC12E7ood6qbW58uhKTQ-1775991119-1.2.1.1-TbLRZfeLoZWI2aZAxrEQfJaKIitpHLHhOomL.LCqe807oyv8bTsRgAm5pI1agWP_LtCN8WWmGJz1HYcGsKKtZfSzi8WbI351kGnpqeuLw.HEWDq_D9VHc62KQzdyxI0Nb01XJPeecA.8knbULyuPl.rJ5_clwaVDAHWX3tbQzhugzAQQ4Hv.g2BrSukrPxZX2C93shKkIT_guwI.20xr31VJQilpZlg0couiZEbG4Fijm3l5a6ULAhxre4LfTIzs9JbXNvxnUKiseYQwu7UXJR8Wu6XuuA59re9hjBbjjX8MTTcYZoYHwUqeMo0fkUDB.VZMU3kDkbidLH583UAHOg"
+        "value": "3VHo9AHf9qM39rmkJTqH5lIJJdCWsUx8mYNMJ9yTLuM-1776009221-1.2.1.1-0pARg_E8AVoG9lf8i7TROA10QQ26JLlsuhDx9xk3LqH1VB1KYCcvHvJG7qQyNpHnc.HgsQgOLihbMfPUrgoB0aRrOhGE3em5FQlKlPPUN2S24yL8TZn16k1ll8NZML6DeXMV8ui6wQmNrrWXQuzrakKZFTlC22ykyQrMQz.SHird7TgJHQMcsqrRtPx61Kv_zed4EUp5NeIm2dcu.2wUcIkuq3.b6FQOpE8nMSVEE.ORbvpgOeylYr6kQH58x2Q_omsukh9n2RpUVX46hqmK.ho41SAM3xsr_0JjWFIO4cqmA3h67g2JgfNVoqTsZETM0j19VmH.2w4YEkD65ubGdg"
     }
 ]

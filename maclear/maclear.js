@@ -2,10 +2,14 @@ import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { getUserById, sendPushNotification } from "../generalFunctions.js";
 import cron from 'node-cron';
-import fs from 'node:fs/promises';
+import * as OTPAuth from 'otpauth';
 
 puppeteer.use(StealthPlugin());
 let lastBetterItems = [];
+
+const MACLEAR_EMAIL = process.env.MACLEAR_EMAIL;
+const MACLEAR_PASSWORD = process.env.MACLEAR_PASSWORD;
+const MACLEAR_SECRET_2FA = process.env.MACLEAR_SECRET_2FA;
 
 export async function fetchMaclearBetterDiscount() {
     console.log('🚀 Iniciando navegador MACLEAR en el servidor...');
@@ -19,77 +23,67 @@ export async function fetchMaclearBetterDiscount() {
     const user = await getUserById(1); 
 
     try {
-        const cookiesString = await fs.readFile('./maclear/cookies.json', 'utf8');
-        let rawCookies = JSON.parse(cookiesString);
+        console.log('🛡️ Navegando a la raíz para establecer contexto y pasar Cloudflare...');
         
-        // Limpiamos las cookies para evitar el error de formato de Puppeteer
-        const cleanCookies = rawCookies.map(cookie => {
-            return {
-                name: cookie.name,
-                value: cookie.value,
-                domain: cookie.domain,
-                path: cookie.path || '/',
-                secure: cookie.secure === true, 
-                httpOnly: cookie.httpOnly === true,
-            };
-        });
-
-        await page.setCookie(...cleanCookies);
-        console.log('🍪 Cookies inyectadas y limpiadas correctamente. Sesión restaurada.');
-    } catch (error) {
-        console.error('❌ Error inyectando cookies:', error.message);
-        await sendPushNotification(
-            user.pushToken,
-            "Bot Maclear: Error de Cookies",
-            "Fallo al leer o inyectar cookies.json. Revisa los logs.",
-            'ic_pie_chart'
-        );
-        await browser.close();
-        return;
-    }
-
-    let tokenAtrapado = null;
-    page.on('request', interceptedRequest => {
-        const headers = interceptedRequest.headers();
-        if (headers['authorization'] && headers['authorization'].startsWith('Bearer ')) {
-            tokenAtrapado = headers['authorization'];
-        }
-    });
-
-    try {
-        console.log('🛡️ Navegando a Maclear para atrapar el token...');
-        
-        await page.goto('https://app.maclear.ch/en/dashboard/secondary-market', {
-            // Espera solo a que el HTML base cargue, sin importar si los scripts/imágenes siguen cargando
+        // Vamos a la raíz solo para que el navegador recoja las cookies iniciales (cf_clearance, etc)
+        await page.goto('https://app.maclear.ch/', {
             waitUntil: 'domcontentloaded', 
-            // Aumentamos el límite a 60 segundos por si el servidor va lento (0 lo haría infinito)
             timeout: 60000 
         });
 
-        // Tu espera manual de 4 segundos le dará tiempo al frontend 
-        // para ejecutar su JavaScript y disparar la petición que contiene el token.
-        await new Promise(r => setTimeout(r, 4000));
+        console.log('✅ Contexto establecido. Generando 2FA...');
 
-        if (!tokenAtrapado) {
-            console.error('❌ No se capturó el token. Las cookies han caducado o cerrado sesión.');
-            await sendPushNotification(
-                user.pushToken,
-                "Bot Maclear: Sesión Caducada",
-                "Exporta un nuevo cookies.json de tu PC y súbelo al servidor.",
-                'ic_pie_chart'
-            );
-            return;
-        }
+        // 1. Generamos el código 2FA fresco justo en el milisegundo antes de usarlo
+        const totp = new OTPAuth.TOTP({
+            algorithm: 'SHA1',
+            digits: 6,
+            period: 30,
+            secret: OTPAuth.Secret.fromBase32(MACLEAR_SECRET_2FA)
+        });
+        const currentCode2FA = totp.generate();
 
-        console.log('✅ Token fresco atrapado. Lanzando la petición a la API...');
+        console.log(`🔑 Código generado: ${currentCode2FA}. Iniciando login silencioso en la API...`);
 
-        const apiData = await page.evaluate(async (tokenDinamico) => {
+        // 2. Inyectamos nuestras variables al navegador y hacemos la magia
+        const apiData = await page.evaluate(async (email, password, code2fa) => {
             try {
-                const response = await fetch('https://app.maclear.ch/api/v1/market/list', {
+                // PASO 1: Login inicial para sacar el token temporal
+                const loginResponse = await fetch('https://app.maclear.ch/api/v1/auth/login', {
                     method: 'POST',
                     headers: {
                         'accept': 'application/json',
-                        'authorization': tokenDinamico,
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ username: email, password: password })
+                });
+
+                const loginJson = await loginResponse.json();
+                if (loginJson.response.status !== 'success') return { error: 'Fallo en credenciales de login' };
+                
+                const tempToken = `Bearer ${loginJson.accessToken}`;
+
+                // PASO 2: Mandamos el 2FA usando el token temporal
+                const twoFaResponse = await fetch('https://app.maclear.ch/api/user/validate-code-two-fa', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'authorization': tempToken,
+                        'content-type': 'application/json',
+                    },
+                    body: JSON.stringify({ code: code2fa, type: "otp" })
+                });
+
+                const twoFaJson = await twoFaResponse.json();
+                if (twoFaJson.response.status !== 'success') return { error: 'Fallo al validar el código 2FA' };
+
+                const finalToken = `Bearer ${twoFaJson.accessToken}`;
+
+                // PASO 3: Ya tenemos acceso total. Pedimos los datos del mercado.
+                const marketResponse = await fetch('https://app.maclear.ch/api/v1/market/list', {
+                    method: 'POST',
+                    headers: {
+                        'accept': 'application/json',
+                        'authorization': finalToken,
                         'content-type': 'application/json',
                     },
                     body: JSON.stringify({
@@ -100,63 +94,69 @@ export async function fetchMaclearBetterDiscount() {
                     })
                 });
 
-                const rawText = await response.text();
+                const marketRawText = await marketResponse.text();
 
-                if (!response.ok) {
-                    return { error: `HTTP ${response.status}`, body: rawText };
+                if (!marketResponse.ok) {
+                    return { error: `HTTP ${marketResponse.status}`, body: marketRawText };
                 }
 
-                return JSON.parse(rawText);
+                return JSON.parse(marketRawText);
             } catch (err) {
                 return { error: err.message };
             }
-        }, tokenAtrapado); 
+        }, MACLEAR_EMAIL, MACLEAR_PASSWORD, currentCode2FA); 
 
-        if (apiData.error != undefined) {
+        // 3. Comprobamos si el bloque de evaluación devolvió algún error
+        if (apiData.error !== undefined) {
             await sendPushNotification(
                 user.pushToken,
                 "Error en la API de Maclear",
                 apiData.error,
                 'ic_pie_chart'
             );
-
-            console.error('❌ Api data undefined o con error:', apiData.error);
+            console.error('❌ Error extraído de la API:', apiData.error);
             return;
         }
 
+        // 4. Si todo ha ido bien, procesamos los datos
         let newBetterItems = [];
-        let remainingMonths = apiData[0].project.loanPeriodLeft;
-        let discount = apiData[0].discount;
-        let indexApiData = 1;
-        let indexTotal = apiData.length;
-        let item = apiData[0];
+        
+        if (apiData && apiData.length > 0) {
+            let remainingMonths = apiData[0].project.loanPeriodLeft;
+            let discount = apiData[0].discount;
+            let indexApiData = 1;
+            let indexTotal = apiData.length;
+            let item = apiData[0];
 
-        newBetterItems.push({
-            id: item.id,
-            discount: item.discount,
-            price: item.price,
-            remainingMonths: item.project.loanPeriodLeft,
-            projectName: item.project.name,
-            projectId: item.project.id
-        });
+            newBetterItems.push({
+                id: item.id,
+                discount: item.discount,
+                price: item.price,
+                remainingMonths: item.project.loanPeriodLeft,
+                projectName: item.project.name,
+                projectId: item.project.id
+            });
 
-        while ((discount > 0) && (indexApiData < indexTotal)) {
-            item = apiData[indexApiData];
+            while ((discount > 0) && (indexApiData < indexTotal)) {
+                item = apiData[indexApiData];
 
-            if ((item.project.loanPeriodLeft < remainingMonths) && (item.discount > 0)) {
-                newBetterItems.push({
-                    id: item.id,
-                    discount: item.discount,
-                    price: item.price,
-                    remainingMonths: item.project.loanPeriodLeft,
-                    projectName: item.project.name,
-                    projectId: item.project.id
-                });
-                remainingMonths = item.project.loanPeriodLeft;
+                if ((item.project.loanPeriodLeft < remainingMonths) && (item.discount > 0)) {
+                    newBetterItems.push({
+                        id: item.id,
+                        discount: item.discount,
+                        price: item.price,
+                        remainingMonths: item.project.loanPeriodLeft,
+                        projectName: item.project.name,
+                        projectId: item.project.id
+                    });
+                    remainingMonths = item.project.loanPeriodLeft;
+                }
+
+                discount = item.discount;
+                indexApiData++;
             }
-
-            discount = item.discount;
-            indexApiData++;
+        } else {
+            console.log('⚠️ El mercado secundario parece estar vacío (0 resultados).');
         }
 
         console.log('Total en newBetterItems: ', newBetterItems.length);
@@ -176,7 +176,6 @@ export async function fetchMaclearBetterDiscount() {
         }
 
         lastBetterItems = newBetterItems;
-
         console.log(`Se han procesado ${apiData ? apiData.length : 0} elementos del mercado.\n`);
 
     } catch (error) {
@@ -188,8 +187,7 @@ export async function fetchMaclearBetterDiscount() {
 }
 
 export const executeCronMaclear = () => {
-    //cron.schedule('*/10 7-22 * * *', async () => {
-    cron.schedule('*/30 * * * * *', async () => {
+    cron.schedule('*/15 9-23 * * *', async () => {
         try {
             await fetchMaclearBetterDiscount();
         } catch (error) {

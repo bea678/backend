@@ -2,7 +2,6 @@ FROM node:20-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Added required libraries for Puppeteer/Chrome (libnss3, libnspr4, etc.)
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
@@ -29,7 +28,7 @@ RUN pip3 install --no-cache-dir --upgrade pytubefix --break-system-packages
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --production
+RUN npm install --loglevel notice
 
 COPY . .
 
