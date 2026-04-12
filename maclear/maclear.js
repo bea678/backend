@@ -58,10 +58,16 @@ export async function fetchMaclearBetterDiscount() {
 
     try {
         console.log('🛡️ Navegando a Maclear para atrapar el token...');
+        
         await page.goto('https://app.maclear.ch/en/dashboard/secondary-market', {
-            waitUntil: 'networkidle2'
+            // Espera solo a que el HTML base cargue, sin importar si los scripts/imágenes siguen cargando
+            waitUntil: 'domcontentloaded', 
+            // Aumentamos el límite a 60 segundos por si el servidor va lento (0 lo haría infinito)
+            timeout: 60000 
         });
 
+        // Tu espera manual de 4 segundos le dará tiempo al frontend 
+        // para ejecutar su JavaScript y disparar la petición que contiene el token.
         await new Promise(r => setTimeout(r, 4000));
 
         if (!tokenAtrapado) {
@@ -182,7 +188,8 @@ export async function fetchMaclearBetterDiscount() {
 }
 
 export const executeCronMaclear = () => {
-    cron.schedule('*/10 7-22 * * *', async () => {
+    //cron.schedule('*/10 7-22 * * *', async () => {
+    cron.schedule('*/30 * * * * *', async () => {
         try {
             await fetchMaclearBetterDiscount();
         } catch (error) {
