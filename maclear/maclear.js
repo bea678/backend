@@ -6,7 +6,7 @@ import * as OTPAuth from 'otpauth';
 
 puppeteer.use(StealthPlugin());
 let lastBetterItems = [];
-let lastShortTermItemId = null; // Para evitar spam de notificaciones si el primer item es el mismo
+let lastShortTermItemId = null; 
 
 const MACLEAR_EMAIL = process.env.MACLEAR_EMAIL;
 const MACLEAR_PASSWORD = process.env.MACLEAR_PASSWORD;
@@ -26,7 +26,6 @@ export async function fetchMaclearBetterDiscount() {
     try {
         console.log('🛡️ Navegando a la raíz para establecer contexto y pasar Cloudflare...');
         
-        // Vamos a la raíz solo para que el navegador recoja las cookies iniciales (cf_clearance, etc)
         await page.goto('https://app.maclear.ch/', {
             waitUntil: 'domcontentloaded', 
             timeout: 60000 
@@ -34,7 +33,6 @@ export async function fetchMaclearBetterDiscount() {
 
         console.log('✅ Contexto establecido. Generando 2FA...');
 
-        // 1. Generamos el código 2FA fresco justo en el milisegundo antes de usarlo
         const totp = new OTPAuth.TOTP({
             algorithm: 'SHA1',
             digits: 6,
@@ -152,7 +150,8 @@ export async function fetchMaclearBetterDiscount() {
             const firstShortTermItem = shortTermData[0];
             
             // Enviamos notificación solo si el primer elemento es nuevo
-            if (lastShortTermItemId !== firstShortTermItem.id) {
+            //TODO BEA
+            //if (lastShortTermItemId !== firstShortTermItem.id) {
                 await sendPushNotification(
                     user.pushToken,
                     `Duración Mínima: ${firstShortTermItem.project.loanPeriodLeft} meses`,
@@ -161,7 +160,7 @@ export async function fetchMaclearBetterDiscount() {
                 );
                 lastShortTermItemId = firstShortTermItem.id; // Actualizamos el id para no repetir
                 console.log('🔔 Notificación enviada para el préstamo más corto.');
-            }
+          //  }
         } else {
             console.log('⚠️ La query de menor duración está vacía.');
         }
@@ -216,14 +215,15 @@ export async function fetchMaclearBetterDiscount() {
             const currentItem = newBetterItems[i]; 
             const itemYaExistia = lastBetterItems.some(oldItem => oldItem.id === currentItem.id);
 
-            if (!itemYaExistia) {
+            //TODO BEA AQUI
+           // if (!itemYaExistia) {
                 await sendPushNotification(
                     user.pushToken,
                     `Nuevo descuento para ${currentItem.remainingMonths} meses`,
                     `Descuento: ${currentItem.discount}%\nPrecio: ${currentItem.price}\nProyecto: ${currentItem.projectName}\nMeses restantes: ${currentItem.remainingMonths}`,
                     'ic_pie_chart'
                 );
-            }
+         //   }
         }
 
         lastBetterItems = newBetterItems;
@@ -238,7 +238,7 @@ export async function fetchMaclearBetterDiscount() {
 }
 
 export const executeCronMaclear = () => {
-    cron.schedule('*/20 9-23 * * *', async () => {
+    cron.schedule('*/15 8-23 * * *', async () => {
         try {
             await fetchMaclearBetterDiscount();
         } catch (error) {
