@@ -12,20 +12,8 @@ import { executeCronHive } from './hive5/hive5.js';
 import bearMusicRoutes from './bearMusic/routes.js';
 import { processAndSaveValueBets } from './bearbitrage/functions.js';
 import cron from 'node-cron';
-import { checkMobilePrice, executeCronMobile } from './checkMobilePrice.js';
-import { scrapeArbitrageFootball, scrapeArbitrageBasketball, scrapeArbitrageTennis, scrapeArbitrageIceHockey } from './scrapeArbitrage.js';
-import { getUserById, sendPushNotification } from './generalFunctions.js';
-import { scrapeBwinFootball } from './bwin/football.js';
-import { scrapeBwinBasketball } from './bwin/basketball.js';
-import { scrapeBwinTennis } from './bwin/tennis.js';
-import { scrapeBwinHockey } from './bwin/icehockey.js';
-import { scrapeBetfairCriquet } from './betfair/cricket.js';
-import { scrapeBetfairRugby } from './betfair/rugby.js';
-import { scrapeBwinRugby } from './bwin/rugby.js';
-import { scrapeLuckiaRugby } from './luckia/rugby.js';
-import { scrapeTonyBetRugby } from './tonybet/rugby.js';
-import { scrapeWinamaxRugby } from './winamax/rugby.js';
-import { executeCronMaclear, fetchMaclearBetterDiscount } from './maclear/maclear.js';
+import { executeCronMobile } from './checkMobilePrice.js';
+import { executeCronMaclear } from './maclear/maclear.js';
 
 const app = express();
 
@@ -463,24 +451,6 @@ export const executeCronYoutubeCredits = async () => {
     });
 };
 
-const executeCronArbitrage = async () => {
-    cron.schedule('0 9 * * *', async () => {
-        console.log('--- Ejecutando cron Scraping ---');
-
-        try {
-            scrapeArbitrageFootball()
-            scrapeArbitrageBasketball()
-            scrapeArbitrageTennis()
-            scrapeArbitrageIceHockey()
-        } catch (error) {
-            console.error('❌ Error en el ciclo del Cron:', error.message);
-        }
-    }, {
-        scheduled: true,
-        timezone: "Europe/Madrid"
-    });
-}
-
 app.listen(PORT, async () => { 
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
@@ -489,8 +459,4 @@ app.listen(PORT, async () => {
     executeCronMobile();
     executeCronYoutubeCredits(); 
     executeCronMaclear()
-
-    //scrapeBetfairCriquet()
-    //scrapeBetfairRugby()
-    //scrapeBwinRugby()
 });
