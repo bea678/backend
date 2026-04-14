@@ -455,8 +455,8 @@ app.listen(PORT, async () => {
     console.log("Hora actual del Servidor:", new Date().toISOString());
     console.log(`🚀 Server running en: `, PORT);
     
-    executeCronHive();
+    //executeCronHive();
     executeCronMobile();
     executeCronYoutubeCredits(); 
-    executeCronMaclear()
+    //executeCronMaclear()
 });
