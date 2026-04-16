@@ -3,6 +3,7 @@ import db from './db.js';
 const TOTAL_INVESTMENT = parseFloat(process.env.TOTAL_INVESTMENT) || 100;
 
 export async function processAndSaveArbitrage(data, sourceApi) { 
+    console.log('en processAndSaveArbitrage')
     try {
         const deleteQuery = `DELETE FROM arbitrage_opportunities WHERE DATE(commence_time) != CURDATE()`;
         await db.execute(deleteQuery);
@@ -10,6 +11,8 @@ export async function processAndSaveArbitrage(data, sourceApi) {
     } catch (err) {
         console.error("❌ Error cleaning old records:", err.message);
     }
+
+    console.log('data: ', data?.length)
 
     for (const event of data) { 
         const { home_team, away_team, bookmakers, commence_time, sport_title, sport_key } = event;

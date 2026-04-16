@@ -18,7 +18,7 @@ import { executeCronMaclear } from './maclear/maclear.js';
 const app = express();
 
 const API_KEY = process.env.API_KEY;
-const API_KEY_IO = process.env.API_KEY_IO;
+
 app.use(express.json());
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -55,58 +55,6 @@ app.use((req, res, next) => {
     }
     
     next();
-});
-
-app.get('/refresh_data_io', async (req, res) => {
-    const bookmakers = ['LeoVegas ES', 'Betfair ES'];
-
-    try {
-        console.log("Iniciando actualización de Value Bets (.io)...");
-
-        const requests = bookmakers.map(bookie =>
-            axios.get('https://api.odds-api.io/v3/value-bets', {
-                params: {
-                    apiKey: API_KEY_IO,
-                    bookmaker: bookie,
-                    includeEventDetails: true
-                }
-            })
-        );
-
-        const responses = await Promise.all(requests);
-        const allValueBets = responses.flatMap(response => response.data);
-
-        const todayStr = new Date().toISOString().split('T')[0];
-        const betsToday = allValueBets.filter(bet => {
-            return bet.event.date.split('T')[0] === todayStr;
-        });
-
-        betsToday.sort((a, b) => b.expectedValue - a.expectedValue);
-
-        let savedCount = 0;
-        if (betsToday.length > 0) {
-            await processAndSaveValueBets(betsToday, 'odds-api.io');
-            savedCount = betsToday.length;
-        }
-
-        res.json({
-            status: "success",
-            source: "odds-api.io",
-            date_processed: todayStr,
-            total_received: allValueBets.length,
-            total_filtered_today: savedCount,
-            allValueBets: allValueBets,
-            message: savedCount > 0 ? "Datos actualizados correctamente" : "No se encontraron apuestas para hoy"
-        });
-
-    } catch (error) {
-        console.error('❌ Error en refresh_data_io:', error.message);
-        res.status(500).json({
-            status: "error",
-            message: error.message,
-            details: error.response ? error.response.data : null
-        });
-    }
 });
 
 app.get('/refresh_data_com', async (req, res) => {
