@@ -26,6 +26,7 @@ export async function processAndSaveArbitrage(data, sourceApi) {
         if (!bookmakers || bookmakers.length < 2) continue;
 
         const mysqlReadyTime = commence_time.replace('T', ' ').replace('Z', '');
+        console.log('mysqlReadyTime: ', mysqlReadyTime)
 
         let bestHome = { price: 0, bookmaker: '' };
         let bestAway = { price: 0, bookmaker: '' };
