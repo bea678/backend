@@ -45,11 +45,15 @@ export async function processAndSaveArbitrage(data, sourceApi) {
             if (awayPrice > bestAway.price) {
                 bestAway = { price: awayPrice, bookmaker: bookie.title };
             }
+
+            console.log('bestHome.price: ', bestHome.price)
+            console.log('bestAway.price: ', bestAway.price)
         });
 
         if (bestHome.price > 0 && bestAway.price > 0) {
             const totalProb = (1 / bestHome.price) + (1 / bestAway.price);
-            
+            console.log('totalProb: ', totalProb)
+
             if (totalProb < 1) {
                 const profitPct = (1 - totalProb) * 100;
                 const netProfit = ((TOTAL_INVESTMENT / totalProb) - TOTAL_INVESTMENT).toFixed(2);
