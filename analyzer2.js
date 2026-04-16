@@ -16,7 +16,13 @@ export async function processAndSaveArbitrage(data, sourceApi) {
 
     for (const event of data) { 
         const { home_team, away_team, bookmakers, commence_time, sport_title, sport_key } = event;
-        
+        console.log('home_team: ', home_team)
+        console.log('away_team: ', away_team)
+        console.log('bookmakers: ', bookmakers)
+        console.log('commence_time: ', commence_time)
+        console.log('sport_title', sport_title)
+        console.log('sport_key: ', sport_key)
+
         if (!bookmakers || bookmakers.length < 2) continue;
 
         const mysqlReadyTime = commence_time.replace('T', ' ').replace('Z', '');
