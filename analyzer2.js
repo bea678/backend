@@ -18,7 +18,7 @@ export async function processAndSaveArbitrage(data, sourceApi) {
         const { home_team, away_team, bookmakers, commence_time, sport_title, sport_key } = event;
         console.log('home_team: ', home_team)
         console.log('away_team: ', away_team)
-        console.log('bookmakers: ', bookmakers)
+        console.log('bookmakers: ', JSON.stringify(bookmakers))
         console.log('commence_time: ', commence_time)
         console.log('sport_title', sport_title)
         console.log('sport_key: ', sport_key)
