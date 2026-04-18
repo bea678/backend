@@ -406,5 +406,5 @@ app.listen(PORT, async () => {
     //executeCronHive();
     executeCronMobile();
     executeCronYoutubeCredits(); 
-    //executeCronMaclear()
+    executeCronMaclear()
 });

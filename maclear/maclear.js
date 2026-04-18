@@ -77,7 +77,7 @@ export async function fetchMaclearBetterDiscount() {
                 const finalToken = `Bearer ${twoFaJson.accessToken}`;
 
                 // --- QUERY 1: Mejor descuento (Existente) ---
-                const marketResponse = await fetch('https://app.maclear.ch/api/v1/market/list', {
+               /* const marketResponse = await fetch('https://app.maclear.ch/api/v1/market/list', {
                     method: 'POST',
                     headers: {
                         'accept': 'application/json',
@@ -95,7 +95,7 @@ export async function fetchMaclearBetterDiscount() {
 
                 const marketRawText = await marketResponse.text();
                 if (!marketResponse.ok) return { error: `HTTP ${marketResponse.status} en Query 1`, body: marketRawText };
-                const marketData = JSON.parse(marketRawText);
+                const marketData = JSON.parse(marketRawText);*/
 
                 // --- QUERY 2: Menor tiempo restante (Nueva) ---
                 const shortTermResponse = await fetch('https://app.maclear.ch/api/v1/market/list', {
@@ -120,7 +120,7 @@ export async function fetchMaclearBetterDiscount() {
 
                 // Devolvemos ambos resultados
                 return { 
-                    marketData: marketData, 
+                    //marketData: marketData, 
                     shortTermData: shortTermData 
                 };
 
@@ -141,7 +141,7 @@ export async function fetchMaclearBetterDiscount() {
             return;
         }
 
-        const { marketData, shortTermData } = apiData;
+        const { shortTermData } = apiData;
 
         // -------------------------------------------------------------------------
         // 4A. Procesamos los datos de la QUERY 2 (Menor tiempo restante)
@@ -149,9 +149,7 @@ export async function fetchMaclearBetterDiscount() {
         if (shortTermData && shortTermData.length > 0) {
             const firstShortTermItem = shortTermData[0];
             
-            // Enviamos notificación solo si el primer elemento es nuevo
-            //TODO BEA
-            //if (lastShortTermItemId !== firstShortTermItem.id) {
+            if (firstShortTermItem.project.loanPeriodLeft <=2) {
                 await sendPushNotification(
                     user.pushToken,
                     `Duración Mínima: ${firstShortTermItem.project.loanPeriodLeft} meses`,
@@ -160,7 +158,7 @@ export async function fetchMaclearBetterDiscount() {
                 );
                 lastShortTermItemId = firstShortTermItem.id; // Actualizamos el id para no repetir
                 console.log('🔔 Notificación enviada para el préstamo más corto.');
-          //  }
+            }
         } else {
             console.log('⚠️ La query de menor duración está vacía.');
         }
@@ -171,7 +169,7 @@ export async function fetchMaclearBetterDiscount() {
         // -------------------------------------------------------------------------
         let newBetterItems = [];
         
-        if (marketData && marketData.length > 0) {
+       /* if (marketData && marketData.length > 0) {
             let remainingMonths = marketData[0].project.loanPeriodLeft;
             let discount = marketData[0].discount;
             let indexApiData = 1;
@@ -207,7 +205,7 @@ export async function fetchMaclearBetterDiscount() {
             }
         } else {
             console.log('⚠️ El mercado secundario parece estar vacío (0 resultados en descuentos).');
-        }
+        }*/
 
         console.log('Total en newBetterItems: ', newBetterItems.length);
 
@@ -227,7 +225,7 @@ export async function fetchMaclearBetterDiscount() {
         }
 
         lastBetterItems = newBetterItems;
-        console.log(`Se han procesado ${marketData ? marketData.length : 0} elementos del mercado por descuento.\n`);
+        //console.log(`Se han procesado ${marketData ? marketData.length : 0} elementos del mercado por descuento.\n`);
 
     } catch (error) {
         console.error('❌ Error general durante la ejecución:', error);
