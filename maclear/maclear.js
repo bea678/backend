@@ -159,6 +159,8 @@ export async function fetchMaclearBetterDiscount() {
                 lastShortTermItemId = firstShortTermItem.id; // Actualizamos el id para no repetir
                 console.log('🔔 Notificación enviada para el préstamo más corto.');
             }
+
+            console.log('Préstamo con menor tiempo encontrado: '+ firstShortTermItem.project.loanPeriodLeft + 'meses')
         } else {
             console.log('⚠️ La query de menor duración está vacía.');
         }
