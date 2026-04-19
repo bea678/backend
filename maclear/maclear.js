@@ -160,7 +160,7 @@ export async function fetchMaclearBetterDiscount() {
                 console.log('🔔 Notificación enviada para el préstamo más corto.');
             }
 
-            console.log('Préstamo con menor tiempo encontrado: '+ firstShortTermItem.project.loanPeriodLeft + 'meses')
+            console.log('Préstamo con menor tiempo encontrado: '+ firstShortTermItem.project.loanPeriodLeft + ' meses')
         } else {
             console.log('⚠️ La query de menor duración está vacía.');
         }
