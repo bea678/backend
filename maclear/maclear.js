@@ -109,7 +109,6 @@ export async function fetchMaclearBetterDiscount() {
                         "column": "loanPeriodLeft",
                         "page": 1,
                         "per-page": 30,
-                        "priceTo": "500",
                         "typeSort": 4
                     })
                 });
@@ -149,7 +148,7 @@ export async function fetchMaclearBetterDiscount() {
         if (shortTermData && shortTermData.length > 0) {
             const firstShortTermItem = shortTermData[0];
             
-            if (firstShortTermItem.project.loanPeriodLeft <=2) {
+            //if (firstShortTermItem.project.loanPeriodLeft <=2) {
                 await sendPushNotification(
                     user.pushToken,
                     `Duración Mínima: ${firstShortTermItem.project.loanPeriodLeft} meses`,
@@ -158,7 +157,7 @@ export async function fetchMaclearBetterDiscount() {
                 );
                 lastShortTermItemId = firstShortTermItem.id; // Actualizamos el id para no repetir
                 console.log('🔔 Notificación enviada para el préstamo más corto.');
-            }
+            //}
 
             console.log('Préstamo con menor tiempo encontrado: '+ firstShortTermItem.project.loanPeriodLeft + ' meses')
         } else {
@@ -238,7 +237,7 @@ export async function fetchMaclearBetterDiscount() {
 }
 
 export const executeCronMaclear = () => {
-    cron.schedule('*/5 8-23 * * *', async () => {
+    cron.schedule('*/10 8-23 * * *', async () => {
         try {
             await fetchMaclearBetterDiscount();
         } catch (error) {
