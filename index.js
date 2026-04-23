@@ -404,7 +404,7 @@ app.listen(PORT, async () => {
     console.log(`🚀 Server running en: `, PORT);
     
     //executeCronHive();
-    executeCronMobile();
+    //executeCronMobile();
     executeCronYoutubeCredits(); 
-    executeCronMaclear()
+    //executeCronMaclear()
 });

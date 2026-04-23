@@ -237,7 +237,7 @@ export async function fetchMaclearBetterDiscount() {
 }
 
 export const executeCronMaclear = () => {
-    cron.schedule('*/10 8-23 * * *', async () => {
+    cron.schedule('*/18 8-23 * * *', async () => {
         try {
             await fetchMaclearBetterDiscount();
         } catch (error) {
